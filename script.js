@@ -121,11 +121,94 @@
     startJourneyTimer();
   }
 
+
+  // Nexa account access screens (UI only until a secure auth backend is connected).
+  const authPage = document.getElementById('auth-page');
+  const signupForm = document.getElementById('signup-form');
+  const loginForm = document.getElementById('login-form');
+  const authTabs = [...document.querySelectorAll('[data-auth-tab]')];
+  function showAuth(mode) {
+    if (!authPage) return;
+    const isLogin = mode === 'login';
+    authPage.hidden = false;
+    document.body.classList.add('auth-open');
+    signupForm.hidden = isLogin;
+    loginForm.hidden = !isLogin;
+    authTabs.forEach(tab => {
+      const active = tab.dataset.authTab === mode;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+    const asideTitle = document.getElementById('auth-aside-title');
+    const asideCopy = document.getElementById('auth-aside-copy');
+    if (asideTitle) asideTitle.textContent = isLogin ? 'Welcome back to Nexa.' : 'Your next digital opportunity starts here.';
+    if (asideCopy) asideCopy.textContent = isLogin ? 'Log in to continue your digital asset journey.' : 'A clearer way to discover, buy and sell digital assets.';
+    const feedback = document.getElementById(isLogin ? 'login-feedback' : 'signup-feedback');
+    if (feedback) feedback.textContent = '';
+    window.scrollTo(0,0);
+  }
+  function closeAuth() {
+    if (!authPage) return;
+    authPage.hidden = true;
+    document.body.classList.remove('auth-open');
+    if (location.hash === '#auth-login' || location.hash === '#auth-signup') history.replaceState(null,'',location.pathname + location.search);
+  }
+  document.querySelectorAll('[data-auth-open]').forEach(link => link.addEventListener('click', event => {
+    event.preventDefault();
+    const mode = link.dataset.authOpen;
+    if (location.hash !== '#auth-' + mode) history.pushState(null,'','#auth-' + mode);
+    showAuth(mode);
+  }));
+  document.querySelectorAll('[data-auth-tab]').forEach(tab => tab.addEventListener('click', () => {
+    const mode = tab.dataset.authTab;
+    if (location.hash !== '#auth-' + mode) history.pushState(null,'','#auth-' + mode);
+    showAuth(mode);
+  }));
+  document.querySelectorAll('[data-auth-close]').forEach(button => button.addEventListener('click', event => {
+    event.preventDefault();
+    closeAuth();
+  }));
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#auth-login') showAuth('login');
+    else if (location.hash === '#auth-signup') showAuth('signup');
+    else if (authPage && !authPage.hidden) closeAuth();
+  });
+  if (location.hash === '#auth-login') showAuth('login');
+  else if (location.hash === '#auth-signup') showAuth('signup');
+
+  document.querySelectorAll('[data-password-toggle]').forEach(button => button.addEventListener('click', () => {
+    const input = document.getElementById(button.dataset.passwordToggle);
+    if (!input) return;
+    const reveal = input.type === 'password';
+    input.type = reveal ? 'text' : 'password';
+    button.textContent = reveal ? 'Hide' : 'Show';
+    button.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
+  }));
+  signupForm?.addEventListener('submit', event => {
+    event.preventDefault();
+    const feedback = document.getElementById('signup-feedback');
+    const password = document.getElementById('signup-password');
+    const confirm = document.getElementById('signup-confirm-password');
+    if (password.value !== confirm.value) {
+      feedback.textContent = 'Your passwords do not match. Please check and try again.';
+      confirm.focus();
+      return;
+    }
+    if (!signupForm.reportValidity()) return;
+    feedback.textContent = 'The sign-up form is ready. Secure account creation will be enabled after the authentication service is connected.';
+  });
+  loginForm?.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!loginForm.reportValidity()) return;
+    document.getElementById('login-feedback').textContent = 'Login is not connected yet. A secure authentication service is required before you can access an account.';
+  });
+
   // Site-wide English/Bangla language selector.
   const languageSelect = document.getElementById('language-select');
   const translations = {
     "Marketplace":"মার্কেটপ্লেস","Categories":"ক্যাটাগরি","How it works":"যেভাবে কাজ করে","Why Nexa":"কেন Nexa",
-    "Log in":"লগ ইন","List your asset":"আপনার অ্যাসেট লিস্ট করুন",
+    "Log in":"লগ ইন","List your asset":"আপনার অ্যাসেট লিস্ট করুন","Sign up":"সাইন আপ",
+    "WELCOME TO NEXA":"NEXA-তে স্বাগতম","Your next digital opportunity starts here.":"আপনার পরবর্তী ডিজিটাল সুযোগের যাত্রা শুরু হোক এখানে।","A clearer way to discover, buy and sell digital assets.":"ডিজিটাল অ্যাসেট খোঁজা, কেনা ও বিক্রির আরও স্বচ্ছ উপায়।","Transparent marketplace journey":"স্বচ্ছ মার্কেটপ্লেস যাত্রা","Identity-first seller onboarding":"পরিচয় যাচাইয়ের মাধ্যমে সেলার নিবন্ধন","Secure transaction experience":"নিরাপদ লেনদেনের অভিজ্ঞতা","Create account":"অ্যাকাউন্ট তৈরি করুন","GET STARTED":"শুরু করুন","Create your Nexa account":"আপনার Nexa অ্যাকাউন্ট তৈরি করুন","Enter your details to get started.":"শুরু করতে আপনার তথ্য দিন।","First name":"নামের প্রথম অংশ","Last name":"নামের শেষ অংশ","Country":"দেশ","Select your country":"আপনার দেশ নির্বাচন করুন","Email address":"ইমেইল ঠিকানা","Password":"পাসওয়ার্ড","Create a strong password":"শক্তিশালী পাসওয়ার্ড তৈরি করুন","At least 10 characters":"কমপক্ষে ১০টি অক্ষর","One uppercase and one lowercase letter":"একটি বড় হাতের ও একটি ছোট হাতের অক্ষর","One number and one special character":"একটি সংখ্যা ও একটি বিশেষ চিহ্ন","Confirm password":"পাসওয়ার্ড নিশ্চিত করুন","Enter your password again":"আবার পাসওয়ার্ড লিখুন","I agree to the":"আমি সম্মত","Terms & Conditions":"শর্তাবলি","I have read and agree to the":"আমি পড়েছি এবং সম্মত","Privacy Policy":"গোপনীয়তা নীতি","Send me occasional product updates (optional).":"মাঝে মাঝে পণ্যের আপডেট পেতে চাই (ঐচ্ছিক)।","Already have an account?":"আগে থেকেই অ্যাকাউন্ট আছে?","WELCOME BACK":"আবার স্বাগতম","Log in to Nexa":"Nexa-তে লগ ইন করুন","Access your Nexa account.":"আপনার Nexa অ্যাকাউন্টে প্রবেশ করুন।","Enter your password":"আপনার পাসওয়ার্ড লিখুন","New to Nexa?":"Nexa-তে নতুন?","Create an account":"অ্যাকাউন্ট তৈরি করুন","Your account details should be protected by a secure authentication service when registration is connected.":"নিবন্ধন চালু হলে আপনার অ্যাকাউন্টের তথ্য নিরাপদ অথেনটিকেশন সার্ভিসের মাধ্যমে সুরক্ষিত রাখতে হবে।","Show":"দেখুন","Hide":"লুকান","The sign-up form is ready. Secure account creation will be enabled after the authentication service is connected.":"সাইনআপ ফর্ম প্রস্তুত। অথেনটিকেশন সার্ভিস যুক্ত হলে নিরাপদ অ্যাকাউন্ট তৈরি চালু হবে।","Login is not connected yet. A secure authentication service is required before you can access an account.":"লগইন এখনো সংযুক্ত নয়। অ্যাকাউন্টে প্রবেশের আগে নিরাপদ অথেনটিকেশন সার্ভিস যুক্ত করতে হবে।","Your passwords do not match. Please check and try again.":"পাসওয়ার্ড দুটি মিলছে না। আবার পরীক্ষা করে লিখুন।",
     "A smarter way to move digital ownership":"ডিজিটাল অ্যাসেট কেনাবেচার আরও স্মার্ট উপায়",
     "See how it works":"যেভাবে কাজ করে দেখুন",
     "THE GLOBAL MARKETPLACE FOR DIGITAL ASSETS":"ডিজিটাল অ্যাসেটের গ্লোবাল মার্কেটপ্লেস",
