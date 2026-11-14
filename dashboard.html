@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#13B0AA">
+  <meta name="description" content="Your Nexa account dashboard.">
+  <title>Dashboard — Nexa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+  <header class="dash-header">
+    <a class="dash-brand" href="index.html"><span class="brand-mark">N</span> Nexa<span>.</span></a>
+    <nav aria-label="Dashboard navigation">
+      <a class="active" href="dashboard.html">Dashboard</a>
+      <a href="#profile">Profile</a>
+      <button id="logout-button" type="button">Log out</button>
+    </nav>
+  </header>
+  <main class="dash-main">
+    <section class="welcome-row">
+      <div><span class="eyebrow">YOUR NEXA SPACE</span><h1>Welcome back<span>.</span></h1><p>Your digital asset journey starts here.</p></div>
+      <div class="account-chip"><span class="avatar" id="avatar-initial">N</span><span><b id="user-name">Nexa member</b><small id="user-email">Loading account…</small></span></div>
+    </section>
+    <section class="status-card">
+      <div><span class="eyebrow">ACCOUNT OVERVIEW</span><h2>Your account is connected</h2><p>You have successfully signed in to Nexa. More marketplace tools will appear here as they are built.</p></div>
+      <span class="status-pill"><i></i> Signed in</span>
+    </section>
+    <section class="quick-grid">
+      <article class="quick-card"><span class="quick-icon">＋</span><h3>My Listings</h3><p>Your digital asset listings will be managed here.</p><span class="coming-soon">Coming next</span></article>
+      <article class="quick-card"><span class="quick-icon">♡</span><h3>Saved Assets</h3><p>Keep track of assets you are interested in.</p><span class="coming-soon">Coming next</span></article>
+      <article class="quick-card"><span class="quick-icon">⇄</span><h3>Transactions</h3><p>Follow your buying and selling activity.</p><span class="coming-soon">Coming next</span></article>
+    </section>
+    <section class="profile-card" id="profile"><div><span class="eyebrow">PERSONAL DETAILS</span><h2>My Profile</h2><p>Basic account information from your Nexa sign-in.</p></div><dl><div><dt>Email address</dt><dd id="profile-email">Loading…</dd></div><div><dt>Account ID</dt><dd id="profile-id">Loading…</dd></div><div><dt>Email verification</dt><dd id="email-status">Checking…</dd></div></dl></section>
+    <p class="notice">Email confirmation verifies your email address. Identity verification (KYC), where required, is a separate process.</p>
+  </main>
+</body>
+</html>
