@@ -1,5 +1,10 @@
 (() => {
 const SUPABASE_URL="https://hguwdcmwqcpswyxtskcb.supabase.co",KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2",HOME="https://webdeveloperakkas-project.github.io/photo-gallery/",BUCKET="nexa-private-verification",MAX=2*1024*1024;
+
+const pageMenuToggle=$("pageMenuToggle"),pageMenuDropdown=$("pageMenuDropdown");
+pageMenuToggle?.addEventListener("click",()=>{const open=pageMenuDropdown.hidden;pageMenuDropdown.hidden=!open;pageMenuToggle.setAttribute("aria-expanded",String(open))});
+document.addEventListener("click",e=>{if(pageMenuDropdown&&!e.target.closest(".header-left")){pageMenuDropdown.hidden=true;pageMenuToggle?.setAttribute("aria-expanded","false")}});
+
 const client=window.supabase?.createClient(SUPABASE_URL,KEY);const $=id=>document.getElementById(id);let user,identityRow,addressRow,selfieBlob=null,stream=null;
 const countries=["Bangladesh","United States","United Kingdom","India","Pakistan","Canada","Australia","United Arab Emirates","Saudi Arabia","Malaysia","Singapore","Germany","France","Japan","South Korea","China","Türkiye","Indonesia","Philippines","Nepal","Sri Lanka","New Zealand","South Africa","Nigeria","Other"];
 function msg(id,text,type=""){const e=$(id);if(e){e.textContent=text;e.className="feedback "+type}}
