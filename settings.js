@@ -1,8 +1,13 @@
 (() => {
 const URL="https://hguwdcmwqcpswyxtskcb.supabase.co",KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2",HOME="https://webdeveloperakkas-project.github.io/photo-gallery/";
+
+const pageMenuToggle=$("pageMenuToggle"),pageMenuDropdown=$("pageMenuDropdown");
+pageMenuToggle?.addEventListener("click",()=>{const open=pageMenuDropdown.hidden;pageMenuDropdown.hidden=!open;pageMenuToggle.setAttribute("aria-expanded",String(open))});
+document.addEventListener("click",e=>{if(pageMenuDropdown&&!e.target.closest(".header-left")){pageMenuDropdown.hidden=true;pageMenuToggle?.setAttribute("aria-expanded","false")}});
+
 const client=window.supabase?.createClient(URL,KEY),$=id=>document.getElementById(id);let user;
 function message(id,text,error=false){const e=$(id);e.textContent=text;e.className="message"+(error?" error":"")}
-if(!client){location.replace(HOME+"#auth-login")}else client.auth.getSession().then(({data,error})=>{if(error||!data.session){location.replace(HOME+"#auth-login");return}user=data.session.user;$("accountEmail").value=user.email||"";init()});
+if(!client){location.replace(HOME+"#auth-login")}else client.auth.getSession().then(({data,error})=>{if(error||!data.session){location.replace(HOME+"#auth-login");return}user=data.session.user;$("accountEmail").value=user.email||"";const headerName=user.user_metadata?.display_name||[user.user_metadata?.first_name,user.user_metadata?.last_name].filter(Boolean).join(" ")||user.email?.split("@")[0]||"Nexa member";$("profileHeaderName").textContent=headerName;$("profileHeaderEmail").textContent=user.email||"Signed in";const initial=(headerName.trim()[0]||"N").toUpperCase();$("profileHeaderAvatar").textContent=initial;$("profileHeaderDropdownAvatar").textContent=initial;$("profileHeaderToggle")?.addEventListener("click",()=>{const d=$("profileHeaderDropdown"),open=d.hidden;d.hidden=!open;$("profileHeaderToggle").setAttribute("aria-expanded",String(open))});document.addEventListener("click",e=>{if(!e.target.closest(".profile-menu-wrap")){$("profileHeaderDropdown").hidden=true;$("profileHeaderToggle")?.setAttribute("aria-expanded","false")}});$("profileHeaderLogout")?.addEventListener("click",async()=>{await client.auth.signOut();location.replace(HOME)});init()});
 function init(){
 $("showEmailChange").addEventListener("click",()=>{$("emailForm").hidden=false;$("showEmailChange").hidden=true;$("newEmailAddress").focus()});
 $("cancelEmailChange").addEventListener("click",()=>{$("emailForm").reset();$("emailForm").hidden=true;$("showEmailChange").hidden=false;message("accountMessage","")});
