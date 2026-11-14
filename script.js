@@ -135,6 +135,7 @@
   const authTabs = [...document.querySelectorAll('[data-auth-tab]')];
   const navLogin = document.getElementById('nav-login-link');
   const navSignup = document.getElementById('nav-signup-link');
+  const navDashboardMenuLink = document.getElementById('nav-dashboard-menu-link');
   const profileMenuWrap = document.getElementById('profile-menu-wrap');
   const profileMenuToggle = document.getElementById('profile-menu-toggle');
   const profileDropdown = document.getElementById('profile-dropdown');
@@ -185,6 +186,7 @@
     const signedIn = Boolean(session?.user);
     if (navLogin) navLogin.hidden = signedIn;
     if (navSignup) navSignup.hidden = signedIn;
+    if (navDashboardMenuLink) navDashboardMenuLink.hidden = !signedIn;
     if (profileMenuWrap) profileMenuWrap.hidden = !signedIn;
     if (signedIn && session.user) {
       const meta = session.user.user_metadata || {};
