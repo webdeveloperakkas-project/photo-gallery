@@ -221,3 +221,19 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .listing-confirm-modal[hidden] {
   display: none !important;
 }
+
+
+/* My Listings seller management workspace */
+.my-listings-content{display:grid;gap:14px;margin-top:18px}
+.my-listing-card{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px;background:#fff;border:1px solid var(--tb-line);border-radius:14px;box-shadow:0 5px 20px #14322308}
+.my-listing-main{min-width:0;flex:1}.my-listing-category{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#16816f}
+.my-listing-main h2{font-size:18px;color:#234a37;margin:7px 0}.my-listing-main>p{font-size:12px;line-height:1.6;color:var(--tb-muted);margin:0 0 14px}
+.my-listing-meta{display:flex;gap:20px;flex-wrap:wrap}.my-listing-meta span{font-size:10px;color:var(--tb-muted)}.my-listing-meta strong{display:block;color:#234a37;font-size:12px;margin-top:4px}
+.my-listing-side{display:grid;justify-items:end;gap:12px;flex-shrink:0}.my-listing-status{display:inline-flex;padding:7px 11px;border-radius:30px;font-size:10px;font-weight:800;background:#fff5dc;color:#946718}.my-listing-status.approved{background:#e7f7ee;color:#168052}.my-listing-status.rejected{background:#fff0ef;color:#b43d36}.my-listing-edit{border:0}
+.listing-manage-modal[hidden]{display:none!important}.listing-manage-modal{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:18px;background:#10251dcc;overflow:auto}
+.listing-manage-dialog{width:min(100%,760px);max-height:min(90vh,900px);overflow:auto;padding:24px;background:#fff;border-radius:15px;box-shadow:0 18px 60px #0004}
+.listing-manage-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.listing-manage-heading h2{font-size:20px;color:#234a37;margin:5px 0 0}.listing-manage-close{width:36px;height:36px;border:0;border-radius:50%;background:#eef5f1;font-size:24px;cursor:pointer}
+.listing-manage-status{padding:10px 13px;background:#f5faf7;border-radius:8px;font-size:11px;color:#52675a;margin-bottom:14px}.listing-manage-readonly{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-height:300px;overflow:auto;padding:14px;border:1px solid #e5eee8;border-radius:10px}.listing-manage-readonly>div{min-width:0}.listing-manage-readonly small{display:block;color:var(--tb-muted);font-size:10px;margin-bottom:4px}.listing-manage-readonly strong{display:block;color:#2c4637;font-size:11px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
+.listing-price-editor{margin-top:18px;padding:16px;background:#f8fcf9;border:1px solid #e5eee8;border-radius:10px}.listing-price-editor>label{display:block;font-size:12px;font-weight:800;color:#234a37;margin-bottom:8px}.listing-price-input-row{display:flex;align-items:center;gap:9px}.listing-price-input-row span{font-size:13px;font-weight:800;color:#234a37}.listing-price-input-row input{width:100%;max-width:260px;padding:11px;border:1px solid #d8e5dc;border-radius:8px;font:inherit}.listing-price-editor>small{display:block;color:var(--tb-muted);font-size:10px;margin-top:8px}
+.listing-manage-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}.listing-manage-spacer{flex:1}
+@media(max-width:650px){.my-listing-card{align-items:stretch;flex-direction:column}.my-listing-side{display:flex;justify-content:space-between;align-items:center}.listing-manage-dialog{padding:16px}.listing-manage-readonly{grid-template-columns:1fr;max-height:260px}.listing-manage-actions{display:grid;grid-template-columns:1fr 1fr}.listing-manage-spacer{display:none}.listing-manage-actions #listing-manage-delete{grid-column:1/-1;grid-row:2}}
