@@ -363,8 +363,8 @@
       });
       if (error) throw error;
       updateAuthNavigation(data.session);
-      closeAuth();
       loginForm.reset();
+      window.location.replace('dashboard.html');
     } catch (error) {
       setAuthFeedback('login-feedback',friendlyAuthError(error));
     } finally { setFormBusy(loginForm,false); }
