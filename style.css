@@ -480,3 +480,5 @@ body{color:var(--ink);font-size:15px}
  .site-header .nav-actions{order:3;margin:0 0 0 auto;gap:9px}
  .site-header .main-nav{top:calc(100% + 7px);left:17px;width:min(245px,calc(100vw - 34px))}
 }
+
+.site-header .main-nav a[hidden]{display:none!important}
