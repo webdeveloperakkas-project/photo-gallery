@@ -8,8 +8,17 @@
 <link rel="stylesheet" href="profile.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="profile.js" defer></script>
 </head>
 <body>
-<header class="account-header"><a class="brand" href="dashboard.html"><span>N</span>Nexa.</a><a class="back-link" href="dashboard.html">← Back to Dashboard</a></header>
-<main class="profile-shell">
+<header class="nexa-top-header">
+  <div class="header-left"><a class="nexa-page-brand" href="dashboard.html"><span class="nexa-page-brand-mark">N</span><span>Nexa<span>.</span></span></a></div>
+  <div class="wallet-menu-wrap">
+    <button class="wallet-nav-button" type="button" aria-label="Wallet (coming soon)" disabled><span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span></button>
+  </div>
+  <div class="header-right"><div class="profile-menu-wrap">
+    <button class="profile-nav-button" id="profileHeaderToggle" type="button" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="profileHeaderAvatar">N</span><span class="profile-chevron">⌄</span></button>
+    <div class="profile-dropdown" id="profileHeaderDropdown" hidden><div class="profile-dropdown-head"><span class="profile-avatar-small" id="profileHeaderDropdownAvatar">N</span><span><b id="profileHeaderName">Nexa member</b><small id="profileHeaderEmail">Signed in</small></span></div><a href="profile.html">Profile</a><a href="settings.html">Settings</a><button type="button" id="profileHeaderLogout">Log out</button></div>
+  </div></div>
+</header>
+<main class="profile-shell"><div class="profile-backbar"><a class="back-link" href="dashboard.html">← Back to Dashboard</a></div>
 <section class="page-intro"><div><small>ACCOUNT CENTER</small><h1>Profile & Verification</h1><p>Manage your personal details and complete your account verification.</p></div><span class="overall-status" id="overallStatus">Loading status…</span></section>
 <nav class="step-tabs" aria-label="Profile steps">
 <button class="step-tab active" type="button" data-tab="personal"><i>01</i><span><b>Personal Details</b><small>Account information</small></span></button>
