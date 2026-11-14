@@ -14,62 +14,131 @@
   <script src="dashboard.js" defer></script>
 </head>
 <body>
-  <header class="dash-header">
-    <div class="dash-header-left">
-      <button class="dash-menu-toggle" type="button" id="dash-menu-toggle" aria-label="Open dashboard menu" aria-expanded="false" aria-controls="dash-main-menu"><span></span><span></span><span></span></button>
-      <a class="dash-brand" href="index.html" aria-label="Nexa home"><span class="brand-mark">N</span><span class="dash-brand-word">Nexa<span>.</span></span></a>
-    </div>
-    <nav class="dash-main-menu" id="dash-main-menu" aria-label="Dashboard menu">
-      <a class="active" href="dashboard.html">Dashboard</a>
-      <a href="#listings">My Listings</a>
-      <a href="#saved">Saved Assets</a>
-      <a href="#transactions">Transactions</a>
-      <a href="#verification">Account Verification</a>
-      <a href="#support">Help &amp; Support</a>
-    </nav>
-    <div class="wallet-menu-wrap" id="dash-wallet-menu-wrap">
-      <button class="wallet-nav-button" type="button" id="dash-wallet-toggle" aria-label="Open wallet menu" aria-expanded="false" aria-controls="dash-wallet-dropdown">
-        <span class="wallet-icon" aria-hidden="true">▣</span>
-        <span class="wallet-nav-copy"><small>MY WALLET</small><b>Wallet</b></span>
-        <span class="wallet-chevron" aria-hidden="true">⌄</span>
-      </button>
-      <div class="wallet-dropdown" id="dash-wallet-dropdown" hidden>
-        <span class="wallet-dropdown-label">WALLET OVERVIEW</span>
-        <b class="wallet-coming-title">Your wallet is coming soon</b>
-        <p>Your Nexa wallet balance and transactions will appear here when the wallet service is ready.</p>
+  <div class="nexa-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="nexa-sidebar" id="nexa-sidebar">
+      <div class="sidebar-brand-row">
+        <a class="nexa-side-brand" href="index.html"><span class="brand-mark">N</span><span>Nexa<span>.</span></span></a>
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">×</button>
       </div>
-    </div>
-    <div class="dash-header-actions">
-      <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
-        <button class="profile-nav-button" type="button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false" aria-controls="dash-profile-dropdown"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron" aria-hidden="true">⌄</span></button>
-        <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
-          <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
-          <a href="my-profile.html">My Profile</a>
-          <a href="#settings">Settings</a>
-          <button type="button" id="logout-button">Log out</button>
+      <nav class="sidebar-navigation" aria-label="Main navigation">
+        <div class="nav-section">
+          <p class="nav-section-title">MAIN MENU</p>
+          <a class="nav-link active" href="#dashboard-section" data-section="dashboard-section"><span class="nav-symbol">▦</span>Dashboard</a>
+          <a class="nav-link" href="#browse-assets-section" data-section="browse-assets-section"><span class="nav-symbol">⌕</span>Browse Assets</a>
+          <a class="nav-link" href="#post-ad-section" data-section="post-ad-section"><span class="nav-symbol">＋</span>Post Your Advertisement</a>
+          <a class="nav-link" href="#my-listings-section" data-section="my-listings-section"><span class="nav-symbol">▤</span>My Listings</a>
+          <a class="nav-link" href="#saved-assets-section" data-section="saved-assets-section"><span class="nav-symbol">♡</span>Saved Assets</a>
+          <a class="nav-link" href="#my-purchases-section" data-section="my-purchases-section"><span class="nav-symbol">🛍</span>My Purchases</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">FINANCE</p>
+          <a class="nav-link" href="#wallet-section" data-section="wallet-section"><span class="nav-symbol">▣</span>My Wallet</a>
+          <a class="nav-link" href="#transactions-section" data-section="transactions-section"><span class="nav-symbol">⇄</span>Transactions</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">SUPPORT</p>
+          <a class="nav-link" href="#help-section" data-section="help-section"><span class="nav-symbol">?</span>Help &amp; Support</a>
+        </div>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help-card">
+          <div class="help-icon">ⓘ</div><h4>Need Help?</h4>
+          <p>Our team is here to help with your marketplace journey.</p>
+          <a href="#help-section" data-section="help-section">Get Support →</a>
         </div>
       </div>
+    </aside>
+
+    <div class="nexa-main-area">
+      <header class="nexa-top-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+        </div>
+        <div class="wallet-menu-wrap" id="dash-wallet-menu-wrap">
+          <button class="wallet-nav-button" id="dash-wallet-toggle" aria-label="Open wallet menu" aria-expanded="false" aria-controls="dash-wallet-dropdown">
+            <span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span>
+          </button>
+          <div class="wallet-dropdown" id="dash-wallet-dropdown" hidden>
+            <span class="wallet-dropdown-label">WALLET OVERVIEW</span>
+            <b>Your Nexa wallet is coming soon</b>
+            <p>Your available balance and supported currency wallets will appear here after the wallet service is connected.</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
+            <button class="profile-nav-button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron">⌄</span></button>
+            <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
+              <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
+              <a href="my-profile.html">Profile</a><a href="#settings-section" data-section="settings-section">Settings</a>
+              <button type="button" id="logout-button">Log out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="nexa-dashboard-content">
+        <section id="dashboard-section" class="page-section active">
+          <section class="nexa-welcome-banner">
+            <div class="welcome-content">
+              <span class="eyebrow">YOUR DIGITAL ASSET MARKETPLACE</span>
+              <h1>Welcome back<span>.</span></h1>
+              <p>Buy, sell and manage digital assets — all from one place.</p>
+              <div class="welcome-actions">
+                <a href="#browse-assets-section" class="primary-button" data-section="browse-assets-section">Explore Assets</a>
+                <a href="#post-ad-section" class="secondary-button" data-section="post-ad-section">＋ Post Your Advertisement</a>
+              </div>
+            </div>
+            <div class="welcome-art" aria-hidden="true"><div class="art-circle">N</div><span class="art-chip chip-one">Websites</span><span class="art-chip chip-two">Social Media</span><span class="art-chip chip-three">SaaS</span></div>
+          </section>
+
+          <section class="dashboard-section-heading"><div><span class="eyebrow">OVERVIEW</span><h2>Your Marketplace at a Glance</h2><p>A quick look at your buying and selling activity.</p></div></section>
+          <section class="nexa-stats-grid">
+            <article class="nexa-stat-card"><span class="stat-icon">▤</span><p>Active Listings</p><strong>—</strong><small>Your published advertisements</small></article>
+            <article class="nexa-stat-card"><span class="stat-icon">♡</span><p>Saved Assets</p><strong>—</strong><small>Assets you are following</small></article>
+            <article class="nexa-stat-card"><span class="stat-icon">🛍</span><p>Purchases</p><strong>—</strong><small>Your asset acquisitions</small></article>
+            <article class="nexa-stat-card"><span class="stat-icon">⇄</span><p>Sales</p><strong>—</strong><small>Your completed sales</small></article>
+          </section>
+
+          <section class="dashboard-section-heading category-heading"><div><span class="eyebrow">EXPLORE THE MARKETPLACE</span><h2>Browse by Category</h2><p>Find the type of digital asset you want to buy or sell.</p></div><a href="#browse-assets-section" data-section="browse-assets-section" class="view-all-link">View all assets →</a></section>
+          <section class="asset-category-grid">
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🌐</span><b>Websites</b><small>Established websites</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>⚙️</span><b>SaaS</b><small>Software businesses</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🛒</span><b>E-commerce</b><small>Online stores</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🔗</span><b>Domains</b><small>Domain names</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>▶️</span><b>YouTube</b><small>Channels</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>📘</span><b>Facebook</b><small>Pages &amp; communities</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>📸</span><b>Instagram</b><small>Accounts</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🎵</span><b>TikTok</b><small>Accounts</small></a>
+            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>＋</span><b>Other Assets</b><small>More digital assets</small></a>
+          </section>
+          <section class="content-panel recent-assets-panel">
+            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#browse-assets-section" data-section="browse-assets-section" class="view-all-link">Browse marketplace →</a></div>
+            <div class="marketplace-empty"><span>⌕</span><b>Marketplace listings will appear here</b><p>Once sellers publish advertisements, you can explore available digital assets here.</p><a href="#browse-assets-section" data-section="browse-assets-section">Explore marketplace</a></div>
+          </section>
+        </section>
+
+        <section id="browse-assets-section" class="page-section">
+          <div class="section-heading"><div><span class="eyebrow">BUY DIGITAL ASSETS</span><h1>Browse Assets</h1><p>Discover websites, online businesses, domains and social media assets.</p></div></div>
+          <div class="asset-category-grid browse-category-grid">
+            <div class="asset-category"><span>◇</span><b>Websites</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>SaaS</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>E-commerce</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Domains</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>YouTube</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Facebook</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Instagram</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>TikTok</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Other Assets</b><small>Listings will appear here</small></div>
+          </div>
+          <div class="marketplace-empty"><span>⌕</span><b>No live listings are connected yet</b><p>Published seller advertisements will be shown here when marketplace listing services are ready.</p></div>
+        </section>
+
+        <section id="post-ad-section" class="page-section">
+          <div class="section-heading"><div><span class="eyebrow">SELL ON NEXA</span><h1>Post Your Advertisement</h1><p>Create a listing to introduce your digital asset to potential buyers.</p></div></div>
+          <div class="content-panel post-ad-intro"><span class="post-ad-icon">＋</span><h2>Ready to sell your digital asset?</h2><p>Prepare your asset details, choose its category and add the information buyers need to evaluate your listing.</p><div class="post-ad-steps"><div><b>01</b><span>Choose asset category</span></div><div><b>02</b><span>Add asset details</span></div><div><b>03</b><span>Set asking price</span></div><div><b>04</b><span>Submit for review</span></div></div><p class="coming-note">The advertisement submission form and verification workflow will be connected in the next development step.</p></div>
+        </section>
+
+        <section id="my-listings-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">SELLER WORKSPACE</span><h1>My Listings</h1><p>Manage the digital assets you have advertised for sale.</p></div><a href="#post-ad-section" class="primary-button" data-section="post-ad-section">＋ Post Your Advertisement</a></div><div class="marketplace-empty"><span>▤</span><b>You have no listings yet</b><p>Your published advertisements will be listed here.</p></div></section>
+        <section id="saved-assets-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">YOUR SHORTLIST</span><h1>Saved Assets</h1><p>Keep track of digital assets you may want to purchase.</p></div></div><div class="marketplace-empty"><span>♡</span><b>No saved assets yet</b><p>Assets you save from the marketplace will appear here.</p></div></section>
+        <section id="my-purchases-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">BUYER WORKSPACE</span><h1>My Purchases</h1><p>Track the digital assets you are purchasing or have purchased.</p></div></div><div class="marketplace-empty"><span>🛍</span><b>No purchases yet</b><p>Your purchase activity will appear here.</p></div></section>
+        <section id="wallet-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">FINANCE</span><h1>My Wallet</h1><p>Your Nexa wallet and supported currencies.</p></div></div><div class="marketplace-empty"><span>▣</span><b>Wallet service is coming soon</b><p>Balance, deposits and withdrawals will be shown after secure payment services are integrated.</p></div></section>
+        <section id="transactions-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">FINANCE</span><h1>Transactions</h1><p>Review your buying and selling transaction history.</p></div></div><div class="marketplace-empty"><span>⇄</span><b>No transactions yet</b><p>Your completed and pending transactions will appear here.</p></div></section>
+        <section id="help-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">SUPPORT</span><h1>Help &amp; Support</h1><p>Get help with buying, selling and managing digital assets.</p></div></div><div class="marketplace-empty"><span>?</span><b>Nexa Support</b><p>Support resources and contact options will be available here.</p></div></section>
+        <section id="settings-section" class="page-section"><div class="section-heading"><div><span class="eyebrow">ACCOUNT</span><h1>Settings</h1><p>Manage your account preferences and security.</p></div></div><div class="marketplace-empty"><span>⚙</span><b>Settings are coming soon</b><p>Your account settings will be available here.</p></div></section>
+      </main>
     </div>
-  </header>
-  <main class="dash-main">
-    <section class="welcome-row">
-      <div><span class="eyebrow">YOUR NEXA SPACE</span><h1>Welcome back<span>.</span></h1><p>Your digital asset journey starts here.</p></div>
-      <div class="account-chip"><span class="avatar" id="avatar-initial">N</span><span><b id="user-name">Nexa member</b><small id="user-email">Loading account…</small></span></div>
-    </section>
-    <section class="status-card">
-      <div><span class="eyebrow">ACCOUNT OVERVIEW</span><h2>Your account is connected</h2><p>You have successfully signed in to Nexa. More marketplace tools will appear here as they are built.</p></div>
-      <span class="status-pill"><i></i> Signed in</span>
-    </section>
-    <section class="quick-grid">
-      <article class="quick-card" id="listings"><span class="quick-icon">＋</span><h3>My Listings</h3><p>Your digital asset listings will be managed here.</p><span class="coming-soon">Coming next</span></article>
-      <article class="quick-card" id="saved"><span class="quick-icon">♡</span><h3>Saved Assets</h3><p>Keep track of assets you are interested in.</p><span class="coming-soon">Coming next</span></article>
-      <article class="quick-card" id="transactions"><span class="quick-icon">⇄</span><h3>Transactions</h3><p>Follow your buying and selling activity.</p><span class="coming-soon">Coming next</span></article>
-    </section>
-    <section class="profile-card" id="profile"><div><span class="eyebrow">PERSONAL DETAILS</span><h2>My Profile</h2><p>Basic account information from your Nexa sign-in.</p></div><dl><div><dt>Email address</dt><dd id="profile-email">Loading…</dd></div><div><dt>Account ID</dt><dd id="profile-id">Loading…</dd></div><div><dt>Email verification</dt><dd id="email-status">Checking…</dd></div></dl></section>
-    <section class="status-card secondary-placeholder" id="verification"><div><span class="eyebrow">ACCOUNT VERIFICATION</span><h2>Identity verification</h2><p>Verification tools will be available here when the review process is introduced.</p></div></section>
-    <section class="status-card secondary-placeholder" id="settings"><div><span class="eyebrow">ACCOUNT SETTINGS</span><h2>Settings</h2><p>Account preferences and security settings will be available here soon.</p></div></section>
-    <section class="status-card secondary-placeholder" id="support"><div><span class="eyebrow">HELP &amp; SUPPORT</span><h2>How can we help?</h2><p>Nexa support resources will be available here soon.</p></div></section>
-    <p class="notice">Email confirmation verifies your email address. Identity verification (KYC), where required, is a separate process.</p>
-  </main>
+  </div>
 </body>
-</html>
