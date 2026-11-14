@@ -482,3 +482,23 @@ body{color:var(--ink);font-size:15px}
 }
 
 .site-header .main-nav a[hidden]{display:none!important}
+
+
+/* Correct home header states: signed-out desktop has no side navigation; mobile menu sits at right. */
+@media(min-width:701px){
+ .site-header .menu-toggle{display:none!important}
+ .site-header .main-nav{display:none!important}
+ .site-header .nav-wrap{justify-content:space-between;gap:16px}
+ .site-header .brand{order:0}
+ .site-header .nav-actions{order:1;margin-left:auto}
+}
+@media(max-width:700px){
+ .site-header .nav-wrap{justify-content:space-between}
+ .site-header .brand{order:0;margin-right:auto}
+ .site-header .nav-actions{order:1;margin-left:0;margin-right:0}
+ .site-header .menu-toggle{order:2;display:flex!important;margin-left:5px}
+ .site-header .menu-toggle span{width:5px;height:5px;border-radius:50%;background:#087f79;margin:0}
+ .site-header .main-nav{left:auto;right:17px;top:calc(100% + 7px)}
+ .site-header .main-nav.open{display:flex}
+ body.nexa-signed-in .site-header .menu-toggle{display:none!important}
+}
