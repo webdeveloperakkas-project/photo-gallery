@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#13B0AA">
+<title>Profile & Verification — Nexa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="profile.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="profile.js" defer></script>
+</head>
+<body>
+<header class="account-header"><a class="brand" href="dashboard.html"><span>N</span>Nexa.</a><a class="back-link" href="dashboard.html">← Back to Dashboard</a></header>
+<main class="profile-shell">
+<section class="page-intro"><div><small>ACCOUNT CENTER</small><h1>Profile & Verification</h1><p>Manage your personal details and complete your account verification.</p></div><span class="overall-status" id="overallStatus">Loading status…</span></section>
+<nav class="step-tabs" aria-label="Profile steps">
+<button class="step-tab active" type="button" data-tab="personal"><i>01</i><span><b>Personal Details</b><small>Account information</small></span></button>
+<button class="step-tab" type="button" data-tab="identity"><i>02</i><span><b>ID Verification</b><small>Identity documents</small></span><em id="identityTabStatus">Not submitted</em></button>
+<button class="step-tab" type="button" data-tab="address"><i>03</i><span><b>Address Verification</b><small>Proof of residence</small></span><em id="addressTabStatus">Not submitted</em></button>
+</nav>
+<section class="profile-panel active" id="personalPanel">
+<div class="panel-heading"><div><small>YOUR INFORMATION</small><h2>Personal Details</h2><p>Enter your legal details. Your sign-in email cannot be changed here.</p></div><span>♙</span></div>
+<form id="personalForm" class="form-card"><div class="form-grid">
+<label class="field wide">Full Name<input id="fullName" maxlength="120" autocomplete="name" required placeholder="Enter your full legal name"></label>
+<label class="field wide">Email Address<input id="emailAddress" type="email" readonly><small>Change your email from Settings.</small></label>
+<label class="field">Date of Birth<input id="dateOfBirth" type="date"></label>
+<label class="field">Phone Number<input id="phoneNumber" type="tel" maxlength="30" placeholder="+880 1XXXXXXXXX"></label>
+<label class="field">Gender<select id="gender"><option value="">Prefer not to say</option><option value="female">Female</option><option value="male">Male</option><option value="non_binary">Non-binary</option><option value="other">Other</option></select></label>
+<label class="field">Country<select id="personalCountry" required><option value="">Select country</option></select></label>
+</div><div class="form-actions"><p id="personalFeedback" class="feedback" aria-live="polite"></p><button class="primary" id="savePersonalButton">Save Changes</button></div></form>
+</section>
+<section class="profile-panel" id="identityPanel" hidden>
+<div class="panel-heading"><div><small>KNOW YOUR CUSTOMER</small><h2>ID Verification</h2><p>Submit a government-issued identity document and a live selfie.</p></div><span>◇</span></div>
+<div class="secure-note">🔒 Your verification documents are stored in private Nexa storage and are accessible only to you and authorized administrators.</div>
+<form id="identityForm" class="form-card">
+<div class="form-grid"><label class="field">ID Document Type<select id="idDocumentType" required><option value="">Select ID type</option><option value="national_id">National ID Card</option><option value="passport">Passport</option><option value="driving_license">Driving License</option></select></label><label class="field">Issuing Country<select id="idCountry" required><option value="">Select country</option></select></label></div>
+<div class="upload-grid">
+<div class="upload-card"><h3>01 · Front Side</h3><p>Clear image of the front of your ID.</p><div class="preview" id="frontPreview">No file selected</div><input id="frontFile" type="file" accept="image/jpeg,image/png,image/webp"><small id="frontFeedback">JPG, PNG or WEBP · Max 2 MB</small></div>
+<div class="upload-card"><h3>02 · Back Side</h3><p>Clear image of the reverse side of your ID.</p><div class="preview" id="backPreview">No file selected</div><input id="backFile" type="file" accept="image/jpeg,image/png,image/webp"><small id="backFeedback">JPG, PNG or WEBP · Max 2 MB</small></div>
+</div>
+<div class="selfie-row"><div><h3>03 · Live Selfie</h3><p>Capture a current photo using your device camera. Existing image uploads are not accepted for this step.</p></div><video id="selfieVideo" autoplay playsinline muted hidden></video><canvas id="selfieCanvas" hidden></canvas><img id="selfiePreview" alt="Captured selfie preview" hidden><button type="button" class="secondary" id="startSelfie">Open Live Camera</button><button type="button" class="secondary" id="captureSelfie" hidden>Capture Selfie</button><small id="selfieFeedback">Not captured</small></div>
+<div class="submission-status" id="identitySubmissionStatus"></div><div class="form-actions"><p id="identityFeedback" class="feedback" aria-live="polite"></p><button class="primary" id="submitIdentityButton">Submit ID Verification</button></div>
+</form>
+</section>
+<section class="profile-panel" id="addressPanel" hidden>
+<div class="panel-heading"><div><small>PROOF OF RESIDENCE</small><h2>Address Verification</h2><p>Provide your current residential address and one supporting document.</p></div><span>⌖</span></div>
+<div class="secure-note">Accepted: Utility Bill, Bank Statement, Government Address Certificate, Rental Agreement, or National/Voter ID showing your current address. Prefer a document issued within the last 3 months.</div>
+<form id="addressForm" class="form-card"><div class="form-grid">
+<label class="field wide">Street Address / House & Building<input id="addressLine" maxlength="240" required></label>
+<label class="field">City<input id="addressCity" maxlength="100" required></label><label class="field">State / Division / Region<input id="addressRegion" maxlength="100"></label>
+<label class="field">Postal Code<input id="postalCode" maxlength="20"></label><label class="field">Country<select id="addressCountry" required><option value="">Select country</option></select></label>
+<label class="field wide">Proof of Address Document<select id="addressDocumentType" required><option value="">Choose document type</option><option value="utility_bill">Utility Bill</option><option value="bank_statement">Bank Statement</option><option value="government_certificate">Government Address Certificate</option><option value="rental_agreement">Rental Agreement</option><option value="national_voter_id">National / Voter ID with current address</option></select></label>
+</div><div class="upload-card address-upload"><h3>04 · Address Document</h3><p>Upload a clear scan or photo of your proof of address.</p><div class="preview" id="addressPreview">No file selected</div><input id="addressFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><small id="addressUploadFeedback">JPG, PNG, WEBP or PDF · Max 2 MB</small></div>
+<div class="submission-status" id="addressSubmissionStatus"></div><div class="form-actions"><p id="addressFeedback" class="feedback" aria-live="polite"></p><button class="primary" id="submitAddressButton">Submit Address Verification</button></div></form>
+</section>
+<p class="page-footnote">Email confirmation and identity verification are separate. Verification is subject to Nexa administrator review.</p>
+</main></body></html>
