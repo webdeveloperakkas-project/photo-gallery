@@ -216,7 +216,7 @@
     "Explore":"অন্বেষণ","Company":"কোম্পানি","Information":"তথ্য",
     "About the platform":"প্ল্যাটফর্ম সম্পর্কে","Contact":"যোগাযোগ","Trust & safety":"আস্থা ও নিরাপত্তা",
     "FAQ":"সাধারণ জিজ্ঞাসা","Terms of service":"সেবার শর্তাবলি","Privacy policy":"গোপনীয়তা নীতি",
-    "All rights reserved.":"সর্বস্বত্ব সংরক্ষিত।","Designed for confident digital ownership.":"আত্মবিশ্বাসের সঙ্গে ডিজিটাল মালিকানা হস্তান্তরের জন্য তৈরি।"
+    "All rights reserved.":"সর্বস্বত্ব সংরক্ষিত।","Designed for confident digital ownership.":"আত্মবিশ্বাসের সঙ্গে ডিজিটাল মালিকানা হস্তান্তরের জন্য তৈরি।",
     "YOUR JOURNEY, MADE CLEAR": "আপনার যাত্রা, আরও সহজ ও স্পষ্ট",
     "From first click to": "প্রথম ক্লিক থেকে",
     "successful handover.": "সফল হস্তান্তর পর্যন্ত।",
