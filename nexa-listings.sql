@@ -61,8 +61,6 @@ create policy "Sellers delete own Nexa listings"
 grant select, insert, delete on public.asset_listings to authenticated;
 grant update (asking_price) on public.asset_listings to authenticated;
 grant update (status, admin_note, reviewed_by, reviewed_at, updated_at) on public.asset_listings to authenticated;
-grant usage, select on sequence public.asset_listings_id_seq to authenticated;
-
 -- Keep update timestamps current for both seller price edits and admin review actions.
 create or replace function public.set_asset_listings_updated_at()
 returns trigger language plpgsql as $$
