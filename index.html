@@ -247,15 +247,6 @@
             <p class="auth-switch-copy">New to Nexa? <a href="#auth-signup" data-auth-open="signup">Create an account</a></p>
           </form>
 
-          <form class="auth-form auth-flow-form" id="signup-otp-form" hidden>
-            <div class="auth-form-heading"><span class="eyebrow">EMAIL VERIFICATION</span><h2>Check your inbox</h2><p>Enter the 6-digit verification code sent to your email address.</p></div>
-            <p class="otp-destination" id="signup-otp-destination"></p>
-            <label>Verification code<input name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="Enter 6-digit code" required></label>
-            <p class="auth-feedback" id="signup-otp-feedback" role="status" aria-live="polite"></p>
-            <button class="button button-dark auth-submit" type="submit">Verify email <span>→</span></button>
-            <button class="auth-text-button" type="button" data-auth-step="signup">Back to sign up</button>
-          </form>
-
           <section class="auth-result" id="signup-success" hidden>
             <div class="auth-result-icon">✓</div><span class="eyebrow">WELCOME ABOARD</span><h2>Account created successfully!</h2><p>Your email is verified and your Nexa account is ready. The dashboard will be connected in the next step.</p>
             <button class="button button-dark auth-submit" type="button" data-auth-close>Continue <span>→</span></button>
@@ -265,18 +256,15 @@
             <div class="auth-form-heading"><span class="eyebrow">ACCOUNT RECOVERY</span><h2>Forgot your password?</h2><p>Enter the email address linked to your Nexa account.</p></div>
             <label>Email address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
             <p class="auth-feedback" id="forgot-email-feedback" role="status" aria-live="polite"></p>
-            <button class="button button-dark auth-submit" type="submit">Send verification code <span>→</span></button>
+            <button class="button button-dark auth-submit" type="submit">Send reset link <span>→</span></button>
             <button class="auth-text-button" type="button" data-auth-step="login">Back to login</button>
           </form>
 
-          <form class="auth-form auth-flow-form" id="forgot-otp-form" hidden>
-            <div class="auth-form-heading"><span class="eyebrow">VERIFY YOUR EMAIL</span><h2>Enter your reset code</h2><p>Enter the 6-digit code sent to your registered email.</p></div>
-            <p class="otp-destination" id="forgot-otp-destination"></p>
-            <label>Verification code<input name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="Enter 6-digit code" required></label>
+          <section class="auth-result auth-flow-form" id="forgot-otp-form" hidden>
+            <div class="auth-result-icon">✉</div><span class="eyebrow">PASSWORD RECOVERY</span><h2>Check your email</h2><p class="otp-destination" id="forgot-otp-destination"></p>
             <p class="auth-feedback" id="forgot-otp-feedback" role="status" aria-live="polite"></p>
-            <button class="button button-dark auth-submit" type="submit">Verify code <span>→</span></button>
-            <button class="auth-text-button" type="button" data-auth-step="forgot">Back</button>
-          </form>
+            <button class="auth-text-button" type="button" data-auth-step="login">Back to login</button>
+          </section>
 
           <form class="auth-form auth-flow-form" id="reset-password-form" hidden>
             <div class="auth-form-heading"><span class="eyebrow">CREATE A NEW PASSWORD</span><h2>Reset your password</h2><p>Choose a strong password you have not used before.</p></div>
