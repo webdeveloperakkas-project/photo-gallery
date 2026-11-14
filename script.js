@@ -184,6 +184,7 @@
   }
   function updateAuthNavigation(session) {
     const signedIn = Boolean(session?.user);
+    document.body.classList.toggle('nexa-signed-in', signedIn);
     if (navLogin) navLogin.hidden = signedIn;
     if (navSignup) navSignup.hidden = signedIn;
     if (navDashboardMenuLink) navDashboardMenuLink.hidden = !signedIn;
