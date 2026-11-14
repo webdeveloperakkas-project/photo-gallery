@@ -9,6 +9,9 @@
   const profileWrap = document.getElementById("dash-profile-menu-wrap");
   const profileToggle = document.getElementById("dash-profile-toggle");
   const profileDropdown = document.getElementById("dash-profile-dropdown");
+  const walletWrap = document.getElementById("dash-wallet-menu-wrap");
+  const walletToggle = document.getElementById("dash-wallet-toggle");
+  const walletDropdown = document.getElementById("dash-wallet-dropdown");
   if (!client) { window.location.replace(home + "#auth-login"); return; }
   client.auth.getSession().then(({data,error}) => {
     if (error || !data?.session?.user) { window.location.replace(home + "#auth-login"); return; }
@@ -66,6 +69,25 @@
       profileDropdown.hidden = true;
       profileToggle?.setAttribute("aria-expanded", "false");
       profileToggle?.focus();
+    }
+  });
+
+  walletToggle?.addEventListener("click", () => {
+    const opening = walletDropdown?.hidden ?? true;
+    if (walletDropdown) walletDropdown.hidden = !opening;
+    walletToggle.setAttribute("aria-expanded", String(opening));
+  });
+  document.addEventListener("click", event => {
+    if (walletWrap && !walletWrap.contains(event.target) && walletDropdown && !walletDropdown.hidden) {
+      walletDropdown.hidden = true;
+      walletToggle?.setAttribute("aria-expanded", "false");
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && walletDropdown && !walletDropdown.hidden) {
+      walletDropdown.hidden = true;
+      walletToggle?.setAttribute("aria-expanded", "false");
+      walletToggle?.focus();
     }
   });
   logout?.addEventListener("click", async () => {
