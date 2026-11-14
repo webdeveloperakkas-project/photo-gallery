@@ -136,6 +136,8 @@
   const navLogin = document.getElementById('nav-login-link');
   const navSignup = document.getElementById('nav-signup-link');
   const navLogout = document.getElementById('nav-logout-button');
+  const navDashboard = document.getElementById('nav-dashboard-link');
+  const navProfile = document.getElementById('nav-profile-link');
   const authViews = {
     signup: signupForm,
     login: loginForm,
@@ -183,6 +185,8 @@
     if (navLogin) navLogin.hidden = signedIn;
     if (navSignup) navSignup.hidden = signedIn;
     if (navLogout) navLogout.hidden = !signedIn;
+    if (navDashboard) navDashboard.hidden = !signedIn;
+    if (navProfile) navProfile.hidden = !signedIn;
   }
   if (!supabaseClient) {
     console.error('Supabase JS failed to load. Check the CDN connection.');
