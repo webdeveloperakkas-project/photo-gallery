@@ -452,3 +452,7 @@ body{color:var(--ink);font-size:15px}
 .auth-loading{height:6px;max-width:300px;margin:22px auto 0;border-radius:20px;background:#e4f1ee;overflow:hidden}
 .auth-loading i{display:block;width:40%;height:100%;border-radius:20px;background:linear-gradient(90deg,#13b0aa,#ffe16a);animation:auth-load 1.7s ease-in-out infinite}
 @keyframes auth-load{0%{transform:translateX(-110%);width:30%}50%{width:55%}100%{transform:translateX(230%);width:30%}}
+
+
+/* Signed-in navigation */
+.profile-nav-link{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(19,176,170,.25);border-radius:50%;color:#087f79;background:#effaf9;text-decoration:none;font-size:17px;transition:background .2s,transform .2s}.profile-nav-link:hover{background:#dff5f2;transform:translateY(-1px)}.profile-nav-link[hidden],#nav-dashboard-link[hidden]{display:none!important}
