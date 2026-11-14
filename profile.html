@@ -1,25 +1,60 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#13B0AA">
-<title>Profile & Verification — Nexa</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="profile.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="profile.js" defer></script>
-</head>
-<body>
-<header class="nexa-top-header">
-  <div class="header-left">
-    <button class="page-menu-toggle" id="pageMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">⋮</button>
-    <a class="nexa-page-brand" href="dashboard.html"><span class="nexa-page-brand-mark">N</span><span>Nexa<span>.</span></span></a>
-    <nav class="page-menu-dropdown" id="pageMenuDropdown" hidden aria-label="Dashboard navigation">
-      <a href="dashboard.html">Dashboard</a><a href="dashboard.html#browse-assets-section">Browse Assets</a><a href="dashboard.html#post-ad-section">Post Your Advertisement</a><a href="dashboard.html#my-listings-section">My Listings</a><a href="dashboard.html#saved-assets-section">Saved Assets</a><a href="dashboard.html#my-purchases-section">My Purchases</a><a href="dashboard.html#transactions-section">Transactions</a><a href="dashboard.html#help-section">Help &amp; Support</a>
-    </nav>
-  </div>
-  <div class="wallet-menu-wrap"><button class="wallet-nav-button" type="button" aria-label="Wallet coming soon" disabled><span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span></button></div>
-  <div class="header-right"><div class="profile-menu-wrap"><button class="profile-nav-button" id="profileHeaderToggle" type="button" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="profileHeaderAvatar">N</span><span class="profile-chevron">⌄</span></button><div class="profile-dropdown" id="profileHeaderDropdown" hidden><div class="profile-dropdown-head"><span class="profile-avatar-small" id="profileHeaderDropdownAvatar">N</span><span><b id="profileHeaderName">Nexa member</b><small id="profileHeaderEmail">Signed in</small></span></div><a href="profile.html">Profile</a><a href="settings.html">Settings</a><button type="button" id="profileHeaderLogout">Log out</button></div></div></div>
-</header>
-<main class="profile-shell">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#13B0AA"><title>Profile & Verification — Nexa</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="dashboard.css"><link rel="stylesheet" href="profile.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="profile.js" defer></script></head><body><div class="nexa-layout"><div class="sidebar-overlay" id="sidebar-overlay"></div>    <aside class="nexa-sidebar" id="nexa-sidebar">
+      <div class="sidebar-brand-row">
+        <a class="nexa-side-brand" href="index.html"><span class="brand-mark">N</span><span>Nexa<span>.</span></span></a>
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">×</button>
+      </div>
+      <nav class="sidebar-navigation" aria-label="Main navigation">
+        <div class="nav-section">
+          <p class="nav-section-title">MAIN MENU</p>
+          <a class="nav-link active" href="dashboard.html"><span class="nav-symbol">▦</span>Dashboard</a>
+          <a class="nav-link" href="dashboard.html#browse-assets-section"><span class="nav-symbol">⌕</span>Browse Assets</a>
+          <a class="nav-link" href="dashboard.html#post-ad-section"><span class="nav-symbol">＋</span>Post Your Advertisement</a>
+          <a class="nav-link" href="dashboard.html#my-listings-section"><span class="nav-symbol">▤</span>My Listings</a>
+          <a class="nav-link" href="dashboard.html#saved-assets-section"><span class="nav-symbol">♡</span>Saved Assets</a>
+          <a class="nav-link" href="dashboard.html#my-purchases-section"><span class="nav-symbol">🛍</span>My Purchases</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">FINANCE</p>
+          <a class="nav-link" href="dashboard.html#wallet-section"><span class="nav-symbol">▣</span>My Wallet</a>
+          <a class="nav-link" href="dashboard.html#transactions-section"><span class="nav-symbol">⇄</span>Transactions</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">SUPPORT</p>
+          <a class="nav-link" href="dashboard.html#help-section"><span class="nav-symbol">?</span>Help &amp; Support</a>
+        </div>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help-card">
+          <div class="help-icon">ⓘ</div><h4>Need Help?</h4>
+          <p>Our team is here to help with your marketplace journey.</p>
+          <a href="dashboard.html#help-section">Get Support →</a>
+        </div>
+      </div>
+    </aside><div class="nexa-main-area">      <header class="nexa-top-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+        </div>
+        <div class="wallet-menu-wrap" id="dash-wallet-menu-wrap">
+          <button class="wallet-nav-button" id="dash-wallet-toggle" aria-label="Open wallet menu" aria-expanded="false" aria-controls="dash-wallet-dropdown">
+            <span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span>
+          </button>
+          <div class="wallet-dropdown" id="dash-wallet-dropdown" hidden>
+            <span class="wallet-dropdown-label">WALLET OVERVIEW</span>
+            <b>Your Nexa wallet is coming soon</b>
+            <p>Your available balance and supported currency wallets will appear here after the wallet service is connected.</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
+            <button class="profile-nav-button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron">⌄</span></button>
+            <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
+              <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
+              <a href="profile.html">Profile</a><a href="settings.html">Settings</a>
+              <button type="button" id="logout-button">Log out</button>
+            </div>
+          </div>
+        </div>
+      </header><main class="nexa-dashboard-content account-page-content"><div class="profile-shell">
 <section class="page-intro"><div><small>ACCOUNT CENTER</small><h1>Profile & Verification</h1><p>Manage your personal details and complete your account verification.</p></div><span class="overall-status" id="overallStatus">Loading status…</span></section>
 <div class="profile-toolbar"><a class="back-link profile-back-button" href="dashboard.html">← Back to Dashboard</a>
 <nav class="step-tabs" aria-label="Profile steps">
@@ -63,4 +98,4 @@
 <div class="submission-status" id="addressSubmissionStatus"></div><div class="form-actions"><p id="addressFeedback" class="feedback" aria-live="polite"></p><button class="primary" id="submitAddressButton">Submit Address Verification</button></div></form>
 </section>
 <div class="camera-modal" id="cameraModal" aria-hidden="true"><div class="camera-dialog" role="dialog" aria-modal="true" aria-labelledby="cameraTitle"><div class="camera-heading"><h2 id="cameraTitle">Secure Camera Capture</h2><button type="button" id="closeCamera" aria-label="Close camera">×</button></div><div class="camera-stage"><video id="cameraVideo" autoplay playsinline muted></video></div><p id="cameraInstruction">Place the document clearly in the frame.</p><div class="camera-actions"><button type="button" class="secondary" id="cancelCamera">Cancel</button><button type="button" class="primary" id="capturePhoto">Capture Photo</button></div><canvas id="cameraCanvas" hidden></canvas></div></div><p class="page-footnote">Email confirmation and identity verification are separate. Verification is subject to Nexa administrator review.</p>
-</main></body></html>
+</div></main></div></div></body></html>
