@@ -29,7 +29,7 @@
             <option value="bn">BN</option>
           </select>
         </label>
-        <a class="login-link" href="#get-started">Log in</a><a class="button button-small button-dark" href="#get-started">List your asset <span>↗</span></a>
+        <a class="login-link" href="#auth-login" data-auth-open="login">Log in</a><a class="button button-small button-dark" href="#auth-signup" data-auth-open="signup">Sign up <span>↗</span></a>
       </div>
     </div>
   </header>
@@ -194,6 +194,60 @@
         <div class="payment-footnote"><span class="payment-lock">✓</span><p><strong>Payment availability matters.</strong> These are planned payment methods, not active integrations yet. The actual options will depend on country, currency, provider approval and transaction eligibility. We’ll display only methods that are enabled at checkout.</p></div>
       </div>
     </section>
+
+
+  <section class="auth-page" id="auth-page" aria-label="Nexa account access" hidden>
+    <div class="auth-shell">
+      <a class="auth-brand brand" href="#" data-auth-close aria-label="Nexa home"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 23.5 16 6l9 17.5h-6.1L16 15.8l-2.9 7.7H7Z" fill="currentColor"/><circle cx="24.5" cy="8" r="3.5" fill="#F5C94B"/></svg></span><span>Nexa<span class="brand-period">.</span></span></a>
+      <button class="auth-close" type="button" data-auth-close aria-label="Close account page">×</button>
+      <div class="auth-layout">
+        <aside class="auth-aside">
+          <span class="eyebrow">WELCOME TO NEXA</span>
+          <h1 id="auth-aside-title">Your next digital opportunity starts here.</h1>
+          <p id="auth-aside-copy">A clearer way to discover, buy and sell digital assets.</p>
+          <div class="auth-aside-points"><span>✓ Transparent marketplace journey</span><span>✓ Identity-first seller onboarding</span><span>✓ Secure transaction experience</span></div>
+          <div class="auth-decoration auth-decoration-one"></div><div class="auth-decoration auth-decoration-two"></div>
+        </aside>
+        <div class="auth-panel">
+          <div class="auth-tabs" role="tablist" aria-label="Account access">
+            <button type="button" class="auth-tab is-active" data-auth-tab="signup" role="tab" aria-selected="true">Create account</button>
+            <button type="button" class="auth-tab" data-auth-tab="login" role="tab" aria-selected="false">Log in</button>
+          </div>
+          <form class="auth-form" id="signup-form" novalidate>
+            <div class="auth-form-heading"><span class="eyebrow">GET STARTED</span><h2>Create your Nexa account</h2><p>Enter your details to get started.</p></div>
+            <div class="auth-name-grid">
+              <label>First name<input name="firstName" type="text" autocomplete="given-name" placeholder="First name" required maxlength="60"></label>
+              <label>Last name<input name="lastName" type="text" autocomplete="family-name" placeholder="Last name" required maxlength="60"></label>
+            </div>
+            <label>Country<select name="country" autocomplete="country-name" required><option value="">Select your country</option><option>Bangladesh</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>India</option><option>Pakistan</option><option>United Arab Emirates</option><option>Saudi Arabia</option><option>Singapore</option><option>Malaysia</option><option>Germany</option><option>France</option><option>Netherlands</option><option>Japan</option><option>South Korea</option><option>Other</option></select></label>
+            <label>Email address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required maxlength="254"></label>
+            <label>Password
+              <span class="password-field"><input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="Create a strong password" required minlength="10" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{10,}"><button class="password-toggle" type="button" data-password-toggle="signup-password" aria-label="Show password">Show</button></span>
+            </label>
+            <ul class="password-rules"><li>At least 10 characters</li><li>One uppercase and one lowercase letter</li><li>One number and one special character</li></ul>
+            <label>Confirm password<span class="password-field"><input id="signup-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Enter your password again" required><button class="password-toggle" type="button" data-password-toggle="signup-confirm-password" aria-label="Show password">Show</button></span></label>
+            <div class="auth-consents">
+              <label class="consent-row"><input type="checkbox" name="terms" required><span>I agree to the <a href="#terms" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</span></label>
+              <label class="consent-row"><input type="checkbox" name="privacy" required><span>I have read and agree to the <a href="#privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
+              <label class="consent-row optional-consent"><input type="checkbox" name="updates"><span>Send me occasional product updates (optional).</span></label>
+            </div>
+            <p class="auth-feedback" id="signup-feedback" role="status" aria-live="polite"></p>
+            <button class="button button-dark auth-submit" type="submit">Create account <span>→</span></button>
+            <p class="auth-switch-copy">Already have an account? <a href="#auth-login" data-auth-open="login">Log in</a></p>
+          </form>
+          <form class="auth-form" id="login-form" hidden>
+            <div class="auth-form-heading"><span class="eyebrow">WELCOME BACK</span><h2>Log in to Nexa</h2><p>Access your Nexa account.</p></div>
+            <label>Email address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+            <label>Password<span class="password-field"><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button class="password-toggle" type="button" data-password-toggle="login-password" aria-label="Show password">Show</button></span></label>
+            <p class="auth-feedback" id="login-feedback" role="status" aria-live="polite"></p>
+            <button class="button button-dark auth-submit" type="submit">Log in <span>→</span></button>
+            <p class="auth-switch-copy">New to Nexa? <a href="#auth-signup" data-auth-open="signup">Create an account</a></p>
+          </form>
+          <p class="auth-security-note">Your account details should be protected by a secure authentication service when registration is connected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer class="site-footer"><div class="container"><div class="footer-main"><div class="footer-brand-col"><a class="brand footer-brand" href="#"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 23.5 16 6l9 17.5h-6.1L16 15.8l-2.9 7.7H7Z" fill="currentColor"/><circle cx="24.5" cy="8" r="3.5" fill="#F5C94B"/></svg></span><span>Nexa<span class="brand-period">.</span></span></a><p>A more considered marketplace for digital ownership.</p></div><div class="footer-col"><b>Explore</b><a href="#marketplace">Marketplace</a><a href="#categories">Categories</a><a href="#how-it-works">How it works</a></div><div class="footer-col"><b>Company</b><a href="#why-nexa">About the platform</a><a href="#get-started">Contact</a><a href="#why-nexa">Trust & safety</a></div><div class="footer-col"><b>Information</b><a href="#faq">FAQ</a><a href="#get-started">Terms of service</a><a href="#get-started">Privacy policy</a></div></div><div class="footer-bottom"><span>© <span id="year"></span> Nexa. All rights reserved.</span><span>Designed for confident digital ownership.</span></div></div></footer>
 </body>
