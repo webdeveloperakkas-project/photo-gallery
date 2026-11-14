@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#13B0AA">
+  <meta name="description" content="Your Nexa profile.">
+  <title>My Profile — Nexa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+  <header class="dash-header">
+    <button class="dash-menu-toggle" type="button" id="dash-menu-toggle" aria-label="Open dashboard menu" aria-expanded="false" aria-controls="dash-main-menu"><span></span><span></span><span></span></button>
+    <a class="dash-brand" href="index.html" aria-label="Nexa home"><span class="brand-mark">N</span><span class="dash-brand-word">Nexa<span>.</span></span></a>
+    <nav class="dash-main-menu" id="dash-main-menu" aria-label="Dashboard menu">
+      <a href="dashboard.html">Dashboard</a><a href="dashboard.html#listings">My Listings</a><a href="dashboard.html#saved">Saved Assets</a><a href="dashboard.html#transactions">Transactions</a><a href="dashboard.html#settings">Settings</a><a class="active" href="my-profile.html">My Profile</a>
+    </nav>
+    <div class="dash-header-actions">
+      <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
+        <button class="profile-nav-button" type="button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false" aria-controls="dash-profile-dropdown"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron" aria-hidden="true">⌄</span></button>
+        <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
+          <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
+          <a href="dashboard.html">Dashboard</a><a href="dashboard.html#listings">My Listings</a><a href="dashboard.html#saved">Saved Assets</a><a href="dashboard.html#transactions">Transactions</a><a href="dashboard.html#settings">Settings</a><a href="my-profile.html">My Profile</a>
+          <button type="button" id="logout-button">Log out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="dash-main">
+    <section class="welcome-row">
+      <div><span class="eyebrow">YOUR NEXA ACCOUNT</span><h1>My Profile<span>.</span></h1><p>View your personal account information.</p></div>
+      <div class="account-chip"><span class="avatar" id="avatar-initial">N</span><span><b id="user-name">Nexa member</b><small id="user-email">Loading account…</small></span></div>
+    </section>
+    <section class="profile-card">
+      <div><span class="eyebrow">PERSONAL DETAILS</span><h2>Account information</h2><p>Your basic information connected to your Nexa sign-in.</p></div>
+      <dl>
+        <div><dt>Full name</dt><dd id="profile-name">Loading…</dd></div>
+        <div><dt>Email address</dt><dd id="profile-email">Loading…</dd></div>
+        <div><dt>Account ID</dt><dd id="profile-id">Loading…</dd></div>
+        <div><dt>Email verification</dt><dd id="email-status">Checking…</dd></div>
+      </dl>
+    </section>
+    <p class="notice">Email confirmation verifies your email address. Identity verification (KYC), where required, is a separate process.</p>
+    <div hidden><span id="settings"></span></div>
+  </main>
+</body>
+</html>
