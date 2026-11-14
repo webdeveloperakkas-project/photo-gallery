@@ -34,12 +34,68 @@
   sidebarClose?.addEventListener("click",closeSidebar);
   overlay?.addEventListener("click",closeSidebar);
 
+  // My Listings demo workspace. Live database/admin approval will be connected separately.
+  const LISTING_DEMO_KEY = "nexa_listing_submissions_demo";
+  const readDemoListings = () => { try { const value=JSON.parse(localStorage.getItem(LISTING_DEMO_KEY)||"[]"); return Array.isArray(value)?value:[]; } catch(e) { return []; } };
+  const writeDemoListings = rows => { try { localStorage.setItem(LISTING_DEMO_KEY,JSON.stringify(rows)); return true; } catch(e) { alert("Could not save this change in this browser."); return false; } };
+  const listingsHost=document.getElementById("my-listings-content");
+  const manageModal=document.getElementById("listing-manage-modal");
+  const manageDetails=document.getElementById("listing-manage-details");
+  let managingListingId=null;
+  const safeText=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  const moneyText=(amount,currency)=>safeText(currency||"USD")+" "+safeText(amount||"");
+  const renderMyListings=()=>{
+    if(!listingsHost)return;
+    const rows=readDemoListings();
+    if(!rows.length){listingsHost.innerHTML="<div class='marketplace-empty'><span>▤</span><b>You have no listings yet</b><p>After you submit an advertisement, it will appear here with its review status.</p></div>";return;}
+    listingsHost.innerHTML=rows.map(item=>{
+      const status=item.status||"Waiting for Approval";
+      const statusClass=status==="Approved"?"approved":status==="Rejected"?"rejected":"pending";
+      return "<article class='my-listing-card'><div class='my-listing-main'><div class='my-listing-category'>"+safeText(item.category||"Digital Asset")+"</div><h2>"+safeText(item.title||"Untitled listing")+"</h2><p>"+safeText(item.summary||"No short summary provided.")+"</p><div class='my-listing-meta'><span>Asking Price <strong>"+moneyText(item.askingPrice,item.currency)+"</strong></span><span>Submitted <strong>"+safeText(item.submittedAt?new Date(item.submittedAt).toLocaleDateString():"—")+"</strong></span></div></div><div class='my-listing-side'><span class='my-listing-status "+statusClass+"'>"+safeText(status)+"</span><button type='button' class='primary-button my-listing-edit' data-manage-listing='"+safeText(item.id)+"'>Edit / Manage</button></div></article>";
+    }).join("");
+  };
+  const openManageListing=id=>{
+    const item=readDemoListings().find(row=>row.id===id); if(!item||!manageModal)return;
+    managingListingId=id;
+    const status=item.status||"Waiting for Approval";
+    const detailRows=(item.details||[]).filter(row=>row.value).map(row=>"<div><small>"+safeText(row.label)+"</small><strong>"+safeText(row.value)+"</strong></div>").join("");
+    manageDetails.innerHTML="<div class='listing-manage-status'>Status: <strong>"+safeText(status)+"</strong></div><div class='listing-manage-readonly'>"+(detailRows||"<p>No saved details.</p>")+"</div>";
+    document.getElementById("listing-manage-title").textContent=item.title||"Listing details";
+    document.getElementById("listing-manage-price").value=item.askingPrice||"";
+    document.getElementById("listing-manage-currency").textContent=item.currency||"USD";
+    manageModal.hidden=false;
+  };
+  const closeManageListing=()=>{if(manageModal)manageModal.hidden=true;managingListingId=null;};
+  listingsHost?.addEventListener("click",event=>{const button=event.target.closest("[data-manage-listing]");if(button)openManageListing(button.dataset.manageListing);});
+  document.getElementById("listing-manage-close")?.addEventListener("click",closeManageListing);
+  document.getElementById("listing-manage-cancel")?.addEventListener("click",closeManageListing);
+  document.getElementById("listing-manage-save")?.addEventListener("click",()=>{
+    if(!managingListingId)return;
+    const price=document.getElementById("listing-manage-price"),value=Number(price.value);
+    if(!price.value||!Number.isFinite(value)||value<=0){price.reportValidity();return;}
+    const rows=readDemoListings(),index=rows.findIndex(row=>row.id===managingListingId);if(index<0)return;
+    rows[index].askingPrice=value;
+    if(writeDemoListings(rows)){renderMyListings();closeManageListing();}
+  });
+  document.getElementById("listing-manage-delete")?.addEventListener("click",()=>{
+    if(!managingListingId)return;
+    const item=readDemoListings().find(row=>row.id===managingListingId);
+    if(!window.confirm("Delete '"+(item?.title||"this listing")+"'? This cannot be undone."))return;
+    const rows=readDemoListings().filter(row=>row.id!==managingListingId);
+    if(writeDemoListings(rows)){renderMyListings();closeManageListing();}
+  });
+  manageModal?.addEventListener("click",event=>{if(event.target===manageModal)closeManageListing();});
+  document.addEventListener("keydown",event=>{if(event.key==="Escape"&&manageModal&&!manageModal.hidden)closeManageListing();});
+  window.nexaRenderMyListings=renderMyListings;
+  renderMyListings();
+
   const openSection = (id) => {
     const target=document.getElementById(id);
     if(!target) return;
     document.querySelectorAll(".page-section").forEach(s=>s.classList.toggle("active",s.id===id));
     document.querySelectorAll(".sidebar-navigation .nav-link").forEach(a=>a.classList.toggle("active",a.dataset.section===id));
     history.replaceState(null,"","#"+id);
+    if(id==="my-listings-section") window.nexaRenderMyListings?.();
     closeSidebar();
     window.scrollTo({top:0,behavior:"smooth"});
   };
@@ -91,7 +147,20 @@
     document.getElementById("listing-submit-back").addEventListener("click",showPreview);
     document.getElementById("listing-submit-open-confirm").addEventListener("click",openConfirmation);
     document.getElementById("listing-confirm-cancel").addEventListener("click",closeConfirmation);
-    document.getElementById("listing-confirm-accept").addEventListener("click",()=>{confirmModal.hidden=true;hideScreens();view="status";statusScreen.hidden=false;try{localStorage.setItem("nexa_listing_submission_demo",JSON.stringify({status:"Waiting for Approval",submittedAt:new Date().toISOString()}))}catch(e){}updateProgress();scrollTop()});
+    document.getElementById("listing-confirm-accept").addEventListener("click",()=>{
+      const details=[],seen=new Set();
+      [...listingForm.querySelectorAll("input,select,textarea")].forEach(el=>{
+        if(el.type==="button"||el.type==="submit"||el.type==="radio"&&!el.checked)return;
+        const key=el.name||el.id||"field"; if(el.type!=="checkbox"&&seen.has(key))return; seen.add(key);
+        let value=el.type==="file"?[...(el.files||[])].map(file=>file.name).join(", "):String(el.value||"").trim();
+        if(el.type==="checkbox"){if(!el.checked)return;const existing=details.find(row=>row.key===key);if(existing){existing.value+=", "+value;return;}}
+        if(value){const label=el.closest("label")?.childNodes[0]?.textContent?.replace("*","").trim()||key.replace(/_/g," ");details.push({key,label,value});}
+      });
+      const record={id:window.crypto?.randomUUID?crypto.randomUUID():String(Date.now()),title:listingForm.elements.title?.value||"Untitled listing",category:listingForm.elements.category?.value||"Digital Asset",summary:listingForm.elements.summary?.value||"",askingPrice:Number(listingForm.elements.asking_price?.value||0),currency:listingForm.elements.price_currency?.value||"USD",status:"Waiting for Approval",submittedAt:new Date().toISOString(),details};
+      const rows=readDemoListings();rows.unshift(record);
+      if(!writeDemoListings(rows))return;
+      confirmModal.hidden=true;hideScreens();view="status";statusScreen.hidden=false;window.nexaRenderMyListings?.();updateProgress();scrollTop();
+    });
     confirmModal.addEventListener("click",e=>{if(e.target===confirmModal)closeConfirmation()});
     document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!confirmModal.hidden)closeConfirmation()});
     listingForm.addEventListener("submit",e=>e.preventDefault());
