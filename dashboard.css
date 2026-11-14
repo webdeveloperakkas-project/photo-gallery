@@ -8,8 +8,8 @@
 .dash-menu-toggle{display:flex;flex:0 0 40px;width:40px;height:40px;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line);border-radius:11px;background:#f3fbfa;cursor:pointer}
 .dash-menu-toggle span{display:block;width:19px;height:2px;border-radius:2px;background:#087f79}
 .dash-brand{order:1}
-.dash-main-menu{display:none;position:absolute;z-index:1001;top:calc(100% + 8px);left:max(24px,5vw);width:245px;margin:0;padding:9px;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 18px 45px rgba(18,54,52,.16)}
-.dash-main-menu.open{display:flex}
+.dash-header nav.dash-main-menu{display:none;position:absolute;z-index:1001;top:calc(100% + 8px);left:max(24px,5vw);width:245px;margin:0;padding:9px;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 18px 45px rgba(18,54,52,.16)}
+.dash-header nav.dash-main-menu.open{display:flex}
 .dash-main-menu a{display:block;padding:11px 12px;border-radius:8px;color:#405b57;font-size:13px;font-weight:650;text-decoration:none}
 .dash-main-menu a:hover{background:#effaf9;color:#078f89}
 .dash-header-actions{display:flex;align-items:center;margin-left:auto}
