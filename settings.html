@@ -1,19 +1,63 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#13B0AA"><title>Settings — Nexa</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="settings.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="settings.js" defer></script></head><body>
-<header class="nexa-top-header">
-  <div class="header-left">
-    <button class="page-menu-toggle" id="pageMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">⋮</button>
-    <a class="nexa-page-brand" href="dashboard.html"><span class="nexa-page-brand-mark">N</span><span>Nexa<span>.</span></span></a>
-    <nav class="page-menu-dropdown" id="pageMenuDropdown" hidden aria-label="Dashboard navigation">
-      <a href="dashboard.html">Dashboard</a><a href="dashboard.html#browse-assets-section">Browse Assets</a><a href="dashboard.html#post-ad-section">Post Your Advertisement</a><a href="dashboard.html#my-listings-section">My Listings</a><a href="dashboard.html#saved-assets-section">Saved Assets</a><a href="dashboard.html#my-purchases-section">My Purchases</a><a href="dashboard.html#transactions-section">Transactions</a><a href="dashboard.html#help-section">Help &amp; Support</a>
-    </nav>
-  </div>
-  <div class="wallet-menu-wrap"><button class="wallet-nav-button" type="button" aria-label="Wallet coming soon" disabled><span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span></button></div>
-  <div class="header-right"><div class="profile-menu-wrap"><button class="profile-nav-button" id="profileHeaderToggle" type="button" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="profileHeaderAvatar">N</span><span class="profile-chevron">⌄</span></button><div class="profile-dropdown" id="profileHeaderDropdown" hidden><div class="profile-dropdown-head"><span class="profile-avatar-small" id="profileHeaderDropdownAvatar">N</span><span><b id="profileHeaderName">Nexa member</b><small id="profileHeaderEmail">Signed in</small></span></div><a href="profile.html">Profile</a><a href="settings.html">Settings</a><button type="button" id="profileHeaderLogout">Log out</button></div></div></div>
-</header>
-<main class="settings-shell"><div class="settings-title-row"><a class="back-link profile-back-button" href="dashboard.html">← Back to Dashboard</a><div class="settings-intro"><small>ACCOUNT PREFERENCES</small><h1>Settings</h1><p>Manage your account, security and notification preferences.</p></div></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#13B0AA"><title>Settings — Nexa</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="dashboard.css"><link rel="stylesheet" href="settings.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="settings.js" defer></script></head><body><div class="nexa-layout"><div class="sidebar-overlay" id="sidebar-overlay"></div>    <aside class="nexa-sidebar" id="nexa-sidebar">
+      <div class="sidebar-brand-row">
+        <a class="nexa-side-brand" href="index.html"><span class="brand-mark">N</span><span>Nexa<span>.</span></span></a>
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">×</button>
+      </div>
+      <nav class="sidebar-navigation" aria-label="Main navigation">
+        <div class="nav-section">
+          <p class="nav-section-title">MAIN MENU</p>
+          <a class="nav-link active" href="dashboard.html"><span class="nav-symbol">▦</span>Dashboard</a>
+          <a class="nav-link" href="dashboard.html#browse-assets-section"><span class="nav-symbol">⌕</span>Browse Assets</a>
+          <a class="nav-link" href="dashboard.html#post-ad-section"><span class="nav-symbol">＋</span>Post Your Advertisement</a>
+          <a class="nav-link" href="dashboard.html#my-listings-section"><span class="nav-symbol">▤</span>My Listings</a>
+          <a class="nav-link" href="dashboard.html#saved-assets-section"><span class="nav-symbol">♡</span>Saved Assets</a>
+          <a class="nav-link" href="dashboard.html#my-purchases-section"><span class="nav-symbol">🛍</span>My Purchases</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">FINANCE</p>
+          <a class="nav-link" href="dashboard.html#wallet-section"><span class="nav-symbol">▣</span>My Wallet</a>
+          <a class="nav-link" href="dashboard.html#transactions-section"><span class="nav-symbol">⇄</span>Transactions</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">SUPPORT</p>
+          <a class="nav-link" href="dashboard.html#help-section"><span class="nav-symbol">?</span>Help &amp; Support</a>
+        </div>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help-card">
+          <div class="help-icon">ⓘ</div><h4>Need Help?</h4>
+          <p>Our team is here to help with your marketplace journey.</p>
+          <a href="dashboard.html#help-section">Get Support →</a>
+        </div>
+      </div>
+    </aside><div class="nexa-main-area">      <header class="nexa-top-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+        </div>
+        <div class="wallet-menu-wrap" id="dash-wallet-menu-wrap">
+          <button class="wallet-nav-button" id="dash-wallet-toggle" aria-label="Open wallet menu" aria-expanded="false" aria-controls="dash-wallet-dropdown">
+            <span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span>
+          </button>
+          <div class="wallet-dropdown" id="dash-wallet-dropdown" hidden>
+            <span class="wallet-dropdown-label">WALLET OVERVIEW</span>
+            <b>Your Nexa wallet is coming soon</b>
+            <p>Your available balance and supported currency wallets will appear here after the wallet service is connected.</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
+            <button class="profile-nav-button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron">⌄</span></button>
+            <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
+              <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
+              <a href="profile.html">Profile</a><a href="settings.html">Settings</a>
+              <button type="button" id="logout-button">Log out</button>
+            </div>
+          </div>
+        </div>
+      </header><main class="nexa-dashboard-content account-page-content"><div class="settings-shell"><div class="settings-title-row"><a class="back-link profile-back-button" href="dashboard.html">← Back to Dashboard</a><div class="settings-intro"><small>ACCOUNT PREFERENCES</small><h1>Settings</h1><p>Manage your account, security and notification preferences.</p></div></div>
 <div class="settings-layout"><nav class="settings-nav" aria-label="Settings sections"><button class="active" data-settings-tab="account">♙　Account Settings</button><button data-settings-tab="security">♧　Security &amp; Privacy</button><button data-settings-tab="notifications">♧　Notifications</button></nav>
 <div class="settings-content">
 <section class="settings-panel active" data-settings-panel="account"><h2>Account Settings</h2><p>Update the email address connected to your account.</p><div class="email-row"><label>Email Address<input id="accountEmail" type="email" readonly></label><button class="secondary" id="showEmailChange">Change</button></div><form id="emailForm" hidden><label>New Email Address<input id="newEmailAddress" type="email" required placeholder="Enter your new email address"></label><button class="primary" type="submit" id="saveEmailChange">Send Confirmation</button><button class="text-button" type="button" id="cancelEmailChange">Cancel</button></form><div id="accountMessage" class="message" role="status"></div></section>
 <section class="settings-panel" data-settings-panel="security"><h2>Security &amp; Privacy</h2><p>Keep your account secure by changing your password.</p><form id="passwordForm"><label>Current Password<input id="currentPassword" type="password" autocomplete="current-password" required></label><label>New Password<input id="newPassword" type="password" minlength="8" autocomplete="new-password" required placeholder="At least 8 characters"></label><label>Confirm New Password<input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required></label><button class="primary" type="submit">Update Password</button></form><div class="privacy-note"><b>Privacy &amp; Security</b><p>Your account information is used to provide Nexa services. Never share your password or verification codes.</p></div><div id="securityMessage" class="message" role="status"></div></section>
 <section class="settings-panel" data-settings-panel="notifications"><h2>Notification Preferences</h2><p>Choose which updates you want to receive.</p><div class="pref-group">GENERAL UPDATES</div><label class="pref"><span><b>News &amp; Updates</b><small>Product news, announcements and important updates.</small></span><input type="checkbox" data-notification-pref="news_updates"></label><div class="pref-group">PAYMENTS &amp; WALLET</div><label class="pref"><span><b>Payment Received</b><small>When a buyer pays or funds are credited to your wallet.</small></span><input type="checkbox" data-notification-pref="payment_received"></label><label class="pref"><span><b>Payment Receipts</b><small>Receipts and confirmations for deposits and payments.</small></span><input type="checkbox" data-notification-pref="payment_receipts"></label><label class="pref"><span><b>Deposit Updates</b><small>When a deposit is submitted, approved or rejected.</small></span><input type="checkbox" data-notification-pref="deposit_updates"></label><label class="pref"><span><b>Withdrawal Updates</b><small>When a withdrawal is processed, approved or rejected.</small></span><input type="checkbox" data-notification-pref="withdrawal_updates"></label><div class="pref-group">MARKETPLACE ACTIVITY</div><label class="pref"><span><b>Listing Updates</b><small>Changes to your digital asset advertisements.</small></span><input type="checkbox" data-notification-pref="listing_updates"></label><label class="pref"><span><b>Purchase &amp; Sale Updates</b><small>When an asset purchase or sale changes status.</small></span><input type="checkbox" data-notification-pref="transaction_updates"></label><label class="pref"><span><b>Verification Updates</b><small>When your identity or address verification is reviewed.</small></span><input type="checkbox" data-notification-pref="verification_updates"></label><div class="pref-group">ACCOUNT SECURITY</div><label class="pref"><span><b>Security Alerts</b><small>Important account and security-related notifications.</small></span><input type="checkbox" data-notification-pref="security_alerts"></label><div id="notificationMessage" class="message" role="status"></div></section>
-</div></div></main></body></html>
+</div></div></div></main></div></div></body></html>
