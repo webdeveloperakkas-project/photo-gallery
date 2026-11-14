@@ -77,6 +77,50 @@
   });
 
 
+
+  // Five-step Nexa transaction journey slider.
+  const journeySlider = document.getElementById('journey-slider');
+  if (journeySlider) {
+    const journeySlides = [...journeySlider.querySelectorAll('[data-journey-slide]')];
+    const journeyDots = [...journeySlider.querySelectorAll('[data-journey-to]')];
+    const journeyPrev = document.getElementById('journey-prev');
+    const journeyNext = document.getElementById('journey-next');
+    const journeyCount = document.getElementById('journey-count');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let journeyIndex = 0;
+    let journeyTimer;
+    function showJourneySlide(index) {
+      journeyIndex = (index + journeySlides.length) % journeySlides.length;
+      journeySlides.forEach((slide, i) => {
+        const active = i === journeyIndex;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+      journeyDots.forEach((dot, i) => {
+        const active = i === journeyIndex;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-selected', String(active));
+      });
+      if (journeyCount) journeyCount.textContent = String(journeyIndex + 1).padStart(2, '0') + ' / ' + String(journeySlides.length).padStart(2, '0');
+      if (journeyPrev) journeyPrev.disabled = journeyIndex === 0;
+      if (journeyNext) journeyNext.disabled = journeyIndex === journeySlides.length - 1;
+    }
+    function stopJourneyTimer() { if (journeyTimer) window.clearInterval(journeyTimer); }
+    function startJourneyTimer() {
+      stopJourneyTimer();
+      if (!reducedMotion) journeyTimer = window.setInterval(() => showJourneySlide((journeyIndex + 1) % journeySlides.length), 6000);
+    }
+    journeyPrev?.addEventListener('click', () => { showJourneySlide(journeyIndex - 1); startJourneyTimer(); });
+    journeyNext?.addEventListener('click', () => { showJourneySlide(journeyIndex + 1); startJourneyTimer(); });
+    journeyDots.forEach(dot => dot.addEventListener('click', () => { showJourneySlide(Number(dot.dataset.journeyTo)); startJourneyTimer(); }));
+    journeySlider.addEventListener('mouseenter', stopJourneyTimer);
+    journeySlider.addEventListener('mouseleave', startJourneyTimer);
+    journeySlider.addEventListener('focusin', stopJourneyTimer);
+    journeySlider.addEventListener('focusout', startJourneyTimer);
+    showJourneySlide(0);
+    startJourneyTimer();
+  }
+
   // Site-wide English/Bangla language selector.
   const languageSelect = document.getElementById('language-select');
   const translations = {
@@ -173,6 +217,65 @@
     "About the platform":"প্ল্যাটফর্ম সম্পর্কে","Contact":"যোগাযোগ","Trust & safety":"আস্থা ও নিরাপত্তা",
     "FAQ":"সাধারণ জিজ্ঞাসা","Terms of service":"সেবার শর্তাবলি","Privacy policy":"গোপনীয়তা নীতি",
     "All rights reserved.":"সর্বস্বত্ব সংরক্ষিত।","Designed for confident digital ownership.":"আত্মবিশ্বাসের সঙ্গে ডিজিটাল মালিকানা হস্তান্তরের জন্য তৈরি।"
+    "YOUR JOURNEY, MADE CLEAR": "আপনার যাত্রা, আরও সহজ ও স্পষ্ট",
+    "From first click to": "প্রথম ক্লিক থেকে",
+    "successful handover.": "সফল হস্তান্তর পর্যন্ত।",
+    "Five simple stages show how buyers and sellers move through a more confident digital asset transaction.": "পাঁচটি সহজ ধাপে দেখুন কীভাবে ক্রেতা ও বিক্রেতা আত্মবিশ্বাসের সঙ্গে ডিজিটাল অ্যাসেটের লেনদেন সম্পন্ন করেন।",
+    "GET STARTED": "শুরু করুন",
+    "Create your account.": "অ্যাকাউন্ট তৈরি করুন।",
+    "Build your trust.": "আস্থা গড়ে তুলুন।",
+    "Join Nexa, complete your profile and verify your identity before listing an asset or taking part in a transaction.": "Nexa-তে যোগ দিন, প্রোফাইল সম্পূর্ণ করুন এবং অ্যাসেট লিস্ট করা বা লেনদেনে অংশ নেওয়ার আগে পরিচয় যাচাই করুন।",
+    "Account setup": "অ্যাকাউন্ট তৈরি",
+    "Identity verification": "পরিচয় যাচাই",
+    "YOUR NEXA PROFILE": "আপনার NEXA প্রোফাইল",
+    "Welcome to Nexa": "Nexa-তে স্বাগতম",
+    "IDENTITY": "পরিচয়",
+    "VERIFIED": "যাচাইকৃত",
+    "SELL WITH CLARITY": "স্বচ্ছভাবে বিক্রি করুন",
+    "List your digital asset.": "আপনার ডিজিটাল অ্যাসেট লিস্ট করুন।",
+    "Show its value.": "এর মূল্য তুলে ধরুন।",
+    "Prepare your website, domain, SaaS product or other eligible digital asset listing with clear details for potential buyers.": "সম্ভাব্য ক্রেতাদের জন্য আপনার ওয়েবসাইট, ডোমেইন, SaaS পণ্য বা উপযুক্ত ডিজিটাল অ্যাসেটের বিস্তারিত তথ্য দিয়ে লিস্টিং তৈরি করুন।",
+    "Free listing model": "বিনামূল্যে লিস্টিং",
+    "Asset details": "অ্যাসেটের বিস্তারিত",
+    "NEW LISTING": "নতুন লিস্টিং",
+    "ASSET TYPE": "অ্যাসেটের ধরন",
+    "Digital business": "ডিজিটাল ব্যবসা",
+    "STATUS": "অবস্থা",
+    "READY TO REVIEW": "পর্যালোচনার জন্য প্রস্তুত",
+    "FIND THE RIGHT FIT": "সঠিক অ্যাসেট খুঁজুন",
+    "Discover and choose.": "খুঁজে বেছে নিন।",
+    "Connect directly.": "সরাসরি যোগাযোগ করুন।",
+    "Buyers explore listings, review available information and discuss the details with sellers before agreeing on the deal.": "ক্রেতারা লিস্টিং দেখবেন, উপলভ্য তথ্য পর্যালোচনা করবেন এবং চুক্তিতে সম্মত হওয়ার আগে বিক্রেতার সঙ্গে বিস্তারিত আলোচনা করবেন।",
+    "Explore opportunities": "সুযোগ খুঁজুন",
+    "Agree on terms": "শর্তে সম্মত হন",
+    "FEATURED ASSET": "বিশেষ অ্যাসেট",
+    "Find your next asset": "আপনার পরবর্তী অ্যাসেট খুঁজুন",
+    "Explore • Compare • Connect": "খুঁজুন • তুলনা করুন • যোগাযোগ করুন",
+    "Find an opportunity": "সুযোগ খুঁজুন",
+    "PAYMENT PROTECTION": "পেমেন্ট সুরক্ষা",
+    "Pay securely.": "নিরাপদে পেমেন্ট করুন।",
+    "Funds stay protected.": "ফান্ড সুরক্ষিত থাকে।",
+    "The buyer pays through an enabled payment flow. Funds are handled by an appropriate payment or escrow partner while the agreed transfer takes place.": "ক্রেতা চালু থাকা পেমেন্ট ব্যবস্থার মাধ্যমে অর্থ পরিশোধ করবেন। সম্মত হস্তান্তর চলাকালে উপযুক্ত পেমেন্ট বা এসক্রো পার্টনার অর্থ পরিচালনা করবে।",
+    "Secure payment flow": "নিরাপদ পেমেন্ট ব্যবস্থা",
+    "Transaction records": "লেনদেনের রেকর্ড",
+    "SECURE TRANSACTION": "নিরাপদ লেনদেন",
+    "PAYMENT": "পেমেন্ট",
+    "PROTECTED": "সুরক্ষিত",
+    "Payment received": "পেমেন্ট গ্রহণ করা হয়েছে",
+    "Transfer can proceed": "হস্তান্তর শুরু করা যাবে",
+    "DEAL COMPLETED": "লেনদেন সম্পন্ন",
+    "Transfer and confirm.": "হস্তান্তর ও নিশ্চিত করুন।",
+    "Complete the deal.": "চুক্তি সম্পন্ন করুন।",
+    "The seller transfers the agreed asset. Once the buyer confirms receipt, the seller's funds are released according to the transaction terms and provider rules.": "বিক্রেতা সম্মত অ্যাসেট হস্তান্তর করবেন। ক্রেতা গ্রহণ নিশ্চিত করলে লেনদেনের শর্ত ও প্রদানকারীর নিয়ম অনুযায়ী বিক্রেতার অর্থ ছেড়ে দেওয়া হবে।",
+    "Buyer confirmation": "ক্রেতার নিশ্চিতকরণ",
+    "Seller payout": "বিক্রেতার পেমেন্ট",
+    "BUYER": "ক্রেতা",
+    "Asset received": "অ্যাসেট গ্রহণ করা হয়েছে",
+    "Confirmed ✓": "নিশ্চিত ✓",
+    "SELLER": "বিক্রেতা",
+    "Funds released": "ফান্ড রিলিজ হয়েছে",
+    "Transaction complete": "লেনদেন সম্পন্ন",
+    "Payment handling and fund release depend on the enabled payment or escrow provider, transaction terms and applicable rules.": "পেমেন্ট পরিচালনা ও অর্থ ছেড়ে দেওয়া চালু থাকা পেমেন্ট বা এসক্রো প্রদানকারী, লেনদেনের শর্ত এবং প্রযোজ্য নিয়মের ওপর নির্ভরশীল।",
   };
   const originalTextNodes = [];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
