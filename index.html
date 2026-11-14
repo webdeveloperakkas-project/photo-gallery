@@ -31,7 +31,20 @@
             <option value="bn">BN</option>
           </select>
         </label>
-        <a class="login-link" href="dashboard.html" id="nav-dashboard-link" hidden>Dashboard</a><a class="profile-nav-link" href="dashboard.html#profile" id="nav-profile-link" aria-label="Open profile" title="Profile" hidden><span aria-hidden="true">👤</span></a><a class="login-link" href="#auth-login" data-auth-open="login" id="nav-login-link">Log in</a><a class="button button-small button-dark" href="#auth-signup" data-auth-open="signup" id="nav-signup-link">Sign up <span>↗</span></a><button class="login-link" type="button" id="nav-logout-button" hidden>Log out</button>
+        <a class="login-link" href="#auth-login" data-auth-open="login" id="nav-login-link">Log in</a><a class="button button-small button-dark" href="#auth-signup" data-auth-open="signup" id="nav-signup-link">Sign up <span>↗</span></a>
+        <div class="profile-menu-wrap" id="profile-menu-wrap" hidden>
+          <button class="profile-nav-button" type="button" id="profile-menu-toggle" aria-label="Open profile menu" aria-expanded="false" aria-controls="profile-dropdown"><span class="profile-avatar-small" id="nav-avatar-initial">N</span><span class="profile-chevron" aria-hidden="true">⌄</span></button>
+          <div class="profile-dropdown" id="profile-dropdown" hidden>
+            <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dropdown-avatar-initial">N</span><span><b id="dropdown-user-name">Nexa member</b><small id="dropdown-user-email">Signed in</small></span></div>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="dashboard.html#profile">My Profile</a>
+            <a href="dashboard.html#listings">My Listings</a>
+            <a href="dashboard.html#saved">Saved Assets</a>
+            <a href="dashboard.html#transactions">Transactions</a>
+            <a href="dashboard.html#settings">Settings</a>
+            <button type="button" id="menu-logout-button">Log out</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
