@@ -9,22 +9,24 @@
 </head>
 <body>
 <header class="nexa-top-header">
-  <div class="header-left"><a class="nexa-page-brand" href="dashboard.html"><span class="nexa-page-brand-mark">N</span><span>Nexa<span>.</span></span></a></div>
-  <div class="wallet-menu-wrap">
-    <button class="wallet-nav-button" type="button" aria-label="Wallet (coming soon)" disabled><span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span></button>
+  <div class="header-left">
+    <button class="page-menu-toggle" id="pageMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">⋮</button>
+    <a class="nexa-page-brand" href="dashboard.html"><span class="nexa-page-brand-mark">N</span><span>Nexa<span>.</span></span></a>
+    <nav class="page-menu-dropdown" id="pageMenuDropdown" hidden aria-label="Dashboard navigation">
+      <a href="dashboard.html">Dashboard</a><a href="dashboard.html#browse-assets-section">Browse Assets</a><a href="dashboard.html#post-ad-section">Post Your Advertisement</a><a href="dashboard.html#my-listings-section">My Listings</a><a href="dashboard.html#saved-assets-section">Saved Assets</a><a href="dashboard.html#my-purchases-section">My Purchases</a><a href="dashboard.html#transactions-section">Transactions</a><a href="dashboard.html#help-section">Help &amp; Support</a>
+    </nav>
   </div>
-  <div class="header-right"><div class="profile-menu-wrap">
-    <button class="profile-nav-button" id="profileHeaderToggle" type="button" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="profileHeaderAvatar">N</span><span class="profile-chevron">⌄</span></button>
-    <div class="profile-dropdown" id="profileHeaderDropdown" hidden><div class="profile-dropdown-head"><span class="profile-avatar-small" id="profileHeaderDropdownAvatar">N</span><span><b id="profileHeaderName">Nexa member</b><small id="profileHeaderEmail">Signed in</small></span></div><a href="profile.html">Profile</a><a href="settings.html">Settings</a><button type="button" id="profileHeaderLogout">Log out</button></div>
-  </div></div>
+  <div class="wallet-menu-wrap"><button class="wallet-nav-button" type="button" aria-label="Wallet coming soon" disabled><span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span></button></div>
+  <div class="header-right"><div class="profile-menu-wrap"><button class="profile-nav-button" id="profileHeaderToggle" type="button" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="profileHeaderAvatar">N</span><span class="profile-chevron">⌄</span></button><div class="profile-dropdown" id="profileHeaderDropdown" hidden><div class="profile-dropdown-head"><span class="profile-avatar-small" id="profileHeaderDropdownAvatar">N</span><span><b id="profileHeaderName">Nexa member</b><small id="profileHeaderEmail">Signed in</small></span></div><a href="profile.html">Profile</a><a href="settings.html">Settings</a><button type="button" id="profileHeaderLogout">Log out</button></div></div></div>
 </header>
-<main class="profile-shell"><div class="profile-backbar"><a class="back-link" href="dashboard.html">← Back to Dashboard</a></div>
+<main class="profile-shell">
 <section class="page-intro"><div><small>ACCOUNT CENTER</small><h1>Profile & Verification</h1><p>Manage your personal details and complete your account verification.</p></div><span class="overall-status" id="overallStatus">Loading status…</span></section>
+<div class="profile-toolbar"><a class="back-link profile-back-button" href="dashboard.html">← Back to Dashboard</a>
 <nav class="step-tabs" aria-label="Profile steps">
 <button class="step-tab active" type="button" data-tab="personal"><i>01</i><span><b>Personal Details</b><small>Account information</small></span></button>
 <button class="step-tab" type="button" data-tab="identity"><i>02</i><span><b>ID Verification</b><small>Identity documents</small></span><em id="identityTabStatus">Not submitted</em></button>
 <button class="step-tab" type="button" data-tab="address"><i>03</i><span><b>Address Verification</b><small>Proof of residence</small></span><em id="addressTabStatus">Not submitted</em></button>
-</nav>
+</nav></div>
 <section class="profile-panel active" id="personalPanel">
 <div class="panel-heading"><div><small>YOUR INFORMATION</small><h2>Personal Details</h2><p>Enter your legal details. Your sign-in email cannot be changed here.</p></div><span>♙</span></div>
 <form id="personalForm" class="form-card"><div class="form-grid">
