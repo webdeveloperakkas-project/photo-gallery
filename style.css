@@ -138,3 +138,102 @@ body{color:var(--ink);font-size:15px}
 .site-footer .footer-bottom{border-top-color:#ffffff45;color:#f0fff7}
 .site-footer .footer-brand .brand-mark{background:#fff;color:#075c43}
 .site-footer .footer-brand .brand-period{color:#ffdf68}
+
+
+
+/* ===== Nexa teal + soft yellow brand refresh ===== */
+:root{
+  --purple:#13B0AA;
+  --purple-dark:#087D79;
+  --green:#13B0AA;
+  --yellow:#FFE16A;
+  --ink:#183B3A;
+  --muted:#637B79;
+  --line:#DDEDEC;
+  --soft:#F3FBFA;
+}
+.announcement{background:#087D79}
+.announcement-dot{background:#FFE16A;box-shadow:0 0 0 4px #FFE16A35}
+.brand-mark{background:#13B0AA;color:#fff;box-shadow:0 7px 17px #13B0AA35}
+.brand-period{color:#13B0AA}
+.button-dark{background:#13B0AA;box-shadow:0 7px 18px #13B0AA35}
+.button-dark:hover{background:#087D79}
+.hero{
+  background:
+    radial-gradient(circle at 78% 23%,#5AD8D0 0,transparent 34%),
+    radial-gradient(circle at 8% 90%,#087D79 0,transparent 42%),
+    linear-gradient(118deg,#087D79 0%,#13B0AA 54%,#0B9994 100%);
+}
+.hero:after{border-color:#ffffff25;box-shadow:0 0 0 48px #ffffff0b,0 0 0 96px #ffffff07}
+.hero .eyebrow{color:#E1FFFC}
+.hero .eyebrow-icon{color:#FFE16A}
+.hero h1{font-size:clamp(43px,4.8vw,61px);letter-spacing:-2.8px}
+.hero .gradient-text{
+  background:linear-gradient(90deg,#FFF0A8 0%,#FFE16A 55%,#FFF6D1 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero-description{color:#E8FFFD}
+.hero-search{border-color:#fff}
+.hero-search:focus-within{border-color:#FFE16A}
+.hero-search button{background:#FFE16A;color:#164543}
+.hero-search button:hover{background:#FFF0A8}
+.search-icon{color:#087D79}
+.avatar-stack i{border-color:#0C9690}
+.avatar-stack i:nth-child(1){background:#FFE16A;color:#4C3A00}
+.avatar-stack i:nth-child(2){background:#fff;color:#087D79}
+.avatar-stack i:nth-child(3){background:#B9F3EE;color:#087D79}
+.avatar-stack i:nth-child(4){background:#087D79;color:#fff}
+.hero-trust strong{color:#fff}
+.hero-trust small{color:#D5F8F5}
+.visual-glow{background:radial-gradient(circle,#8BE7E1 0%,#42C9C188 43%,transparent 72%)}
+.chip-icon.green{background:#DDF9F6;color:#087D79}
+.shield-icon{background:#FFF3BF;color:#6B5200}
+.star-one{color:#FFE16A}
+.star-two{color:#D4FF9E}
+.hero-bottom{border-color:#ffffff45}
+.hero-bottom>span{color:#D5F8F5}
+.hero-categories{color:#fff}
+.hero-categories b{color:#FFE16A}
+.categories-section .eyebrow,.listings-section .eyebrow,.process-section .eyebrow,.pricing-copy .eyebrow,.faq-grid .eyebrow{color:#087D79}
+.section-heading h2 .gradient-text,.faq-grid h2 .gradient-text{
+  background:linear-gradient(90deg,#13B0AA,#087D79);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.category-card:hover{border-color:#8ADBD6;box-shadow:0 15px 32px #087D7918}
+.cat-purple .category-icon{background:#13B0AA;color:#fff}
+.cat-green .category-icon{background:#DDF8F5;color:#087D79}
+.cat-yellow .category-icon{background:#FFE16A;color:#4C3A00}
+.category-card>i{color:#087D79}
+.listings-section{background:linear-gradient(180deg,#EAF9F7 0%,#F8FCFB 100%)}
+.listing-card{border-color:#D7ECEA}
+.listing-meta,.save-button{color:#087D79}
+.filter-chip.active,.filter-chip:hover{background:#13B0AA;border-color:#13B0AA;color:#fff}
+.slider-btn{color:#087D79;border-color:#B8E3DF}
+.slider-btn:hover{background:#13B0AA}
+.trust-band{background:linear-gradient(115deg,#087D79 0%,#13B0AA 72%,#087D79 100%)}
+.trust-intro h2 span,.cta-inner h2 span{color:#FFE16A}
+.feature-icon{background:#FFE16A;color:#17514E}
+.process-icon{box-shadow:0 8px 25px #087D7918}
+.purple-icon{background:#13B0AA;color:#fff}
+.green-icon{background:#DDF8F5;color:#087D79}
+.yellow-icon{background:#FFE16A;color:#4C3A00}
+.blue-icon{background:#DDF4F2;color:#087D79}
+.process-grid:before{border-color:#B9E3DF}
+.step-number{color:#087D79}
+.pricing-section{background:linear-gradient(120deg,#EFFAF9 0%,#FFFBEA 100%)}
+.pricing-card{border-color:#DDEDEC;box-shadow:0 22px 60px #087D7912}
+.pricing-copy li span{background:#DDF8F5;color:#087D79}
+.fee-panel{background:#FFFEF7;border-color:#F3E4A9}
+.fee-panel-top{color:#087D79}
+.fee-label{background:#FFE16A;color:#4C3A00}
+.fee-total{color:#087D79}
+.fee-sum b{color:#087D79}
+.faq-list summary span{color:#13B0AA}
+.closing-cta{background:linear-gradient(110deg,#087D79 0%,#13B0AA 72%,#087D79 100%)}
+.button-yellow{background:#FFE16A;color:#164543;box-shadow:0 9px 24px #064C4938}
+.button-yellow:hover{background:#FFF0A8}
+.site-footer .footer-brand .brand-mark{background:#fff;color:#087D79}
+.site-footer .footer-brand .brand-period{color:#FFE16A}
+@media(max-width:700px){
+ .hero h1{font-size:clamp(37px,9vw,46px);letter-spacing:-2px}
+}
