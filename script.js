@@ -122,59 +122,67 @@
   }
 
 
-  // Nexa account access screens (UI only until a secure auth backend is connected).
+  // Nexa account access screens. Real email OTP and authentication require a connected backend.
   const authPage = document.getElementById('auth-page');
   const signupForm = document.getElementById('signup-form');
   const loginForm = document.getElementById('login-form');
   const authTabs = [...document.querySelectorAll('[data-auth-tab]')];
-  function showAuth(mode) {
-    if (!authPage) return;
-    const isLogin = mode === 'login';
-    authPage.hidden = false;
-    document.body.classList.add('auth-open');
-    signupForm.hidden = isLogin;
-    loginForm.hidden = !isLogin;
+  const authViews = {
+    signup: signupForm,
+    login: loginForm,
+    'signup-otp': document.getElementById('signup-otp-form'),
+    'signup-success': document.getElementById('signup-success'),
+    forgot: document.getElementById('forgot-email-form'),
+    'forgot-otp': document.getElementById('forgot-otp-form'),
+    reset: document.getElementById('reset-password-form'),
+    'reset-success': document.getElementById('reset-success')
+  };
+  let signupEmail = '';
+  let recoveryEmail = '';
+  let signupDetails = null;
+  function showAuthView(view) {
+    Object.entries(authViews).forEach(([key, element]) => { if (element) element.hidden = key !== view; });
+    const tabMode = view === 'login' ? 'login' : 'signup';
     authTabs.forEach(tab => {
-      const active = tab.dataset.authTab === mode;
+      const active = tab.dataset.authTab === tabMode && (view === tabMode);
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
     });
     const asideTitle = document.getElementById('auth-aside-title');
     const asideCopy = document.getElementById('auth-aside-copy');
-    if (asideTitle) asideTitle.textContent = isLogin ? 'Welcome back to Nexa.' : 'Your next digital opportunity starts here.';
-    if (asideCopy) asideCopy.textContent = isLogin ? 'Log in to continue your digital asset journey.' : 'A clearer way to discover, buy and sell digital assets.';
-    const feedback = document.getElementById(isLogin ? 'login-feedback' : 'signup-feedback');
-    if (feedback) feedback.textContent = '';
+    if (asideTitle) asideTitle.textContent = view === 'login' ? 'Welcome back to Nexa.' : view.startsWith('forgot') || view === 'reset' || view === 'reset-success' ? 'Let’s get you back into your account.' : 'Your next digital opportunity starts here.';
+    if (asideCopy) asideCopy.textContent = view === 'login' ? 'Log in to continue your digital asset journey.' : view.startsWith('forgot') || view === 'reset' || view === 'reset-success' ? 'Verify your email and securely choose a new password.' : 'A clearer way to discover, buy and sell digital assets.';
     window.scrollTo(0,0);
+  }
+  function showAuth(mode) {
+    if (!authPage) return;
+    authPage.hidden = false;
+    document.body.classList.add('auth-open');
+    showAuthView(mode);
   }
   function closeAuth() {
     if (!authPage) return;
     authPage.hidden = true;
     document.body.classList.remove('auth-open');
-    if (location.hash === '#auth-login' || location.hash === '#auth-signup') history.replaceState(null,'',location.pathname + location.search);
+    if (location.hash.startsWith('#auth-')) history.replaceState(null,'',location.pathname + location.search);
+  }
+  function navigateAuth(view) {
+    if (location.hash !== '#auth-' + view) history.pushState(null,'','#auth-' + view);
+    showAuth(view);
   }
   document.querySelectorAll('[data-auth-open]').forEach(link => link.addEventListener('click', event => {
-    event.preventDefault();
-    const mode = link.dataset.authOpen;
-    if (location.hash !== '#auth-' + mode) history.pushState(null,'','#auth-' + mode);
-    showAuth(mode);
+    event.preventDefault(); navigateAuth(link.dataset.authOpen);
   }));
-  document.querySelectorAll('[data-auth-tab]').forEach(tab => tab.addEventListener('click', () => {
-    const mode = tab.dataset.authTab;
-    if (location.hash !== '#auth-' + mode) history.pushState(null,'','#auth-' + mode);
-    showAuth(mode);
-  }));
-  document.querySelectorAll('[data-auth-close]').forEach(button => button.addEventListener('click', event => {
-    event.preventDefault();
-    closeAuth();
-  }));
+  document.querySelectorAll('[data-auth-tab]').forEach(tab => tab.addEventListener('click', () => navigateAuth(tab.dataset.authTab)));
+  document.querySelectorAll('[data-auth-step]').forEach(button => button.addEventListener('click', () => navigateAuth(button.dataset.authStep)));
+  document.querySelectorAll('[data-auth-close]').forEach(button => button.addEventListener('click', event => { event.preventDefault(); closeAuth(); }));
   window.addEventListener('hashchange', () => {
-    if (location.hash === '#auth-login') showAuth('login');
-    else if (location.hash === '#auth-signup') showAuth('signup');
+    const view = location.hash.replace('#auth-','');
+    if (authViews[view]) showAuth(view);
     else if (authPage && !authPage.hidden) closeAuth();
   });
-  if (location.hash === '#auth-login') showAuth('login');
-  else if (location.hash === '#auth-signup') showAuth('signup');
+  const initialAuthView = location.hash.replace('#auth-','');
+  if (authViews[initialAuthView]) showAuth(initialAuthView);
 
   document.querySelectorAll('[data-password-toggle]').forEach(button => button.addEventListener('click', () => {
     const input = document.getElementById(button.dataset.passwordToggle);
@@ -184,25 +192,60 @@
     button.textContent = reveal ? 'Hide' : 'Show';
     button.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
   }));
+
   signupForm?.addEventListener('submit', event => {
     event.preventDefault();
     const feedback = document.getElementById('signup-feedback');
     const password = document.getElementById('signup-password');
     const confirm = document.getElementById('signup-confirm-password');
-    if (password.value !== confirm.value) {
-      feedback.textContent = 'Your passwords do not match. Please check and try again.';
-      confirm.focus();
-      return;
-    }
+    if (password.value !== confirm.value) { feedback.textContent = 'Your passwords do not match. Please check and try again.'; confirm.focus(); return; }
     if (!signupForm.reportValidity()) return;
-    feedback.textContent = 'The sign-up form is ready. Secure account creation will be enabled after the authentication service is connected.';
+    signupDetails = Object.fromEntries(new FormData(signupForm).entries());
+    signupEmail = signupDetails.email;
+    document.getElementById('signup-otp-destination').textContent = 'Verification code destination: ' + signupEmail;
+    document.getElementById('signup-otp-feedback').textContent = 'Demo preview: email delivery is not active until the authentication service is connected.';
+    navigateAuth('signup-otp');
   });
+  document.getElementById('signup-otp-form')?.addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const feedback = document.getElementById('signup-otp-feedback');
+    if (!form.reportValidity()) return;
+    feedback.textContent = 'OTP verification cannot be completed until the email authentication service is connected. This preview does not send or validate real codes.';
+  });
+
   loginForm?.addEventListener('submit', event => {
     event.preventDefault();
     if (!loginForm.reportValidity()) return;
-    document.getElementById('login-feedback').textContent = 'Login is not connected yet. A secure authentication service is required before you can access an account.';
+    document.getElementById('login-feedback').textContent = 'Wrong email or password. Please check your details and try again. (Demo preview — real credentials will be checked by the authentication service.)';
   });
 
+  document.getElementById('forgot-email-form')?.addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    recoveryEmail = new FormData(form).get('email').trim();
+    document.getElementById('forgot-otp-destination').textContent = 'Password reset code destination: ' + recoveryEmail;
+    document.getElementById('forgot-otp-feedback').textContent = 'Demo preview: a reset email will be sent when the authentication service is connected.';
+    navigateAuth('forgot-otp');
+  });
+  document.getElementById('forgot-otp-form')?.addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    document.getElementById('forgot-otp-feedback').textContent = 'Code verification requires the connected email authentication service. No real code has been sent in this preview.';
+  });
+  document.getElementById('reset-password-form')?.addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const password = document.getElementById('reset-password');
+    const confirm = document.getElementById('reset-confirm-password');
+    const feedback = document.getElementById('reset-password-feedback');
+    if (password.value !== confirm.value) { feedback.textContent = 'Your passwords do not match. Please try again.'; confirm.focus(); return; }
+    if (!form.reportValidity()) return;
+    feedback.textContent = 'Password changes require a verified reset session from the authentication service. No password has been changed in this preview.';
+  });
+  
   // Site-wide English/Bangla language selector.
   const languageSelect = document.getElementById('language-select');
   const translations = {
