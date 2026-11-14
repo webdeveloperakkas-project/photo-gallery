@@ -192,7 +192,27 @@
       if (error) console.error('Unable to read Nexa session:', error.message);
       updateAuthNavigation(data?.session);
     });
-    supabaseClient.auth.onAuthStateChange((_event, session) => updateAuthNavigation(session));
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      updateAuthNavigation(session);
+      if (event === 'PASSWORD_RECOVERY') navigateAuth('reset');
+      if (event === 'SIGNED_IN' && session?.user && new URLSearchParams(location.hash.slice(1)).get('type') === 'signup') {
+        const heading = document.querySelector('#signup-success h2');
+        const copy = document.querySelector('#signup-success p');
+        if (heading) heading.textContent = 'Email confirmed successfully!';
+        if (copy) copy.textContent = 'Your email address is verified and your Nexa account is ready. The dashboard will be connected in the next step.';
+        navigateAuth('signup-success');
+      }
+    });
+    supabaseClient.auth.getSession().then(({ data }) => {
+      const hashParams = new URLSearchParams(location.hash.slice(1));
+      if (data?.session && hashParams.get('type') === 'signup') {
+        const heading = document.querySelector('#signup-success h2');
+        const copy = document.querySelector('#signup-success p');
+        if (heading) heading.textContent = 'Email confirmed successfully!';
+        if (copy) copy.textContent = 'Your email address is verified and your Nexa account is ready. The dashboard will be connected in the next step.';
+        navigateAuth('signup-success');
+      }
+    });
   }
 
   function showAuthView(view) {
@@ -273,36 +293,18 @@
         options: { data: signupDetails }
       });
       if (error) throw error;
-      if (data.session) {
-        document.getElementById('signup-success').querySelector('h2').textContent = 'Account created successfully!';
-        navigateAuth('signup-success');
-      } else {
-        document.getElementById('signup-otp-destination').textContent = 'Verification code sent to: ' + signupEmail;
-        setAuthFeedback('signup-otp-feedback','Enter the 6-digit code from your Supabase confirmation email.',false);
-        navigateAuth('signup-otp');
-      }
+      const successHeading = document.querySelector('#signup-success h2');
+      const successCopy = document.querySelector('#signup-success p');
+      if (successHeading) successHeading.textContent = data.session ? 'Account created successfully!' : 'Check your email to confirm your account.';
+      if (successCopy) successCopy.textContent = data.session
+        ? 'Your Nexa account is ready. The dashboard will be connected in the next step.'
+        : 'We sent you a confirmation link. Open the email and click Confirm to verify your address. You will return to Nexa automatically.';
+      navigateAuth('signup-success');
       password.value = '';
       confirm.value = '';
     } catch (error) {
       setAuthFeedback('signup-feedback',friendlyAuthError(error));
     } finally { setFormBusy(signupForm,false); }
-  });
-
-  document.getElementById('signup-otp-form')?.addEventListener('submit', async event => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (!form.reportValidity()) return;
-    if (!supabaseClient) { setAuthFeedback('signup-otp-feedback','Authentication service is unavailable.'); return; }
-    const token = String(new FormData(form).get('code') || '').trim();
-    setFormBusy(form,true,'Verifying…');
-    try {
-      const { data, error } = await supabaseClient.auth.verifyOtp({ email: signupEmail, token, type: 'signup' });
-      if (error) throw error;
-      updateAuthNavigation(data.session);
-      navigateAuth('signup-success');
-    } catch (error) {
-      setAuthFeedback('signup-otp-feedback',friendlyAuthError(error));
-    } finally { setFormBusy(form,false); }
   });
 
   loginForm?.addEventListener('submit', async event => {
@@ -336,28 +338,12 @@
     try {
       const { error } = await supabaseClient.auth.resetPasswordForEmail(recoveryEmail);
       if (error) throw error;
-      document.getElementById('forgot-otp-destination').textContent = 'Password reset code sent to: ' + recoveryEmail;
-      setAuthFeedback('forgot-otp-feedback','Enter the 6-digit recovery code from your email.',false);
+      const destination = document.getElementById('forgot-otp-destination');
+      if (destination) destination.textContent = 'Password reset email sent to: ' + recoveryEmail;
+      setAuthFeedback('forgot-otp-feedback','Open the password reset email and click its link. You will return to Nexa to choose a new password.',false);
       navigateAuth('forgot-otp');
     } catch (error) {
       setAuthFeedback('forgot-email-feedback',friendlyAuthError(error));
-    } finally { setFormBusy(form,false); }
-  });
-
-  document.getElementById('forgot-otp-form')?.addEventListener('submit', async event => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (!form.reportValidity()) return;
-    if (!supabaseClient) { setAuthFeedback('forgot-otp-feedback','Authentication service is unavailable.'); return; }
-    const token = String(new FormData(form).get('code') || '').trim();
-    setFormBusy(form,true,'Verifying…');
-    try {
-      const { data, error } = await supabaseClient.auth.verifyOtp({ email: recoveryEmail, token, type: 'recovery' });
-      if (error) throw error;
-      if (!data.session) throw new Error('The recovery session could not be established. Request a new code and try again.');
-      navigateAuth('reset');
-    } catch (error) {
-      setAuthFeedback('forgot-otp-feedback',friendlyAuthError(error));
     } finally { setFormBusy(form,false); }
   });
 
