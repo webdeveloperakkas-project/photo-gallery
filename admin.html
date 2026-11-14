@@ -1,23 +1,130 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#13B0AA"><title>Nexa Admin — Listing Review</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#13B0AA">
+  <meta name="description" content="Nexa marketplace administration workspace">
+  <title>Admin Workspace — Nexa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="admin.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin.js" defer></script>
 </head>
 <body>
-  <header class="admin-header"><a class="brand" href="index.html"><span>N</span>Nexa Admin</a><div><span id="admin-email"></span><button id="admin-logout" class="button button-light" hidden>Log out</button></div></header>
-  <main class="admin-wrap">
-    <section id="admin-login" class="panel login-panel"><span class="eyebrow">SECURE ADMIN ACCESS</span><h1>Admin sign in</h1><p>Sign in with an account that has the Nexa admin role.</p><form id="admin-login-form"><label>Email<input name="email" type="email" autocomplete="username" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><p id="login-message" class="message" role="status"></p><button class="button button-primary" type="submit">Sign in</button></form></section>
-    <section id="admin-dashboard" hidden>
-      <div class="page-heading"><div><span class="eyebrow">MARKETPLACE CONTROL</span><h1>Listing approvals</h1><p>Review submitted digital asset listings before publication.</p></div><button id="refresh-listings" class="button button-light">Refresh</button></div>
-      <div class="stats"><article class="stat"><small>Pending review</small><strong id="pending-count">0</strong></article><article class="stat"><small>Approved</small><strong id="approved-count">0</strong></article><article class="stat"><small>Rejected</small><strong id="rejected-count">0</strong></article></div>
-      <div class="toolbar"><label>Show status<select id="status-filter"><option value="pending">Waiting for Approval</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All listings</option></select></label><span id="list-message" class="message" role="status"></span></div>
-      <div id="listing-list" class="listing-list"><div class="empty">Loading listings…</div></div>
-    </section>
-  </main>
-  <div id="review-modal" class="modal" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="review-title"><div class="modal-head"><div><span class="eyebrow">LISTING REVIEW</span><h2 id="review-title">Review listing</h2></div><button id="close-review" class="icon-button" aria-label="Close">×</button></div><div id="review-details" class="review-details"></div><label class="note-label">Admin note (optional)<textarea id="admin-note" rows="3" maxlength="1200" placeholder="Add a note for the seller…"></textarea></label><div class="review-actions"><button id="reject-listing" class="button button-danger">Reject</button><span></span><button id="approve-listing" class="button button-primary">Approve Listing</button></div></div></div>
-</body></html>
+  <section id="admin-login" class="login-page">
+    <div class="login-shell">
+      <a class="login-brand" href="index.html"><span class="brand-mark">N</span><span>Nexa<span>.</span></span></a>
+      <div class="login-card">
+        <span class="eyebrow">SECURE ADMIN ACCESS</span>
+        <h1>Welcome back.</h1>
+        <p class="login-intro">Sign in to manage marketplace listings and seller submissions.</p>
+        <form id="admin-login-form">
+          <label for="admin-email-input">Email address</label>
+          <input id="admin-email-input" name="email" type="email" autocomplete="username" placeholder="Enter your admin email" required>
+          <label for="admin-password-input">Password</label>
+          <input id="admin-password-input" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+          <p id="login-message" class="form-message" role="status" aria-live="polite"></p>
+          <button class="button button-primary login-submit" type="submit">Sign in to Admin</button>
+        </form>
+        <div class="login-security"><span>♢</span><p>Restricted area. Only accounts assigned the Nexa admin role can review listings.</p></div>
+      </div>
+      <p class="login-footer">© 2026 Nexa Marketplace. All rights reserved.</p>
+    </div>
+  </section>
+
+  <div id="admin-app" class="admin-layout" hidden>
+    <div class="admin-overlay" id="admin-overlay"></div>
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand-row">
+        <a class="admin-brand" href="index.html"><span class="brand-mark">N</span><span>Nexa<span>.</span><small>ADMINISTRATION</small></span></a>
+        <button class="sidebar-close" id="sidebar-close" type="button" aria-label="Close menu">×</button>
+      </div>
+
+      <div class="admin-account">
+        <span class="admin-avatar" id="sidebar-avatar">A</span>
+        <span class="admin-account-copy"><b>Administrator</b><small id="sidebar-email">Admin account</small></span>
+        <i class="online-dot" aria-label="Signed in"></i>
+      </div>
+
+      <nav class="admin-navigation" aria-label="Admin navigation">
+        <div class="nav-section">
+          <p class="nav-section-title">WORKSPACE</p>
+          <a href="#overview" class="admin-nav-link active" data-filter="all" data-title="Dashboard Overview"><span class="nav-symbol">▦</span><span>Dashboard Overview</span></a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">MARKETPLACE</p>
+          <a href="#pending" class="admin-nav-link" data-filter="pending" data-title="Pending Listings"><span class="nav-symbol">◷</span><span>Pending Listings</span><span class="nav-count" id="nav-pending-count">0</span></a>
+          <a href="#approved" class="admin-nav-link" data-filter="approved" data-title="Approved Listings"><span class="nav-symbol">✓</span><span>Approved Listings</span></a>
+          <a href="#rejected" class="admin-nav-link" data-filter="rejected" data-title="Rejected Listings"><span class="nav-symbol">×</span><span>Rejected Listings</span></a>
+          <a href="#all-listings" class="admin-nav-link" data-filter="all" data-title="All Listings"><span class="nav-symbol">▤</span><span>All Listings</span></a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">ACCOUNT</p>
+          <a href="index.html" class="admin-nav-link"><span class="nav-symbol">↗</span><span>Visit Nexa Website</span></a>
+        </div>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-help-card"><span class="help-icon">ⓘ</span><b>Admin workspace</b><p>Review every submitted asset carefully before it appears on the marketplace.</p></div>
+        <button type="button" id="sidebar-logout" class="sidebar-logout"><span>↪</span> Sign out</button>
+      </div>
+    </aside>
+
+    <div class="admin-main-area">
+      <header class="admin-top-header">
+        <div class="header-start">
+          <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+          <div class="breadcrumb"><span>Nexa</span><i>/</i><b id="current-page-title">Dashboard Overview</b></div>
+        </div>
+        <div class="header-end">
+          <span class="admin-role-chip"><i></i> Admin workspace</span>
+          <div class="profile-menu-wrap" id="admin-profile-wrap">
+            <button type="button" class="profile-button" id="admin-profile-toggle" aria-expanded="false" aria-controls="admin-profile-dropdown">
+              <span class="profile-avatar" id="header-avatar">A</span><span class="profile-chevron">⌄</span>
+            </button>
+            <div class="profile-dropdown" id="admin-profile-dropdown" hidden>
+              <div class="profile-dropdown-head"><span class="profile-avatar" id="dropdown-avatar">A</span><span><b>Administrator</b><small id="header-admin-email">Signed in</small></span></div>
+              <button type="button" id="header-logout">Sign out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="admin-content" id="admin-dashboard">
+        <div class="page-heading">
+          <div><span class="eyebrow">MARKETPLACE CONTROL CENTER</span><h1 id="page-heading-title">Dashboard Overview</h1><p>Monitor listing submissions and manage marketplace approvals.</p></div>
+          <button type="button" id="refresh-listings" class="button button-secondary"><span>↻</span> Refresh</button>
+        </div>
+
+        <section class="stats-grid" aria-label="Listing statistics">
+          <article class="stat-card stat-total"><div class="stat-icon">▤</div><span>Total listings</span><strong id="total-count">0</strong><small>All seller submissions</small></article>
+          <article class="stat-card stat-pending"><div class="stat-icon">◷</div><span>Pending review</span><strong id="pending-count">0</strong><small>Awaiting admin decision</small></article>
+          <article class="stat-card stat-approved"><div class="stat-icon">✓</div><span>Approved</span><strong id="approved-count">0</strong><small>Accepted listings</small></article>
+          <article class="stat-card stat-rejected"><div class="stat-icon">×</div><span>Rejected</span><strong id="rejected-count">0</strong><small>Not approved</small></article>
+        </section>
+
+        <section class="listing-workspace">
+          <div class="workspace-heading">
+            <div><span class="eyebrow">SELLER SUBMISSIONS</span><h2 id="listing-section-title">Pending Listings</h2><p>Open a listing to review the details and take action.</p></div>
+            <label class="filter-control"><span>Filter by status</span><select id="status-filter"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All listings</option></select></label>
+          </div>
+          <p id="list-message" class="list-message" role="status" aria-live="polite"></p>
+          <div id="listing-list" class="listing-list"><div class="empty-state">Loading listing submissions…</div></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="review-modal" class="review-overlay" hidden>
+    <div class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-title">
+      <div class="review-heading"><div><span class="eyebrow">LISTING REVIEW</span><h2 id="review-title">Review listing</h2></div><button type="button" id="close-review" class="close-button" aria-label="Close review">×</button></div>
+      <div id="review-details" class="review-details"></div>
+      <label class="note-label" for="admin-note">Note for seller <span>Optional</span><textarea id="admin-note" rows="4" maxlength="1200" placeholder="Write feedback or explain what needs to be changed…"></textarea></label>
+      <div class="review-actions"><button type="button" id="reject-listing" class="button button-danger">Reject listing</button><span></span><button type="button" id="approve-listing" class="button button-primary">Approve listing</button></div>
+    </div>
+  </div>
+</body>
+</html>
