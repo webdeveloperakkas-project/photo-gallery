@@ -122,11 +122,20 @@
   }
 
 
-  // Nexa account access screens. Real email OTP and authentication require a connected backend.
+  // Nexa authentication powered by Supabase Auth.
+  const SUPABASE_URL = "https://hguwdcmwqcpswyxtskcb.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2";
+  const supabaseClient = window.supabase?.createClient
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+    : null;
+
   const authPage = document.getElementById('auth-page');
   const signupForm = document.getElementById('signup-form');
   const loginForm = document.getElementById('login-form');
   const authTabs = [...document.querySelectorAll('[data-auth-tab]')];
+  const navLogin = document.getElementById('nav-login-link');
+  const navSignup = document.getElementById('nav-signup-link');
+  const navLogout = document.getElementById('nav-logout-button');
   const authViews = {
     signup: signupForm,
     login: loginForm,
@@ -140,11 +149,57 @@
   let signupEmail = '';
   let recoveryEmail = '';
   let signupDetails = null;
+
+  function setAuthFeedback(id, message, isError = true) {
+    const element = document.getElementById(id);
+    if (!element) return;
+    element.textContent = message || '';
+    element.style.color = isError ? '#b4533c' : '#087f65';
+  }
+  function setFormBusy(form, busy, busyText) {
+    const button = form?.querySelector('button[type="submit"]');
+    if (!button) return;
+    if (busy) {
+      button.dataset.originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = busyText || 'Please wait…';
+    } else {
+      button.disabled = false;
+      if (button.dataset.originalText) button.textContent = button.dataset.originalText;
+      delete button.dataset.originalText;
+    }
+  }
+  function friendlyAuthError(error) {
+    const message = String(error?.message || 'Something went wrong. Please try again.');
+    if (/invalid login credentials/i.test(message)) return 'Incorrect email or password. Please check your details.';
+    if (/email not confirmed/i.test(message)) return 'Please verify your email address before logging in.';
+    if (/already registered|user already registered/i.test(message)) return 'An account with this email may already exist. Try logging in or use password recovery.';
+    if (/password should be at least/i.test(message)) return 'Your password does not meet the required security rules.';
+    if (/rate limit|too many requests/i.test(message)) return 'Too many attempts. Please wait a little and try again.';
+    return message;
+  }
+  function updateAuthNavigation(session) {
+    const signedIn = Boolean(session?.user);
+    if (navLogin) navLogin.hidden = signedIn;
+    if (navSignup) navSignup.hidden = signedIn;
+    if (navLogout) navLogout.hidden = !signedIn;
+  }
+  if (!supabaseClient) {
+    console.error('Supabase JS failed to load. Check the CDN connection.');
+    setAuthFeedback('signup-feedback', 'Authentication could not load. Please refresh the page and try again.');
+  } else {
+    supabaseClient.auth.getSession().then(({ data, error }) => {
+      if (error) console.error('Unable to read Nexa session:', error.message);
+      updateAuthNavigation(data?.session);
+    });
+    supabaseClient.auth.onAuthStateChange((_event, session) => updateAuthNavigation(session));
+  }
+
   function showAuthView(view) {
     Object.entries(authViews).forEach(([key, element]) => { if (element) element.hidden = key !== view; });
     const tabMode = view === 'login' ? 'login' : 'signup';
     authTabs.forEach(tab => {
-      const active = tab.dataset.authTab === tabMode && (view === tabMode);
+      const active = tab.dataset.authTab === tabMode && view === tabMode;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
     });
@@ -193,57 +248,152 @@
     button.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
   }));
 
-  signupForm?.addEventListener('submit', event => {
+  signupForm?.addEventListener('submit', async event => {
     event.preventDefault();
-    const feedback = document.getElementById('signup-feedback');
     const password = document.getElementById('signup-password');
     const confirm = document.getElementById('signup-confirm-password');
-    if (password.value !== confirm.value) { feedback.textContent = 'Your passwords do not match. Please check and try again.'; confirm.focus(); return; }
+    if (password.value !== confirm.value) { setAuthFeedback('signup-feedback','Your passwords do not match. Please check and try again.'); confirm.focus(); return; }
     if (!signupForm.reportValidity()) return;
-    signupDetails = Object.fromEntries(new FormData(signupForm).entries());
-    signupEmail = signupDetails.email;
-    document.getElementById('signup-otp-destination').textContent = 'Verification code destination: ' + signupEmail;
-    document.getElementById('signup-otp-feedback').textContent = 'Demo preview: email delivery is not active until the authentication service is connected.';
-    navigateAuth('signup-otp');
-  });
-  document.getElementById('signup-otp-form')?.addEventListener('submit', event => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const feedback = document.getElementById('signup-otp-feedback');
-    if (!form.reportValidity()) return;
-    feedback.textContent = 'OTP verification cannot be completed until the email authentication service is connected. This preview does not send or validate real codes.';
+    if (!supabaseClient) { setAuthFeedback('signup-feedback','Authentication service is unavailable. Please refresh and try again.'); return; }
+    const formData = Object.fromEntries(new FormData(signupForm).entries());
+    signupEmail = String(formData.email || '').trim().toLowerCase();
+    signupDetails = {
+      first_name: String(formData.firstName || '').trim(),
+      last_name: String(formData.lastName || '').trim(),
+      display_name: [formData.firstName,formData.lastName].filter(Boolean).join(' ').trim(),
+      country: String(formData.country || ''),
+      updates_opt_in: formData.updates === 'on'
+    };
+    setAuthFeedback('signup-feedback','',false);
+    setFormBusy(signupForm,true,'Creating account…');
+    try {
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: signupEmail,
+        password: password.value,
+        options: { data: signupDetails }
+      });
+      if (error) throw error;
+      if (data.session) {
+        document.getElementById('signup-success').querySelector('h2').textContent = 'Account created successfully!';
+        navigateAuth('signup-success');
+      } else {
+        document.getElementById('signup-otp-destination').textContent = 'Verification code sent to: ' + signupEmail;
+        setAuthFeedback('signup-otp-feedback','Enter the 6-digit code from your Supabase confirmation email.',false);
+        navigateAuth('signup-otp');
+      }
+      password.value = '';
+      confirm.value = '';
+    } catch (error) {
+      setAuthFeedback('signup-feedback',friendlyAuthError(error));
+    } finally { setFormBusy(signupForm,false); }
   });
 
-  loginForm?.addEventListener('submit', event => {
+  document.getElementById('signup-otp-form')?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    if (!supabaseClient) { setAuthFeedback('signup-otp-feedback','Authentication service is unavailable.'); return; }
+    const token = String(new FormData(form).get('code') || '').trim();
+    setFormBusy(form,true,'Verifying…');
+    try {
+      const { data, error } = await supabaseClient.auth.verifyOtp({ email: signupEmail, token, type: 'signup' });
+      if (error) throw error;
+      updateAuthNavigation(data.session);
+      navigateAuth('signup-success');
+    } catch (error) {
+      setAuthFeedback('signup-otp-feedback',friendlyAuthError(error));
+    } finally { setFormBusy(form,false); }
+  });
+
+  loginForm?.addEventListener('submit', async event => {
     event.preventDefault();
     if (!loginForm.reportValidity()) return;
-    document.getElementById('login-feedback').textContent = 'Wrong email or password. Please check your details and try again. (Demo preview — real credentials will be checked by the authentication service.)';
+    if (!supabaseClient) { setAuthFeedback('login-feedback','Authentication service is unavailable.'); return; }
+    const values = Object.fromEntries(new FormData(loginForm).entries());
+    setFormBusy(loginForm,true,'Signing in…');
+    setAuthFeedback('login-feedback','',false);
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: String(values.email || '').trim().toLowerCase(),
+        password: values.password
+      });
+      if (error) throw error;
+      updateAuthNavigation(data.session);
+      closeAuth();
+      loginForm.reset();
+    } catch (error) {
+      setAuthFeedback('login-feedback',friendlyAuthError(error));
+    } finally { setFormBusy(loginForm,false); }
   });
 
-  document.getElementById('forgot-email-form')?.addEventListener('submit', event => {
+  document.getElementById('forgot-email-form')?.addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
-    recoveryEmail = new FormData(form).get('email').trim();
-    document.getElementById('forgot-otp-destination').textContent = 'Password reset code destination: ' + recoveryEmail;
-    document.getElementById('forgot-otp-feedback').textContent = 'Demo preview: a reset email will be sent when the authentication service is connected.';
-    navigateAuth('forgot-otp');
+    if (!supabaseClient) { setAuthFeedback('forgot-email-feedback','Authentication service is unavailable.'); return; }
+    recoveryEmail = String(new FormData(form).get('email') || '').trim().toLowerCase();
+    setFormBusy(form,true,'Sending code…');
+    try {
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(recoveryEmail);
+      if (error) throw error;
+      document.getElementById('forgot-otp-destination').textContent = 'Password reset code sent to: ' + recoveryEmail;
+      setAuthFeedback('forgot-otp-feedback','Enter the 6-digit recovery code from your email.',false);
+      navigateAuth('forgot-otp');
+    } catch (error) {
+      setAuthFeedback('forgot-email-feedback',friendlyAuthError(error));
+    } finally { setFormBusy(form,false); }
   });
-  document.getElementById('forgot-otp-form')?.addEventListener('submit', event => {
+
+  document.getElementById('forgot-otp-form')?.addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
-    document.getElementById('forgot-otp-feedback').textContent = 'Code verification requires the connected email authentication service. No real code has been sent in this preview.';
+    if (!supabaseClient) { setAuthFeedback('forgot-otp-feedback','Authentication service is unavailable.'); return; }
+    const token = String(new FormData(form).get('code') || '').trim();
+    setFormBusy(form,true,'Verifying…');
+    try {
+      const { data, error } = await supabaseClient.auth.verifyOtp({ email: recoveryEmail, token, type: 'recovery' });
+      if (error) throw error;
+      if (!data.session) throw new Error('The recovery session could not be established. Request a new code and try again.');
+      navigateAuth('reset');
+    } catch (error) {
+      setAuthFeedback('forgot-otp-feedback',friendlyAuthError(error));
+    } finally { setFormBusy(form,false); }
   });
-  document.getElementById('reset-password-form')?.addEventListener('submit', event => {
+
+  document.getElementById('reset-password-form')?.addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
     const password = document.getElementById('reset-password');
     const confirm = document.getElementById('reset-confirm-password');
-    const feedback = document.getElementById('reset-password-feedback');
-    if (password.value !== confirm.value) { feedback.textContent = 'Your passwords do not match. Please try again.'; confirm.focus(); return; }
+    if (password.value !== confirm.value) { setAuthFeedback('reset-password-feedback','Your passwords do not match. Please try again.'); confirm.focus(); return; }
     if (!form.reportValidity()) return;
-    feedback.textContent = 'Password changes require a verified reset session from the authentication service. No password has been changed in this preview.';
+    if (!supabaseClient) { setAuthFeedback('reset-password-feedback','Authentication service is unavailable.'); return; }
+    setFormBusy(form,true,'Saving password…');
+    try {
+      const { error } = await supabaseClient.auth.updateUser({ password: password.value });
+      if (error) throw error;
+      await supabaseClient.auth.signOut();
+      updateAuthNavigation(null);
+      password.value = '';
+      confirm.value = '';
+      navigateAuth('reset-success');
+    } catch (error) {
+      setAuthFeedback('reset-password-feedback',friendlyAuthError(error));
+    } finally { setFormBusy(form,false); }
+  });
+
+  navLogout?.addEventListener('click', async () => {
+    if (!supabaseClient) return;
+    navLogout.disabled = true;
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) throw error;
+      updateAuthNavigation(null);
+    } catch (error) {
+      console.error('Nexa sign-out failed:', error);
+      alert(friendlyAuthError(error));
+    } finally { navLogout.disabled = false; }
   });
   
   // Site-wide English/Bangla language selector.
