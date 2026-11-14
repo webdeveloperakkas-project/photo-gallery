@@ -4,6 +4,8 @@
   const client = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY) : null;
   const home = "https://webdeveloperakkas-project.github.io/photo-gallery/";
   const logout = document.getElementById("logout-button");
+  const menuToggle = document.getElementById("dash-menu-toggle");
+  const mainMenu = document.getElementById("dash-main-menu");
   const profileWrap = document.getElementById("dash-profile-menu-wrap");
   const profileToggle = document.getElementById("dash-profile-toggle");
   const profileDropdown = document.getElementById("dash-profile-dropdown");
@@ -24,6 +26,29 @@
     document.getElementById("dash-dropdown-avatar").textContent = initial;
     document.getElementById("dash-dropdown-name").textContent = displayName;
     document.getElementById("dash-dropdown-email").textContent = user.email || "";
+  });
+  menuToggle?.addEventListener("click", () => {
+    const opening = !mainMenu?.classList.contains("open");
+    mainMenu?.classList.toggle("open", opening);
+    menuToggle.setAttribute("aria-expanded", String(opening));
+    menuToggle.setAttribute("aria-label", opening ? "Close dashboard menu" : "Open dashboard menu");
+  });
+  mainMenu?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+    mainMenu.classList.remove("open");
+    menuToggle?.setAttribute("aria-expanded", "false");
+  }));
+  document.addEventListener("click", event => {
+    if (mainMenu && menuToggle && !mainMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+      mainMenu.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && mainMenu?.classList.contains("open")) {
+      mainMenu.classList.remove("open");
+      menuToggle?.setAttribute("aria-expanded", "false");
+      menuToggle?.focus();
+    }
   });
   profileToggle?.addEventListener("click", () => {
     const opening = profileDropdown?.hidden ?? true;
