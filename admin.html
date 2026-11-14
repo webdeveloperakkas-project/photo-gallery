@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#13B0AA"><title>Nexa Admin — Listing Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="admin.js" defer></script>
+</head>
+<body>
+  <header class="admin-header"><a class="brand" href="index.html"><span>N</span>Nexa Admin</a><div><span id="admin-email"></span><button id="admin-logout" class="button button-light" hidden>Log out</button></div></header>
+  <main class="admin-wrap">
+    <section id="admin-login" class="panel login-panel"><span class="eyebrow">SECURE ADMIN ACCESS</span><h1>Admin sign in</h1><p>Sign in with an account that has the Nexa admin role.</p><form id="admin-login-form"><label>Email<input name="email" type="email" autocomplete="username" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><p id="login-message" class="message" role="status"></p><button class="button button-primary" type="submit">Sign in</button></form></section>
+    <section id="admin-dashboard" hidden>
+      <div class="page-heading"><div><span class="eyebrow">MARKETPLACE CONTROL</span><h1>Listing approvals</h1><p>Review submitted digital asset listings before publication.</p></div><button id="refresh-listings" class="button button-light">Refresh</button></div>
+      <div class="stats"><article class="stat"><small>Pending review</small><strong id="pending-count">0</strong></article><article class="stat"><small>Approved</small><strong id="approved-count">0</strong></article><article class="stat"><small>Rejected</small><strong id="rejected-count">0</strong></article></div>
+      <div class="toolbar"><label>Show status<select id="status-filter"><option value="pending">Waiting for Approval</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All listings</option></select></label><span id="list-message" class="message" role="status"></span></div>
+      <div id="listing-list" class="listing-list"><div class="empty">Loading listings…</div></div>
+    </section>
+  </main>
+  <div id="review-modal" class="modal" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="review-title"><div class="modal-head"><div><span class="eyebrow">LISTING REVIEW</span><h2 id="review-title">Review listing</h2></div><button id="close-review" class="icon-button" aria-label="Close">×</button></div><div id="review-details" class="review-details"></div><label class="note-label">Admin note (optional)<textarea id="admin-note" rows="3" maxlength="1200" placeholder="Add a note for the seller…"></textarea></label><div class="review-actions"><button id="reject-listing" class="button button-danger">Reject</button><span></span><button id="approve-listing" class="button button-primary">Approve Listing</button></div></div></div>
+</body></html>
