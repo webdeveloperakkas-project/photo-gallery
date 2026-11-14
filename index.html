@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -30,7 +31,7 @@
             <option value="bn">BN</option>
           </select>
         </label>
-        <a class="login-link" href="#auth-login" data-auth-open="login">Log in</a><a class="button button-small button-dark" href="#auth-signup" data-auth-open="signup">Sign up <span>↗</span></a>
+        <a class="login-link" href="#auth-login" data-auth-open="login" id="nav-login-link">Log in</a><a class="button button-small button-dark" href="#auth-signup" data-auth-open="signup" id="nav-signup-link">Sign up <span>↗</span></a><button class="login-link" type="button" id="nav-logout-button" hidden>Log out</button>
       </div>
     </div>
   </header>
@@ -256,8 +257,8 @@
           </form>
 
           <section class="auth-result" id="signup-success" hidden>
-            <div class="auth-result-icon">✓</div><span class="eyebrow">WELCOME ABOARD</span><h2>Account created successfully!</h2><p>Your email has been verified. Preparing your Nexa account…</p>
-            <div class="auth-loading"><i></i></div><small>Taking you to your dashboard</small>
+            <div class="auth-result-icon">✓</div><span class="eyebrow">WELCOME ABOARD</span><h2>Account created successfully!</h2><p>Your email is verified and your Nexa account is ready. The dashboard will be connected in the next step.</p>
+            <button class="button button-dark auth-submit" type="button" data-auth-close>Continue <span>→</span></button>
           </section>
 
           <form class="auth-form auth-flow-form" id="forgot-email-form" hidden>
@@ -291,7 +292,7 @@
             <button class="button button-dark auth-submit" type="button" data-auth-step="login">Return to login <span>→</span></button>
           </section>
 
-          <p class="auth-security-note">Your account details should be protected by a secure authentication service when registration is connected.</p>
+          <p class="auth-security-note">Your sign-in and account security are handled by Supabase Authentication.</p>
         </div>
       </div>
     </div>
