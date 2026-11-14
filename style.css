@@ -126,3 +126,15 @@ body{color:var(--ink);font-size:15px}
  .faq-section{padding:68px 0}.cta-inner h2{font-size:40px}.closing-cta{padding:62px 0}
 }
 @media(max-width:380px){.hero h1{font-size:40px}.category-grid{grid-template-columns:1fr}.trust-features{grid-template-columns:1fr}}
+
+
+/* Footer update: deep green background with crisp white typography */
+.site-footer{background:linear-gradient(115deg,#064b38 0%,#075c43 58%,#064532 100%);color:#fff}
+.site-footer .footer-brand{color:#fff}
+.site-footer .footer-brand-col p{color:#f0fff7}
+.site-footer .footer-col b{color:#fff}
+.site-footer .footer-col a{color:#f0fff7}
+.site-footer .footer-col a:hover{color:#ffdf68}
+.site-footer .footer-bottom{border-top-color:#ffffff45;color:#f0fff7}
+.site-footer .footer-brand .brand-mark{background:#fff;color:#075c43}
+.site-footer .footer-brand .brand-period{color:#ffdf68}
