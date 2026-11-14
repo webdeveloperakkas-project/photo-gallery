@@ -15,17 +15,37 @@
 </head>
 <body>
   <header class="dash-header">
-    <button class="dash-menu-toggle" type="button" id="dash-menu-toggle" aria-label="Open dashboard menu" aria-expanded="false" aria-controls="dash-main-menu"><span></span><span></span><span></span></button>
-    <a class="dash-brand" href="index.html" aria-label="Nexa home"><span class="brand-mark">N</span><span class="dash-brand-word">Nexa<span>.</span></span></a>
+    <div class="dash-header-left">
+      <button class="dash-menu-toggle" type="button" id="dash-menu-toggle" aria-label="Open dashboard menu" aria-expanded="false" aria-controls="dash-main-menu"><span></span><span></span><span></span></button>
+      <a class="dash-brand" href="index.html" aria-label="Nexa home"><span class="brand-mark">N</span><span class="dash-brand-word">Nexa<span>.</span></span></a>
+    </div>
     <nav class="dash-main-menu" id="dash-main-menu" aria-label="Dashboard menu">
-      <a class="active" href="dashboard.html">Dashboard</a><a href="my-profile.html">My Profile</a><a href="#listings">My Listings</a><a href="#saved">Saved Assets</a><a href="#transactions">Transactions</a><a href="#settings">Settings</a>
+      <a class="active" href="dashboard.html">Dashboard</a>
+      <a href="#listings">My Listings</a>
+      <a href="#saved">Saved Assets</a>
+      <a href="#transactions">Transactions</a>
+      <a href="#verification">Account Verification</a>
+      <a href="#support">Help &amp; Support</a>
     </nav>
+    <div class="wallet-menu-wrap" id="dash-wallet-menu-wrap">
+      <button class="wallet-nav-button" type="button" id="dash-wallet-toggle" aria-label="Open wallet menu" aria-expanded="false" aria-controls="dash-wallet-dropdown">
+        <span class="wallet-icon" aria-hidden="true">▣</span>
+        <span class="wallet-nav-copy"><small>MY WALLET</small><b>Wallet</b></span>
+        <span class="wallet-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="wallet-dropdown" id="dash-wallet-dropdown" hidden>
+        <span class="wallet-dropdown-label">WALLET OVERVIEW</span>
+        <b class="wallet-coming-title">Your wallet is coming soon</b>
+        <p>Your Nexa wallet balance and transactions will appear here when the wallet service is ready.</p>
+      </div>
+    </div>
     <div class="dash-header-actions">
       <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
         <button class="profile-nav-button" type="button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false" aria-controls="dash-profile-dropdown"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron" aria-hidden="true">⌄</span></button>
         <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
           <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
-          <a href="dashboard.html">Dashboard</a><a href="#listings">My Listings</a><a href="#saved">Saved Assets</a><a href="#transactions">Transactions</a><a href="#settings">Settings</a><a href="my-profile.html">My Profile</a>
+          <a href="my-profile.html">My Profile</a>
+          <a href="#settings">Settings</a>
           <button type="button" id="logout-button">Log out</button>
         </div>
       </div>
@@ -46,6 +66,8 @@
       <article class="quick-card" id="transactions"><span class="quick-icon">⇄</span><h3>Transactions</h3><p>Follow your buying and selling activity.</p><span class="coming-soon">Coming next</span></article>
     </section>
     <section class="profile-card" id="profile"><div><span class="eyebrow">PERSONAL DETAILS</span><h2>My Profile</h2><p>Basic account information from your Nexa sign-in.</p></div><dl><div><dt>Email address</dt><dd id="profile-email">Loading…</dd></div><div><dt>Account ID</dt><dd id="profile-id">Loading…</dd></div><div><dt>Email verification</dt><dd id="email-status">Checking…</dd></div></dl></section>
+    <section class="status-card secondary-placeholder" id="verification"><div><span class="eyebrow">ACCOUNT VERIFICATION</span><h2>Identity verification</h2><p>Verification tools will be available here when the review process is introduced.</p></div></section>
+    <section class="status-card secondary-placeholder" id="support"><div><span class="eyebrow">HELP &amp; SUPPORT</span><h2>How can we help?</h2><p>Nexa support resources will be available here soon.</p></div></section>
     <p class="notice">Email confirmation verifies your email address. Identity verification (KYC), where required, is a separate process.</p>
   </main>
 </body>
