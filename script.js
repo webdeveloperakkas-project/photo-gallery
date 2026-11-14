@@ -135,9 +135,10 @@
   const authTabs = [...document.querySelectorAll('[data-auth-tab]')];
   const navLogin = document.getElementById('nav-login-link');
   const navSignup = document.getElementById('nav-signup-link');
-  const navLogout = document.getElementById('nav-logout-button');
-  const navDashboard = document.getElementById('nav-dashboard-link');
-  const navProfile = document.getElementById('nav-profile-link');
+  const profileMenuWrap = document.getElementById('profile-menu-wrap');
+  const profileMenuToggle = document.getElementById('profile-menu-toggle');
+  const profileDropdown = document.getElementById('profile-dropdown');
+  const menuLogoutButton = document.getElementById('menu-logout-button');
   const authViews = {
     signup: signupForm,
     login: loginForm,
@@ -184,10 +185,44 @@
     const signedIn = Boolean(session?.user);
     if (navLogin) navLogin.hidden = signedIn;
     if (navSignup) navSignup.hidden = signedIn;
-    if (navLogout) navLogout.hidden = !signedIn;
-    if (navDashboard) navDashboard.hidden = !signedIn;
-    if (navProfile) navProfile.hidden = !signedIn;
+    if (profileMenuWrap) profileMenuWrap.hidden = !signedIn;
+    if (signedIn && session.user) {
+      const meta = session.user.user_metadata || {};
+      const name = meta.display_name || [meta.first_name, meta.last_name].filter(Boolean).join(' ') || 'Nexa member';
+      const initial = name.trim().charAt(0).toUpperCase() || 'N';
+      ['nav-avatar-initial','dropdown-avatar-initial'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=initial; });
+      const nameEl=document.getElementById('dropdown-user-name'); if(nameEl) nameEl.textContent=name;
+      const emailEl=document.getElementById('dropdown-user-email'); if(emailEl) emailEl.textContent=session.user.email || '';
+    }
+    if (!signedIn && profileDropdown) profileDropdown.hidden = true;
+    if (profileMenuToggle) profileMenuToggle.setAttribute('aria-expanded', 'false');
   }
+  profileMenuToggle?.addEventListener('click', () => {
+    const opening = profileDropdown?.hidden ?? true;
+    if (profileDropdown) profileDropdown.hidden = !opening;
+    profileMenuToggle.setAttribute('aria-expanded', String(opening));
+  });
+  document.addEventListener('click', event => {
+    if (profileMenuWrap && !profileMenuWrap.contains(event.target) && profileDropdown && !profileDropdown.hidden) {
+      profileDropdown.hidden = true;
+      profileMenuToggle?.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && profileDropdown && !profileDropdown.hidden) {
+      profileDropdown.hidden = true;
+      profileMenuToggle?.setAttribute('aria-expanded', 'false');
+      profileMenuToggle?.focus();
+    }
+  });
+  menuLogoutButton?.addEventListener('click', async () => {
+    if (!supabaseClient) return;
+    menuLogoutButton.disabled = true;
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) { menuLogoutButton.disabled = false; setAuthFeedback('login-feedback', friendlyAuthError(error)); return; }
+    window.location.href = 'index.html';
+  });
+
   if (!supabaseClient) {
     console.error('Supabase JS failed to load. Check the CDN connection.');
     setAuthFeedback('signup-feedback', 'Authentication could not load. Please refresh the page and try again.');
