@@ -93,31 +93,9 @@
             <div class="welcome-art" aria-hidden="true"><div class="art-circle">N</div><span class="art-chip chip-one">Websites</span><span class="art-chip chip-two">Social Media</span><span class="art-chip chip-three">SaaS</span></div>
           </section>
 
-          <section class="content-panel recent-assets-panel">
-            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#dashboard-section" data-section="dashboard-section" class="view-all-link">Browse marketplace →</a></div>
-            <div id="recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Loading recent approved listings…</b></div></div>
-          </section>
 
-          <section class="dashboard-section-heading"><div><span class="eyebrow">OVERVIEW</span><h2>Your Marketplace at a Glance</h2><p>A quick look at your buying and selling activity.</p></div></section>
-          <section class="nexa-stats-grid">
-            <article class="nexa-stat-card"><span class="stat-icon">▤</span><p>Active Listings</p><strong>—</strong><small>Your published advertisements</small></article>
-            <article class="nexa-stat-card"><span class="stat-icon">♡</span><p>Saved Assets</p><strong>—</strong><small>Assets you are following</small></article>
-            <article class="nexa-stat-card"><span class="stat-icon">🛍</span><p>Purchases</p><strong>—</strong><small>Your asset acquisitions</small></article>
-            <article class="nexa-stat-card"><span class="stat-icon">⇄</span><p>Sales</p><strong>—</strong><small>Your completed sales</small></article>
-          </section>
 
-          <section class="dashboard-section-heading category-heading"><div><span class="eyebrow">EXPLORE THE MARKETPLACE</span><h2>Browse by Category</h2><p>Find the type of digital asset you want to buy or sell.</p></div><a href="#dashboard-section" data-section="dashboard-section" class="view-all-link">View all assets →</a></section>
-          <section class="asset-category-grid">
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Website" class="asset-category"><span>🌐</span><b>Websites</b><small>Established websites</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="SaaS" class="asset-category"><span>⚙️</span><b>SaaS</b><small>Software businesses</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="E-commerce" class="asset-category"><span>🛒</span><b>E-commerce</b><small>Online stores</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Domain" class="asset-category"><span>🔗</span><b>Domains</b><small>Domain names</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="YouTube Channel" class="asset-category"><span>▶️</span><b>YouTube</b><small>Channels</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Facebook Page" class="asset-category"><span>📘</span><b>Facebook</b><small>Pages &amp; communities</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Instagram Account" class="asset-category"><span>📸</span><b>Instagram</b><small>Accounts</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="TikTok Account" class="asset-category"><span>🎵</span><b>TikTok</b><small>Accounts</small></a>
-            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Other Digital Asset" class="asset-category"><span>＋</span><b>Other Assets</b><small>More digital assets</small></a>
-          </section>
+
 
 <section class="marketplace-search-layout dashboard-marketplace-search">
             <aside class="marketplace-filter-panel">
@@ -138,15 +116,25 @@
             <div class="marketplace-search-main">
               <section class="marketplace-search-panel">
                 <div class="marketplace-search-title"><div><span class="eyebrow">FIND YOUR NEXT OPPORTUNITY</span><h2>Search Digital Assets</h2><p>Choose your filters, then search to see matching approved listings.</p></div></div>
-                <label class="marketplace-keyword-field"><span>Keyword Search</span><input id="marketplace-keyword" type="search" placeholder="Search websites, SaaS, channels, domains…"></label>
+                <div class="marketplace-keyword-field"><label for="marketplace-keyword">Keyword Search</label><div class="marketplace-keyword-row"><input id="marketplace-keyword" type="search" placeholder="Search websites, SaaS, channels, domains…"><button type="button" id="marketplace-keyword-search" aria-label="Search by keyword">Search</button></div></div>
+                <div class="platform-picker"><div class="platform-picker-heading"><b>Select Your Platform</b><span>Choose one or more</span></div><div class="platform-picker-list" id="marketplace-platform-picker" aria-label="Select asset platforms">
+                  <button type="button" class="platform-chip" data-platform="Website" aria-pressed="false"><span class="platform-logo logo-web">W</span><span>Website</span></button>
+                  <button type="button" class="platform-chip" data-platform="SaaS" aria-pressed="false"><span class="platform-logo logo-saas">S</span><span>SaaS</span></button>
+                  <button type="button" class="platform-chip" data-platform="E-commerce" aria-pressed="false"><span class="platform-logo logo-shop">▣</span><span>Shop</span></button>
+                  <button type="button" class="platform-chip" data-platform="Domain" aria-pressed="false"><span class="platform-logo logo-domain">⌘</span><span>Domain</span></button>
+                  <button type="button" class="platform-chip" data-platform="YouTube Channel" aria-pressed="false"><span class="platform-logo logo-youtube">▶</span><span>YouTube</span></button>
+                  <button type="button" class="platform-chip" data-platform="Facebook Page" aria-pressed="false"><span class="platform-logo logo-facebook">f</span><span>Facebook</span></button>
+                  <button type="button" class="platform-chip" data-platform="Instagram Account" aria-pressed="false"><span class="platform-logo logo-instagram">◎</span><span>Instagram</span></button>
+                  <button type="button" class="platform-chip" data-platform="TikTok Account" aria-pressed="false"><span class="platform-logo logo-tiktok">♪</span><span>TikTok</span></button>
+                  <button type="button" class="platform-chip" data-platform="Other Digital Asset" aria-pressed="false"><span class="platform-logo logo-other">＋</span><span>Other</span></button>
+                </div></div>
                 <div class="marketplace-filter-grid">
                   <label class="marketplace-filter-field"><span>Country</span><select id="marketplace-country"><option value="">All Countries</option></select></label>
                   <label class="marketplace-filter-field"><span>Price Currency</span><select id="marketplace-price-currency"><option value="">All Currencies</option><option>USD</option><option>EUR</option><option>GBP</option><option>BDT</option></select></label>
                   <label class="marketplace-filter-field"><span>Minimum Price</span><input id="marketplace-price-min" type="number" min="0" placeholder="Min"></label>
                   <label class="marketplace-filter-field"><span>Maximum Price</span><input id="marketplace-price-max" type="number" min="0" placeholder="Max"></label>
-                  <label class="marketplace-filter-field"><span>Minimum Monthly Visitors</span><input id="marketplace-visitors-min" type="number" min="0" placeholder="Min visitors"></label>
-                  <label class="marketplace-filter-field"><span>Maximum Monthly Visitors</span><input id="marketplace-visitors-max" type="number" min="0" placeholder="Max visitors"></label>
-                  <label class="marketplace-filter-field"><span>Revenue Currency</span><select id="marketplace-revenue-currency"><option value="">All Currencies</option><option>USD</option><option>EUR</option><option>GBP</option><option>BDT</option></select></label>
+                  <label class="marketplace-filter-field"><span>Minimum Total Monthly Visitors</span><input id="marketplace-visitors-min" type="number" min="0" placeholder="Min visitors"></label>
+                  <label class="marketplace-filter-field"><span>Maximum Total Monthly Visitors</span><input id="marketplace-visitors-max" type="number" min="0" placeholder="Max visitors"></label>
                   <label class="marketplace-filter-field"><span>Minimum Monthly Revenue</span><input id="marketplace-revenue-min" type="number" min="0" step=".01" placeholder="Min revenue"></label>
                   <label class="marketplace-filter-field"><span>Maximum Monthly Revenue</span><input id="marketplace-revenue-max" type="number" min="0" step=".01" placeholder="Max revenue"></label>
                   <label class="marketplace-filter-field"><span>Sort By</span><select id="marketplace-sort"><option value="newest">Recently Added</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="revenue-high">Monthly Revenue: High to Low</option></select></label>
@@ -156,6 +144,11 @@
               <div class="marketplace-results-heading"><div><h2>Search Results</h2><p id="marketplace-results-count">Select your filters and click Search Digital Assets.</p></div></div>
               <div id="browse-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Ready when you are</b><p>All Categories and All Countries are selected by default. Click Search Digital Assets to view listings.</p></div></div>
             </div>
+          </section>
+
+          <section class="content-panel recent-assets-panel">
+            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#dashboard-section" data-section="dashboard-section" class="view-all-link">Browse marketplace →</a></div>
+            <div id="recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Loading recent approved listings…</b></div></div>
           </section>
 
         </section>
