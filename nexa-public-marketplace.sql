@@ -1,11 +1,11 @@
 
 -- Nexa public marketplace read-only view.
 -- Run ONLY in the Nexa Supabase SQL Editor (never TaskBridge).
--- Only approved listings and explicitly selected public search fields are exposed.
--- Private listing_data, evidence files, KYC details and admin review notes are never exposed.
+-- Exposes only approved listings and public marketplace statistics.
+-- Uses caller permissions and the underlying asset_listings RLS policies.
 
 create or replace view public.marketplace_public_listings
-with (security_barrier = true)
+with (security_barrier = true, security_invoker = true)
 as
 select
   l.id,
@@ -18,7 +18,8 @@ select
   max(d.value) filter (where d.key = 'country') as country,
   max(d.value) filter (where d.key = 'financial_currency') as financial_currency,
   max(case
-    when d.key = 'monthly_traffic'
+    when l.category in ('Website', 'E-commerce')
+      and d.key = 'monthly_traffic'
       and d.value ~ '^[0-9]+([.][0-9]+)?$'
     then d.value::numeric
   end) as monthly_visitors,
@@ -28,10 +29,17 @@ select
     then d.value::numeric
   end) as monthly_revenue,
   max(case
-    when d.key = 'followers'
+    when l.category in ('Facebook Page', 'Instagram Account', 'TikTok Account', 'X Account')
+      and d.key = 'followers'
       and d.value ~ '^[0-9]+([.][0-9]+)?$'
     then d.value::numeric
-  end) as total_followers
+  end) as total_followers,
+  max(case
+    when l.category = 'YouTube Channel'
+      and d.key in ('subscribers', 'followers')
+      and d.value ~ '^[0-9]+([.][0-9]+)?$'
+    then d.value::numeric
+  end) as total_subscribers
 from public.asset_listings l
 left join lateral (
   select
