@@ -4,7 +4,7 @@
   const db=window.supabase?.createClient(URL,KEY);
   const $=id=>document.getElementById(id);
   const login=$("admin-login"),app=$("admin-app"),modal=$("review-modal");
-  let listings=[],selected=null;
+  let listings=[],selected=null,currentView="overview";
   const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const label=s=>({pending:"Pending review",approved:"Approved",rejected:"Rejected"}[s]||s);
   const message=(id,value)=>$(id).textContent=value||"";
@@ -48,7 +48,8 @@
   function render(){
     if(!$("status-filter"))return;
     const filter=$("status-filter").value;
-    const rows=listings.filter(x=>filter==="all"||x.status===filter);
+    const q=($("listing-search")?.value||"").trim().toLowerCase();
+    const rows=listings.filter(x=>(filter==="all"||x.status===filter)&&(!q||[x.title,x.category,x.summary,x.user_id].some(v=>String(v||"").toLowerCase().includes(q))));
     $("listing-list").innerHTML=rows.length?rows.map(x=>"<article class='listing-row'><div class='listing-copy'><span class='status "+esc(x.status)+"'>"+esc(label(x.status))+"</span><h3>"+esc(x.title)+"</h3><p>"+esc(x.category)+" · "+esc(x.price_currency)+" "+esc(x.asking_price)+"</p><small>Submitted "+esc(new Date(x.submitted_at).toLocaleString())+"</small></div><button type='button' class='button button-primary' data-review='"+esc(x.id)+"'>Review details →</button></article>").join(""):"<div class='empty-state'>No listings found in this section.</div>";
   }
   function openReview(id){
@@ -87,7 +88,56 @@
   modal.addEventListener("click",e=>{if(e.target===modal){modal.hidden=true;selected=null;}});
   $("approve-listing").addEventListener("click",()=>review("approved"));
   $("reject-listing").addEventListener("click",()=>review("rejected"));
-  document.querySelectorAll(".admin-nav-link[data-filter]").forEach(link=>link.addEventListener("click",e=>{e.preventDefault();setFilter(link.dataset.filter,link.dataset.title);closeSidebar();}));
+  const viewCopy={
+    "finance-transactions":["All Transactions","A complete ledger of buyer payments, seller payouts, refunds and transaction statuses will appear here after the finance database and payment integrations are configured."],
+    "finance-buyer-payments":["Buyer Payments","Review buyer checkout payments, payment methods, currencies, provider references and payment outcomes. This view requires the finance schema and payment integration."],
+    "finance-history":["Payment History","Searchable payment history with dates, amounts, currencies, payment references and status will be connected after the finance database is ready."],
+    "finance-currency":["Currency-wise Transactions","This view will group and summarize transactions by currency, with original amounts retained for accurate reporting."],
+    "finance-payouts":["Seller Payouts","Manage seller payout requests, payout methods, settlement status and payment references after payout workflows are implemented."],
+    "finance-fees":["Platform Fees & Revenue","View the marketplace fee breakdown, provider costs and platform revenue after transaction records and fee calculations are connected."],
+    "finance-refunds":["Refunds & Disputes","Track buyer refund requests, disputes, decisions and supporting records after the dispute workflow is created."],
+    "seller-all":["All Sellers","Seller directory, account status and listing activity will be connected to the Nexa profile and verification tables."],
+    "seller-account":["Account Verification","Review seller profile completeness and verification status. Full seller verification is not yet connected to this admin panel."],
+    "seller-id":["ID Verification","Secure identity-document review will be added after the profile verification tables, private file storage and access policies are configured."],
+    "seller-address":["Address Verification","Review seller address evidence after the verification database and private document storage are configured."],
+    "buyer-all":["All Buyers","Buyer directory and account status will be connected after the buyer profile and account-management workflow is prepared."],
+    "buyer-details":["Buyer Account Details","Buyer profile information and account history will be shown here after the relevant profile data is connected."],
+    "buyer-activity":["Buyer Activity","Buyer browsing, purchase and account activity will be available after activity tracking is implemented."],
+    "support":["Support Tickets","Customer support conversations and ticket status management will be added when the support workflow is ready."],
+    "reports":["User Reports","Reported listings and user complaints will be connected after reporting and moderation tables are created."],
+    "logs":["Admin Activity Logs","A secure audit trail of administrator actions will be added before operational launch."],
+    "settings":["Platform Settings","Marketplace-wide settings will be added after the settings schema and safe update controls are prepared."]
+  };
+  function showView(view,title,filter="all"){
+    currentView=view;
+    document.querySelectorAll(".admin-nav-link[data-view]").forEach(a=>a.classList.toggle("active",a.dataset.view===view&&a.dataset.title===title));
+    $("current-page-title").textContent=title;$("page-heading-title").textContent=title;
+    $("admin-dashboard").querySelector(".page-heading").hidden=view!=="overview"&&view!=="marketplace";
+    $("stats-grid").hidden=view!=="overview";
+    $("listing-workspace").hidden=view!=="overview"&&view!=="marketplace";
+    $("coming-soon-view").hidden=!viewCopy[view];
+    if(viewCopy[view]){
+      $("coming-soon-title").textContent=viewCopy[view][0];
+      $("coming-soon-description").textContent=viewCopy[view][1];
+    }
+    if(view==="overview"||view==="marketplace"){
+      $("admin-dashboard").querySelector(".page-heading").hidden=false;
+      $("stats-grid").hidden=view!=="overview";
+      $("listing-workspace").hidden=false;
+      $("page-heading-title").textContent=title;
+      $("listing-section-title").textContent=view==="overview"?"Recent Listing Submissions":title;
+      $("status-filter").value=filter;
+      render();
+    }
+    closeSidebar();
+  }
+  document.querySelectorAll(".admin-nav-link[data-view]").forEach(link=>link.addEventListener("click",e=>{
+    e.preventDefault();
+    showView(link.dataset.view,link.dataset.title,link.dataset.filter||"all");
+  }));
+  $("listing-search").addEventListener("input",render);
+  $("stats-grid").id="stats-grid";
+
   $("menu-toggle").addEventListener("click",()=>{const open=!$("admin-sidebar").classList.contains("open");$("admin-sidebar").classList.toggle("open",open);$("admin-overlay").classList.toggle("show",open);$("menu-toggle").setAttribute("aria-expanded",String(open));});
   $("sidebar-close").addEventListener("click",closeSidebar);$("admin-overlay").addEventListener("click",closeSidebar);
   $("admin-profile-toggle").addEventListener("click",()=>{const opening=$("admin-profile-dropdown").hidden;$("admin-profile-dropdown").hidden=!opening;$("admin-profile-toggle").setAttribute("aria-expanded",String(opening));});
