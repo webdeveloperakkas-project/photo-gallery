@@ -17,12 +17,12 @@ language sql
 stable
 security definer
 set search_path = public
-as $
+as $$
   select exists (
     select 1 from public.asset_listings l
     where l.user_id = p_user_id and l.status = 'approved'
   );
-$;
+$$;
 
 revoke all on function public.is_approved_nexa_seller(uuid) from public;
 grant execute on function public.is_approved_nexa_seller(uuid) to anon, authenticated;
