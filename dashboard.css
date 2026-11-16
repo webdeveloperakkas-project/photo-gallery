@@ -359,3 +359,11 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 @media(max-width:430px){
   .platform-picker-list{grid-auto-columns:calc((100% - 24px)/5)}
 }
+
+/* Marketplace cards now lead to a dedicated asset detail page. */
+.approved-listing-link{color:inherit;text-decoration:none;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+.approved-listing-link:hover{transform:translateY(-3px);box-shadow:0 12px 28px #14322318}
+.approved-listing-cover{display:block;width:100%;height:150px;object-fit:cover;border-radius:9px;margin:0 0 13px;background:#edf5f0}
+.approved-listing-cover-placeholder{display:grid;place-items:center;background:linear-gradient(135deg,#e5f5ef,#f8f2df);color:#17634f;font-weight:800;font-size:13px;text-align:center;padding:12px}
+.approved-listing-footer small{color:#16816f;font-weight:800}
+@media(max-width:650px){.approved-listing-cover{height:92px;border-radius:7px;margin-bottom:9px}}
