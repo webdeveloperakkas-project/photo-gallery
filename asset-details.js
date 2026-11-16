@@ -2,7 +2,7 @@
 const URL="https://hguwdcmwqcpswyxtskcb.supabase.co",KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2",client=window.supabase.createClient(URL,KEY);
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const id=new URLSearchParams(location.search).get("id"),back=$("detail-back");
-back.addEventListener("click",e=>{const ref=document.referrer;try{if(ref&&new URL(ref).origin===location.origin&&new URL(ref).pathname.endsWith("/dashboard.html")){e.preventDefault();history.back();}}catch(_){}});
+back.addEventListener("click",e=>{e.preventDefault();location.href="dashboard.html#dashboard-section";});
 const loading=$("asset-detail-loading"),errorBox=$("asset-detail-error"),content=$("asset-detail-content");
 const notice=message=>{const n=$("detail-notice");n.textContent=message;n.hidden=false;};
 const imageUrl=path=>path?client.storage.from("asset-listing-media").getPublicUrl(path).data.publicUrl:"";
@@ -22,7 +22,7 @@ async function load(){
  $("detail-description").textContent=item.full_description||"";
  const stats=[];if(item.monthly_visitors!=null)stats.push(["Monthly Visitors",Number(item.monthly_visitors).toLocaleString()]);if(item.total_subscribers!=null)stats.push(["Subscribers",Number(item.total_subscribers).toLocaleString()]);if(item.total_followers!=null)stats.push(["Followers",Number(item.total_followers).toLocaleString()]);if(item.monthly_revenue!=null)stats.push(["Monthly Revenue",money(item.financial_currency||item.price_currency,item.monthly_revenue)]);if(item.monthly_expenses!=null)stats.push(["Monthly Expenses",money(item.financial_currency||item.price_currency,item.monthly_expenses)]);if(item.monthly_profit!=null)stats.push(["Net Monthly Profit",money(item.financial_currency||item.price_currency,item.monthly_profit)]);
  $("detail-performance").innerHTML=stats.map(([label,value])=>"<div class='detail-stat'><small>"+esc(label)+"</small><strong>"+esc(value)+"</strong></div>").join("")||"<div class='detail-stat'><small>Performance</small><strong>Not provided</strong></div>";
- const seller=item.seller_name||"Nexa Seller";$("seller-name").textContent=seller;$("seller-avatar").textContent=seller.trim().charAt(0).toUpperCase()||"N";$("seller-member-since").textContent=item.seller_member_since?"Member since "+new Date(item.seller_member_since).toLocaleDateString():"Nexa marketplace seller";$("seller-stats").innerHTML="<span><b>"+Number(item.seller_total_listings||0)+"</b> approved listings</span><span><b>—</b> successful sales (not available yet)</span>";
+ const seller=item.seller_name||"Nexa Seller";$("seller-name").textContent=seller;$("seller-avatar").textContent=seller.trim().charAt(0).toUpperCase()||"N";$("seller-member-since").textContent=item.seller_member_since?"Member since "+new Date(item.seller_member_since).toLocaleDateString():"Nexa marketplace seller";$("seller-stats").innerHTML="<span><b>"+Number(item.seller_total_listings||0)+"</b> approved listings</span><span><b>—</b> successful sales (not available yet)</span>";$("seller-rating-value").textContent="New";$("seller-rating-note").textContent="No verified reviews yet";
  loading.hidden=true;content.hidden=false;
 }
 $("contact-seller").addEventListener("click",()=>notice("Nexa messaging is not connected yet. Seller chat will be enabled when the messaging service is ready."));
