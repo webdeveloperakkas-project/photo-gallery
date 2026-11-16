@@ -324,8 +324,10 @@
           if(uploadError)throw new Error("Image upload failed ("+file.name+"): "+uploadError.message);
           return path;
         };
-        const coverPath=await uploadImage(cover.files?.[0],"cover");
-        const logoPath=await uploadImage(logo?.files?.[0],"logo");
+        if(!cover.files?.[0])throw new Error("Please upload the Main Cover / Preview Image.");
+        if(!logo?.files?.[0])throw new Error("Please upload the required Logo / Channel Profile Image.");
+        const coverPath=await uploadImage(cover.files[0],"cover");
+        const logoPath=await uploadImage(logo.files[0],"logo");
         const galleryPaths=[];
         for(let i=0;i<(extras.files?.length||0);i++)galleryPaths.push(await uploadImage(extras.files[i],"gallery",i+1));
         const payload={id:listingId,user_id:authData.user.id,title:[listingForm.elements.platform.value,listingForm.elements.asset_type.value,listingForm.elements.country.value].filter(Boolean).join(" - ").slice(0,100),category:listingForm.elements.platform.value,summary:String(listingForm.elements.description.value||"").trim().replace(/\s+/g," ").slice(0,180)||"Digital asset listing",asking_price:Number(listingForm.elements.asking_price.value),price_currency:listingForm.elements.price_currency.value,status:"pending",listing_data:{details,cover_image_path:coverPath,logo_image_path:logoPath,gallery_image_paths:galleryPaths,submitted_file_names:[...(cover.files||[]),...(logo?.files||[]),...(extras.files||[]),...(document.getElementById("listing-proof-files")?.files||[])].map(file=>file.name)}};
