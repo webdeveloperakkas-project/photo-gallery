@@ -499,5 +499,7 @@ body{color:var(--ink);font-size:15px}
  .site-header .menu-toggle span{width:5px;height:5px;border-radius:50%;background:#087f79;margin:0}
  .site-header .main-nav{left:auto;right:17px;top:calc(100% + 7px)}
  .site-header .main-nav.open{display:flex}
+ /* Signed-out visitors can browse by scrolling; hide the three-dot menu beside Sign up. */
+ body:not(.nexa-signed-in) .site-header .menu-toggle{display:none!important}
  body.nexa-signed-in .site-header .menu-toggle{display:none!important}
 }
