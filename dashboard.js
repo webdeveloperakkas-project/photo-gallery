@@ -202,7 +202,35 @@ true;
     const showSubmit=()=>{view="submit";hideScreens();submitScreen.hidden=false;updateProgress();scrollTop()};
     const prompts={"Website":["Main traffic source","Website niche"],"SaaS":["Subscription model","Primary use case"],"E-commerce":["Main sales channel","Product niche"],"Domain":["Domain extension","Registrar"],"YouTube Channel":["Average monthly views","Channel language"],"Facebook Page":["Average monthly reach","Page niche"],"Instagram Account":["Average monthly reach","Account niche"],"TikTok Account":["Average monthly video views","Account niche"],"Other Digital Asset":["Main asset metric","Asset niche"]};
     const typeOptions={"Website":["General","Business","Blog / Content","News & Media","Education","Entertainment","Technology","Portfolio","Other"],"SaaS":["General","Business","Productivity","Technology","Finance","Marketing","Education","Other"],"E-commerce":["General","Fashion","Electronics","Beauty","Home & Living","Food","Digital Products","Other"],"Domain":["General","Brandable","Business","Technology","Short / Premium","Other"],"YouTube Channel":["General","Education","Entertainment","Gaming","Technology","Business & Finance","Lifestyle","News & Media","Other"],"Facebook Page":["General","Business","Community","Entertainment","Education","News & Media","Other"],"Instagram Account":["General","Business","Fashion & Beauty","Lifestyle","Travel","Food","Creator","Other"],"TikTok Account":["General","Entertainment","Education","Gaming","Lifestyle","Business","Other"],"Other Digital Asset":["General","Business","Technology","Education","Entertainment","Other"]};
-    const renderDynamic=()=>{const selected=platform.value,opts=typeOptions[selected]||[];assetType.innerHTML="<option value=''>"+(selected?"Select category":"Select platform first")+"</option>"+opts.map(x=>"<option>"+x+"</option>").join("");assetType.disabled=!selected;const youtube=selected==="YouTube Channel",social=["Facebook Page","Instagram Account","TikTok Account"].includes(selected),website=["Website","SaaS","E-commerce","Domain"].includes(selected);if(trafficLabel){trafficLabel.firstChild.textContent=youtube?"Total Monthly Views":social?"Average Monthly Reach":website?"Total Monthly Visitors":"Monthly Visitors / Views";trafficLabel.querySelector("input").placeholder="Type here";}if(audienceLabel){audienceLabel.firstChild.textContent=youtube?"Total Subscribers":social?"Total Followers":"Total Subscribers / Followers";audienceLabel.querySelector("input").placeholder="Type here";}const p=prompts[selected];dynamic.hidden=!p;if(p)dynamic.innerHTML="<h3>"+selected+" — additional details (optional)</h3><div class='listing-fields-grid'>"+p.map((x,i)=>"<label class='listing-field'>"+x+"<input name='category_extra_"+i+"' placeholder='Type here'></label>").join("")+"</div>";updateProgress()};
+    const renderDynamic=()=>{
+      const selected=platform.value,opts=typeOptions[selected]||[];
+      assetType.innerHTML="<option value=''>"+(selected?"Select category":"Select platform first")+"</option>"+opts.map(x=>"<option>"+x+"</option>").join("");
+      assetType.disabled=!selected;
+      const youtube=selected==="YouTube Channel";
+      const social=["Facebook Page","Instagram Account","TikTok Account"].includes(selected);
+      const trafficPlatforms=["Website","SaaS","E-commerce"].includes(selected);
+      const showTraffic=trafficPlatforms;
+      const showAudience=youtube||social;
+      if(trafficLabel){
+        trafficLabel.hidden=!showTraffic;
+        const input=trafficLabel.querySelector("input");
+        trafficLabel.childNodes[0].textContent="Total Monthly Visitors";
+        input.placeholder="Type here";
+        input.disabled=!showTraffic;
+        if(!showTraffic)input.value="";
+      }
+      if(audienceLabel){
+        audienceLabel.hidden=!showAudience;
+        const input=audienceLabel.querySelector("input");
+        audienceLabel.childNodes[0].textContent=youtube?"Total Subscribers":"Total Followers";
+        input.placeholder="Type here";
+        input.disabled=!showAudience;
+        if(!showAudience)input.value="";
+      }
+      const p=prompts[selected];dynamic.hidden=!p;
+      if(p)dynamic.innerHTML="<h3>"+selected+" — additional details (optional)</h3><div class='listing-fields-grid'>"+p.map((x,i)=>"<label class='listing-field'>"+x+"<input name='category_extra_"+i+"' placeholder='Type here'></label>").join("")+"</div>";
+      updateProgress();
+    };
     const renderImages=()=>{previews.innerHTML="";[...(cover.files||[]),...(extras.files||[])].forEach(f=>{if(!f.type.startsWith("image/"))return;const box=document.createElement("div");box.className="listing-preview-item";const img=document.createElement("img");img.alt=f.name;img.src=URL.createObjectURL(f);box.append(img);previews.append(box)});updateProgress()};
     const valueFor=el=>{if(el.type==="file")return [...(el.files||[])].map(f=>f.name).join(", ");if(el.type==="checkbox"||el.type==="radio")return el.checked?(el.value||"Yes"):"";return String(el.value||"").trim()};
     const escapeHtml=str=>String(str).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
