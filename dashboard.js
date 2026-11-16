@@ -47,7 +47,7 @@
   const renderMarketplaceEmpty=(host,title,detail)=>{if(host)host.innerHTML="<div class='marketplace-empty'><span>⌕</span><b>"+safeText(title)+"</b><p>"+safeText(detail)+"</p></div>";};
   const renderApprovedListings=items=>{
     if(!items?.length)return "<div class='marketplace-empty'><span>⌕</span><b>No matching approved listings</b><p>Try changing your filters or clearing them to see more digital assets.</p></div>";
-    return "<div class='approved-listing-grid'>"+items.map(item=>"<article class='approved-listing-card'><div class='approved-listing-top'><span class='approved-listing-category'>"+safeText(item.category)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><p class='approved-listing-summary'>"+safeText(item.summary||"Explore this digital asset.")+"</p><div class='approved-listing-facts'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(item.monthly_visitors!==null&&item.monthly_visitors!==undefined?"<span>Visitors: "+safeText(Number(item.monthly_visitors).toLocaleString())+"/mo</span>":"")+(item.monthly_revenue!==null&&item.monthly_revenue!==undefined?"<span>Revenue: "+safeText(item.financial_currency||item.price_currency)+" "+safeText(Number(item.monthly_revenue).toLocaleString())+"/mo</span>":"")+"</div><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><small>Listed "+safeText(new Date(item.submitted_at).toLocaleDateString())+"</small></div></article>").join("")+"</div>";
+    return "<div class='approved-listing-grid'>"+items.map(item=>{const social=["YouTube Channel","Facebook Page","Instagram Account","TikTok Account"].includes(item.category);const audienceLabel=item.category==="YouTube Channel"?"Subscribers":"Followers";const audience=item.total_followers!==null&&item.total_followers!==undefined?"<span>"+audienceLabel+": "+safeText(Number(item.total_followers).toLocaleString())+"</span>":"";const visitors=item.monthly_visitors!==null&&item.monthly_visitors!==undefined?"<span>Total Monthly Visitors: "+safeText(Number(item.monthly_visitors).toLocaleString())+"</span>":"";return "<article class='approved-listing-card'><div class='approved-listing-top'><span class='approved-listing-category'>"+safeText(item.category)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><p class='approved-listing-summary'>"+safeText(item.summary||"Explore this digital asset.")+"</p><div class='approved-listing-facts'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(social?audience:visitors)+(item.monthly_revenue!==null&&item.monthly_revenue!==undefined?"<span>Monthly Revenue: "+safeText(item.financial_currency||item.price_currency)+" "+safeText(Number(item.monthly_revenue).toLocaleString())+"</span>":"")+"</div><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><small>Listed "+safeText(new Date(item.submitted_at).toLocaleDateString())+"</small></div></article>";}).join("")+"</div>";
   };
   const showRecentListings=items=>{
     const markup=items.length?renderApprovedListings(items.slice(0,6)):"<div class='marketplace-empty'><b>No approved listings yet</b><p>New assets will appear here as soon as they are approved by Nexa.</p></div>";
@@ -62,7 +62,7 @@
   };
   const loadApprovedListings=async()=>{
     [recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>{host.innerHTML="<div class='marketplace-empty'><b>Loading approved listings…</b></div>";});
-    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,monthly_revenue,financial_currency").order("submitted_at",{ascending:false});
+    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,monthly_revenue,financial_currency").order("submitted_at",{ascending:false});
     if(error){[recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>renderMarketplaceEmpty(host,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup."));renderMarketplaceEmpty(browseListingsHost,"Search is unavailable","The public marketplace data setup needs attention.");return;}
     approvedMarketplaceItems=data||[];
     marketplaceLoaded=true;
@@ -76,7 +76,6 @@
     const keyword=(document.getElementById("marketplace-keyword")?.value||"").trim().toLowerCase();
     const country=countryFilter?.value||"";
     const priceCurrency=document.getElementById("marketplace-price-currency")?.value||"";
-    const revenueCurrency=document.getElementById("marketplace-revenue-currency")?.value||"";
     const pmin=numericValue("marketplace-price-min"),pmax=numericValue("marketplace-price-max");
     const vmin=numericValue("marketplace-visitors-min"),vmax=numericValue("marketplace-visitors-max");
     const rmin=numericValue("marketplace-revenue-min"),rmax=numericValue("marketplace-revenue-max");
@@ -85,7 +84,7 @@
       const price=Number(item.asking_price),visitors=item.monthly_visitors==null?null:Number(item.monthly_visitors),revenue=item.monthly_revenue==null?null:Number(item.monthly_revenue);
       return (!selected.length||selected.includes(item.category))&&(!keyword||haystack.includes(keyword))&&(!country||item.country===country)&&(!priceCurrency||item.price_currency===priceCurrency)&&
         (pmin===null||price>=pmin)&&(pmax===null||price<=pmax)&&(vmin===null||visitors!==null&&visitors>=vmin)&&(vmax===null||visitors!==null&&visitors<=vmax)&&
-        (!revenueCurrency||item.financial_currency===revenueCurrency)&&(rmin===null||revenue!==null&&revenue>=rmin)&&(rmax===null||revenue!==null&&revenue<=rmax);
+(rmin===null||revenue!==null&&revenue>=rmin)&&(rmax===null||revenue!==null&&revenue<=rmax);
     });
     const sort=document.getElementById("marketplace-sort")?.value||"newest";
     if(sort==="price-low")items.sort((a,b)=>Number(a.asking_price)-Number(b.asking_price));
@@ -111,15 +110,26 @@
     const count=document.getElementById("marketplace-results-count");
     if(count)count.textContent="Category selected. Click Search Digital Assets to apply.";
   }));
+  document.getElementById("marketplace-keyword-search")?.addEventListener("click",applyMarketplaceSearch);
+  document.querySelectorAll("#marketplace-platform-picker [data-platform]").forEach(button=>button.addEventListener("click",()=>{
+    const checkbox=categoryOptions.find(input=>input.value===button.getAttribute("data-platform"));
+    if(!checkbox)return;
+    checkbox.checked=!checkbox.checked;
+    button.setAttribute("aria-pressed",String(checkbox.checked));
+    syncCategoryFilters();
+    const count=document.getElementById("marketplace-results-count");
+    if(count)count.textContent="Platform selection updated. Click Search Digital Assets to apply.";
+  }));
   searchButton?.addEventListener("click",applyMarketplaceSearch);
   document.getElementById("marketplace-keyword")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();applyMarketplaceSearch();}});
   document.getElementById("clear-marketplace-filters")?.addEventListener("click",()=>{
     document.getElementById("marketplace-keyword").value="";
     if(countryFilter)countryFilter.value="";
-    ["marketplace-price-currency","marketplace-revenue-currency"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("marketplace-price-currency").value="";
     ["marketplace-price-min","marketplace-price-max","marketplace-visitors-min","marketplace-visitors-max","marketplace-revenue-min","marketplace-revenue-max"].forEach(id=>document.getElementById(id).value="");
     document.getElementById("marketplace-sort").value="newest";
     categoryOptions.forEach(input=>input.checked=false);
+    document.querySelectorAll("#marketplace-platform-picker [data-platform]").forEach(button=>button.setAttribute("aria-pressed","false"));
     if(allCategories){allCategories.checked=true;allCategories.indeterminate=false;}
     applyMarketplaceSearch();
   });
