@@ -28,15 +28,15 @@ $("detail-category-pill").textContent=item.subcategory||item.category||"Digital 
  const description=item.full_description||"The seller has not provided a full description.";$("detail-description").textContent=description;
  const seller=item.seller_name||"Nexa Seller";$("seller-name").textContent=seller;$("seller-avatar").textContent=seller.trim().charAt(0).toUpperCase()||"N";$("seller-member-since").textContent=item.seller_member_since?"Member since "+new Date(item.seller_member_since).toLocaleDateString():"Nexa marketplace seller";$("seller-stats").innerHTML="<span><b>"+Number(item.seller_total_listings||0)+"</b> approved listings</span><span><b>—</b> successful sales (not available yet)</span>";
  $("seller-rating-value").textContent="—";$("seller-rating-note").textContent="No verified reviews yet";
- const presenceText=$("seller-presence-text"),presenceDot=$("seller-presence")?.querySelector(".presence-dot");
+ const presenceText=$("user-presence-text"),presenceDot=$("user-presence")?.querySelector(".presence-dot");
  const renderPresence=async()=>{
    if(!item.seller_id||!presenceText)return;
-   const {data:presence,error:presenceError}=await client.from("seller_presence").select("last_seen_at").eq("user_id",item.seller_id).maybeSingle();
-   if(presenceError||!presence?.last_seen_at){presenceText.textContent="No recent activity";$("seller-presence")?.classList.remove("is-online");return;}
+   const {data:presence,error:presenceError}=await client.from("user_presence").select("last_seen_at").eq("user_id",item.seller_id).maybeSingle();
+   if(presenceError||!presence?.last_seen_at){presenceText.textContent="No recent activity";$("user-presence")?.classList.remove("is-online");return;}
    const lastSeen=new Date(presence.last_seen_at),minutes=Math.max(0,Math.floor((Date.now()-lastSeen.getTime())/60000));
-   if(Date.now()-lastSeen.getTime()<=120000){presenceText.textContent="Online";$("seller-presence")?.classList.add("is-online");}
+   if(Date.now()-lastSeen.getTime()<=120000){presenceText.textContent="Online";$("user-presence")?.classList.add("is-online");}
    else{
-     $("seller-presence")?.classList.remove("is-online");
+     $("user-presence")?.classList.remove("is-online");
      let label;
      if(minutes<60)label=minutes<=1?"1 minute ago":minutes+" minutes ago";
      else if(minutes<1440){const hours=Math.floor(minutes/60);label=hours===1?"1 hour ago":hours+" hours ago";}
