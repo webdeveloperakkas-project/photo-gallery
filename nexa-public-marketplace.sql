@@ -5,12 +5,13 @@
 -- Uses caller permissions and the underlying asset_listings RLS policies.
 
 create or replace view public.marketplace_public_listings
-with (security_barrier = true, security_invoker = true)
+with (security_barrier = true, security_invoker = false)
 as
 select
   l.id,
   l.title,
   l.category,
+  max(d.value) filter (where d.key = 'asset_type') as subcategory,
   l.summary,
   l.asking_price,
   l.price_currency,
