@@ -286,3 +286,31 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 @media(max-width:900px){.marketplace-search-layout{grid-template-columns:210px minmax(0,1fr)}.marketplace-filter-panel{padding:15px}.marketplace-search-panel{padding:16px}}
 @media(max-width:700px){.marketplace-search-layout{grid-template-columns:1fr}.marketplace-filter-panel{position:static}.marketplace-category-options{grid-template-columns:repeat(2,minmax(0,1fr))}.marketplace-filter-grid{grid-template-columns:1fr 1fr}.marketplace-search-panel{padding:15px}.browse-recent-panel{margin-bottom:16px}}
 @media(max-width:430px){.marketplace-filter-grid{grid-template-columns:1fr}.marketplace-category-options{grid-template-columns:1fr 1fr}.recent-live-label{font-size:8px;padding:6px 7px}}
+
+/* Dashboard-first marketplace layout */
+.nexa-top-header{background:linear-gradient(105deg,#103f35 0%,#126b5d 48%,#13a69a 100%);color:#fff;border-bottom:1px solid #ffffff24;box-shadow:0 5px 20px #0b3c3020}
+.nexa-top-header .menu-toggle,.nexa-top-header .wallet-nav-button,.nexa-top-header .profile-nav-button{color:#fff}
+.nexa-top-header .wallet-nav-button{background:#ffffff16;border:1px solid #ffffff35;border-radius:11px}
+.nexa-top-header .wallet-nav-copy small,.nexa-top-header .wallet-nav-copy b,.nexa-top-header .wallet-chevron{color:#fff}
+.nexa-top-header .menu-toggle{background:#ffffff16;border:1px solid #ffffff35;border-radius:9px}
+.nexa-top-header .profile-nav-button{background:#ffffff18;border:1px solid #ffffff40;border-radius:12px}
+.nexa-top-header .profile-avatar-small{background:#f4c95d;color:#174a3b}
+.dashboard-marketplace-search{margin:24px 0 8px}
+.dashboard-marketplace-search .marketplace-filter-panel{top:88px}
+.dashboard-marketplace-search .marketplace-search-panel{border-top:3px solid #13b0aa}
+.nexa-welcome-banner{background:linear-gradient(115deg,#103f35 0%,#126b5d 54%,#13a69a 100%);color:#fff}
+.nexa-welcome-banner .eyebrow,.nexa-welcome-banner h1,.nexa-welcome-banner p{color:#fff}
+.nexa-welcome-banner h1 span{color:#f4c95d}
+.nexa-welcome-banner .primary-button{background:#f4c95d;color:#174a3b}
+.nexa-welcome-banner .secondary-button{border-color:#ffffff70;color:#fff;background:#ffffff12}
+@media(max-width:650px){
+  .dashboard-marketplace-search .marketplace-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .dashboard-marketplace-search .marketplace-filter-field{font-size:10px}
+  .dashboard-marketplace-search .marketplace-filter-field input,.dashboard-marketplace-search .marketplace-filter-field select{min-height:39px;padding:8px 7px;font-size:11px}
+  .dashboard-marketplace-search .marketplace-filter-panel,.dashboard-marketplace-search .marketplace-search-panel{padding:13px}
+}
+@media(max-width:380px){
+  .dashboard-marketplace-search .marketplace-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dashboard-marketplace-search .marketplace-filter-field{font-size:9px}
+  .dashboard-marketplace-search .marketplace-filter-field input,.dashboard-marketplace-search .marketplace-filter-field select{padding:7px 5px;font-size:10px}
+}
