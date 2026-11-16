@@ -327,6 +327,7 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .platform-picker-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px}
 .platform-picker-heading b{font-size:12px;color:#234a37}
 .platform-picker-heading>span{font-size:9px;color:var(--tb-muted)}
+.platform-picker-heading>.selected-platform-badge{display:inline-flex;align-items:center;justify-content:center;min-height:25px;padding:5px 11px;border:1px solid #13b0aa55;border-radius:20px;background:linear-gradient(100deg,#e2f7f3,#fff4d6);color:#126653;font-size:10px;font-weight:800;letter-spacing:.2px;white-space:nowrap;box-shadow:0 2px 7px #138b7620}
 .platform-picker-list{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 64px)/9);gap:8px;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin;padding:1px 1px 7px}
 .platform-chip{display:flex;min-width:0;min-height:65px;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:7px 4px;border:1px solid #e2ebe5;border-radius:9px;background:#fff;color:#4d6256;font-size:9px;font-weight:700;white-space:nowrap;cursor:pointer}
 .platform-chip[aria-pressed="true"]{border-color:#13a69a;background:#eaf8f4;color:#145c4c;box-shadow:0 0 0 2px #13a69a18}
