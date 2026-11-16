@@ -36,8 +36,6 @@
   overlay?.addEventListener("click",closeSidebar);
 
   // Public marketplace: approved listings only; private seller/KYC data stays hidden.
-  const recentListingsHost=document.getElementById("recent-approved-listings");
-  const browseRecentHost=document.getElementById("browse-recent-approved-listings");
   const browseListingsHost=document.getElementById("browse-approved-listings");
   const searchButton=document.getElementById("marketplace-search-button");
   const allCategories=document.getElementById("filter-all-categories");
@@ -50,10 +48,6 @@
     if(!items?.length)return "<div class='marketplace-empty'><span>⌕</span><b>No matching approved listings</b><p>Try changing your filters or clearing them to see more digital assets.</p></div>";
     return "<div class='approved-listing-grid'>"+items.map(item=>{const youtube=item.category==="YouTube Channel";const social=["YouTube Channel","Facebook Page","Instagram Account","TikTok Account","X Account"].includes(item.category);const audienceLabel=youtube?"Total Subscribers":"Total Followers";const audienceValue=youtube?item.total_subscribers:item.total_followers;const audience=social&&audienceValue!==null&&audienceValue!==undefined?"<span>"+audienceLabel+": "+safeText(Number(audienceValue).toLocaleString())+"</span>":"";const visitors=["Website","E-commerce"].includes(item.category)&&item.monthly_visitors!==null&&item.monthly_visitors!==undefined?"<span>Total Monthly Visitors: "+safeText(Number(item.monthly_visitors).toLocaleString())+"</span>":"";return "<article class='approved-listing-card'><div class='approved-listing-top'><span class='approved-listing-category'>"+safeText(item.category)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><p class='approved-listing-summary'>"+safeText(item.summary||"Explore this digital asset.")+"</p><div class='approved-listing-facts'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(social?audience:visitors)+(item.monthly_revenue!==null&&item.monthly_revenue!==undefined?"<span>Monthly Revenue: "+safeText(item.financial_currency||item.price_currency)+" "+safeText(Number(item.monthly_revenue).toLocaleString())+"</span>":"")+"</div><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><small>Listed "+safeText(new Date(item.submitted_at).toLocaleDateString())+"</small></div></article>";}).join("")+"</div>";
   };
-  const showRecentListings=items=>{
-    const markup=items.length?renderApprovedListings(items.slice(0,6)):"<div class='marketplace-empty'><b>No approved listings yet</b><p>New assets will appear here as soon as they are approved by Nexa.</p></div>";
-    [recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>host.innerHTML=markup);
-  };
   const updateCountryOptions=items=>{
     if(!countryFilter)return;
     const current=countryFilter.value;
@@ -62,13 +56,14 @@
     countryFilter.value=countries.includes(current)?current:"";
   };
   const loadApprovedListings=async()=>{
-    [recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>{host.innerHTML="<div class='marketplace-empty'><b>Loading approved listings…</b></div>";});
+    renderMarketplaceEmpty(browseListingsHost,"Loading approved listings…","Please wait while the latest approved digital assets are loaded.");
     const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency").order("submitted_at",{ascending:false});
-    if(error){[recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>renderMarketplaceEmpty(host,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup."));renderMarketplaceEmpty(browseListingsHost,"Search is unavailable","The public marketplace data setup needs attention.");return;}
+    if(error){renderMarketplaceEmpty(browseListingsHost,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup.");return;}
     approvedMarketplaceItems=data||[];
     marketplaceLoaded=true;
-    showRecentListings(approvedMarketplaceItems);
     updateCountryOptions(approvedMarketplaceItems);
+    // Show all categories by default, newest approved listings first.
+    applyMarketplaceSearch();
   };
   const numericValue=id=>{const value=document.getElementById(id)?.value;return value===""||value===undefined?null:Number(value);};
   const visitorMinField=document.getElementById("marketplace-visitors-min");
