@@ -101,3 +101,8 @@
 #asset-detail-content.checkout-active>.detail-hero{display:none!important}
 #asset-detail-content.checkout-active>.seller-section{display:block!important}
 #asset-detail-content.checkout-active>.checkout-view{display:block}
+
+/* Recognizable payout-provider wordmarks in checkout */
+.checkout-methods{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.checkout-method-option{min-height:68px;display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #dfeae3;border-radius:10px;background:#fff;font-size:12px;font-weight:700;color:#315b47}
+.checkout-method-option .payout-brand-logo{width:52px;height:40px;flex-basis:52px;font-size:13px}.checkout-method-option .logo-bank{font-size:20px}.checkout-method-option .logo-bkash{font-size:11px}.checkout-method-option .logo-nagad,.checkout-method-option .logo-rocket{font-size:23px}
