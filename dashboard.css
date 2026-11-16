@@ -387,3 +387,16 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .logo-bank{color:#176b4c;background:#e8f5ed;font-size:19px}.logo-payoneer{color:#e34f32;background:#fff0eb;font-size:21px}.logo-wise{color:#176f59;background:#e7f7ef;font-size:20px}.logo-paypal{color:#145da0;background:#eaf3fc;font-size:21px}.logo-bkash{color:#d12072;background:#fff0f6;font-size:10px}.logo-nagad{color:#ed6b22;background:#fff3e9;font-size:21px;border:1px solid #ffe0c8}.logo-rocket{color:#7136a7;background:#f4edfb;font-size:21px}
 .listing-choice-grid .payout-brand-logo{height:38px}.listing-choice-grid label{align-items:center}.listing-choice-grid .payout-choice-content>span:last-child{min-width:0}
 .payout-preview-logos{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px}.payout-preview-logos>span{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid #e1ece5;border-radius:8px;background:#fff;font-size:10px}
+
+
+/* Compact seller payout choices inside Finance: logo cards stacked vertically */
+.seller-payout-box{margin-top:18px;padding:16px;background:#fbfdfb;border:1px solid #e2ece5;border-radius:11px}
+.seller-payout-box h3{font-size:14px;color:#234a37;margin:0 0 5px}
+.seller-payout-box>p{font-size:10px;color:var(--tb-muted);margin:0 0 11px;line-height:1.55}
+.seller-payout-box .listing-choice-grid{grid-template-columns:1fr;gap:7px;margin:10px 0}
+.seller-payout-box .listing-choice-grid label{min-height:54px;padding:8px 42px 8px 10px;gap:10px;border-radius:9px}
+.seller-payout-box .listing-choice-grid label:has(input:checked){padding:7px 41px 7px 9px}
+.seller-payout-box .listing-choice-grid .payout-brand-logo{width:39px;height:32px;flex-basis:39px;font-size:12px}
+.seller-payout-box .listing-choice-grid b{font-size:11px}
+.seller-payout-box .listing-choice-grid small{font-size:9px}
+.seller-payout-box .payout-note{display:block;margin-top:8px}
