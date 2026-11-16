@@ -121,7 +121,12 @@ select
       'transfer_notes','cover_image','logo_image','additional_images'
     )
   ),'[]'::jsonb) as public_details,
-  nullif(trim(max(d.value) filter (where d.key='payout_methods')), '') as preferred_payment_methods
+  nullif(trim(max(d.value) filter (where d.key='payout_methods')), '') as preferred_payment_methods,
+  (
+    select count(*)
+    from public.asset_listings all_seller_listings
+    where all_seller_listings.user_id=l.user_id
+  ) as seller_all_listings
 from public.asset_listings l
 left join auth.users u on u.id=l.user_id
 left join lateral (
