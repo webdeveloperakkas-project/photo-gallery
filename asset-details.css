@@ -31,3 +31,8 @@
 .inline-product-description-heading{padding:11px 15px;background:#e1f3eb;color:#17634f;font:800 12px Manrope,sans-serif}
 .inline-product-description .detail-description{margin:0;padding:15px 16px;white-space:pre-wrap;color:#53675b;font-size:12px;line-height:1.85;overflow-wrap:anywhere}
 @media(max-width:520px){.detail-price-media-row{grid-template-columns:minmax(0,1fr) minmax(118px,40%);gap:10px}.detail-price{font-size:18px}.detail-cover-frame{min-height:95px;padding:4px}.detail-cover-frame img{min-height:85px}.inline-product-description .detail-description{padding:13px;font-size:11px}}
+
+.seller-presence{display:flex;align-items:center;gap:7px;margin-top:8px;color:#718178;font-size:11px;font-weight:600}
+.seller-presence .presence-dot{width:8px;height:8px;border-radius:50%;background:#aab5ad;box-shadow:0 0 0 3px #eef2ef}
+.seller-presence.is-online{color:#14834b}
+.seller-presence.is-online .presence-dot{background:#18a957;box-shadow:0 0 0 3px #e1f5e9}
