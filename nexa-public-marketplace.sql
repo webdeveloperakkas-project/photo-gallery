@@ -1,3 +1,4 @@
+
 -- Nexa public marketplace read-only view.
 -- Run ONLY in the Nexa Supabase SQL Editor (never TaskBridge).
 -- Only approved listings and explicitly selected public search fields are exposed.
