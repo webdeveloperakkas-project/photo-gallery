@@ -252,3 +252,37 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .approved-listing-footer small{font-size:9px;color:var(--tb-muted);text-align:right}
 @media(max-width:1000px){.approved-listing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.approved-listing-grid{grid-template-columns:1fr}.approved-listing-card{padding:16px}}
+
+/* Nexa marketplace search and category filtering */
+.browse-recent-panel{margin:0 0 22px}
+.recent-live-label{display:inline-flex;align-items:center;padding:7px 10px;border-radius:20px;background:#e8f8ef;color:#168052;font-size:9px;font-weight:800;letter-spacing:.8px;white-space:nowrap}
+.marketplace-search-layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:20px;align-items:start}
+.marketplace-filter-panel,.marketplace-search-panel{background:#fff;border:1px solid var(--tb-line);border-radius:14px;padding:20px;box-shadow:0 5px 20px #14322308}
+.marketplace-filter-panel{position:sticky;top:94px}
+.filter-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.filter-panel-heading h2,.marketplace-search-title h2{font-size:17px;color:#234a37;margin:5px 0}
+.filter-clear-button{border:0;background:transparent;color:#168052;font-size:10px;font-weight:800;cursor:pointer}
+.category-filter-option{display:flex;align-items:center;gap:10px;min-height:39px;padding:8px 9px;border-radius:8px;color:#4b6054;font-size:12px;font-weight:600;cursor:pointer}
+.category-filter-option:hover{background:#f2faf5}
+.category-filter-option input{width:15px;height:15px;margin:0;accent-color:var(--tb-green)}
+.category-filter-all{background:#eff9f2;color:#176b4c;font-weight:800;margin-bottom:8px}
+.marketplace-category-options{display:grid;gap:2px}
+.marketplace-search-main{min-width:0}
+.marketplace-search-title h2{font-size:20px}
+.marketplace-search-title p{font-size:11px;color:var(--tb-muted);line-height:1.6;margin:0 0 17px}
+.marketplace-keyword-field,.marketplace-filter-field{display:grid;gap:7px;min-width:0;color:#43584c;font-size:11px;font-weight:800}
+.marketplace-keyword-field{margin-bottom:15px}
+.marketplace-keyword-field input,.marketplace-filter-field input,.marketplace-filter-field select{width:100%;min-height:41px;padding:10px 11px;border:1px solid #dfe9e3;border-radius:8px;background:#fff;color:var(--tb-ink);font:12px Arial;min-width:0}
+.marketplace-keyword-field input:focus,.marketplace-filter-field input:focus,.marketplace-filter-field select:focus{outline:2px solid #16a36a25;border-color:#70c59b}
+.marketplace-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.marketplace-search-button{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:47px;margin-top:19px;border:0;border-radius:9px;background:linear-gradient(100deg,#13b0aa,#108653);color:#fff;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 7px 16px #10865325;transition:transform .2s,box-shadow .2s}
+.marketplace-search-button:hover{transform:translateY(-1px);box-shadow:0 10px 20px #10865335}
+.marketplace-search-button span{font-size:19px}
+.marketplace-results-heading{display:flex;align-items:center;justify-content:space-between;margin:23px 0 0}
+.marketplace-results-heading h2{font-size:17px;color:#234a37;margin:0 0 5px}
+.marketplace-results-heading p{font-size:10px;color:var(--tb-muted);margin:0}
+.approved-listing-facts{display:flex;flex-wrap:wrap;gap:7px;margin:-6px 0 14px}
+.approved-listing-facts span{padding:5px 7px;border-radius:6px;background:#f2f8f4;color:#526b5c;font-size:9px}
+@media(max-width:900px){.marketplace-search-layout{grid-template-columns:210px minmax(0,1fr)}.marketplace-filter-panel{padding:15px}.marketplace-search-panel{padding:16px}}
+@media(max-width:700px){.marketplace-search-layout{grid-template-columns:1fr}.marketplace-filter-panel{position:static}.marketplace-category-options{grid-template-columns:repeat(2,minmax(0,1fr))}.marketplace-filter-grid{grid-template-columns:1fr 1fr}.marketplace-search-panel{padding:15px}.browse-recent-panel{margin-bottom:16px}}
+@media(max-width:430px){.marketplace-filter-grid{grid-template-columns:1fr}.marketplace-category-options{grid-template-columns:1fr 1fr}.recent-live-label{font-size:8px;padding:6px 7px}}
