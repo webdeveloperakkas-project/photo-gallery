@@ -1,6 +1,6 @@
 -- Nexa: shared online/last-active tracking for every user (seller and buyer).
 -- Run the complete file in the Nexa Supabase SQL Editor.
--- This setup does not depend on or reference a seller_presence table.
+-- This setup creates and uses only the shared user_presence table.
 
 create table if not exists public.user_presence (
   user_id uuid primary key references auth.users(id) on delete cascade,
