@@ -23,10 +23,7 @@ async function load(){
  if(error||!item){loading.hidden=true;errorBox.hidden=false;errorBox.textContent="This listing could not be found or is no longer available.";return;}
 $("detail-category-pill").textContent=item.subcategory||item.category||"Digital Asset";
  $("detail-price").textContent=money(item.price_currency,item.asking_price);$("detail-date").textContent="Listed "+new Date(item.submitted_at).toLocaleDateString();
- const cover=imageUrl(item.cover_image_path),coverEl=$("detail-cover");if(cover){coverEl.src=cover;coverEl.alt=(item.title||"Asset")+" preview";}else{coverEl.hidden=true;}
- const thumbs=$("detail-gallery-thumbs"),gallery=coverEl.closest(".detail-gallery"),paths=[item.logo_image_path,...(Array.isArray(item.gallery_image_paths)?item.gallery_image_paths:[])].filter(Boolean);
- thumbs.innerHTML=paths.map(p=>"<img src='"+esc(imageUrl(p))+"' alt='Additional asset image' loading='lazy'>").join("");thumbs.hidden=paths.length===0;gallery.hidden=!cover&&!paths.length;
- coverEl.onerror=()=>{coverEl.hidden=true;if(!paths.length)gallery.hidden=true;};
+ const cover=imageUrl(item.cover_image_path),coverEl=$("detail-cover"),coverFrame=$("detail-cover-frame");if(cover){coverEl.src=cover;coverEl.alt=(item.title||"Digital asset")+" preview";coverFrame.hidden=false;}else{coverFrame.hidden=true;}coverEl.onerror=()=>{coverFrame.hidden=true;};
  $("detail-overview").innerHTML=detailRows(item.public_details)||"<div><small>Listing information</small><strong>Additional details were not provided.</strong></div>";
  const description=item.full_description||"The seller has not provided a full description.";$("detail-description").textContent=description;
  const seller=item.seller_name||"Nexa Seller";$("seller-name").textContent=seller;$("seller-avatar").textContent=seller.trim().charAt(0).toUpperCase()||"N";$("seller-member-since").textContent=item.seller_member_since?"Member since "+new Date(item.seller_member_since).toLocaleDateString():"Nexa marketplace seller";$("seller-stats").innerHTML="<span><b>"+Number(item.seller_total_listings||0)+"</b> approved listings</span><span><b>—</b> successful sales (not available yet)</span>";
