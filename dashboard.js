@@ -77,6 +77,9 @@
   const visitorMaxLabel=visitorMaxField?.closest("label")?.querySelector("span");
   const updatePlatformMetricFilters=()=>{
     const selected=categoryOptions.filter(input=>input.checked).map(input=>input.value);
+    const selectedPlatformLabel=document.getElementById("selected-platform-label");
+    const platformNames={"Website":"Website","E-commerce":"Shop","YouTube Channel":"YouTube","X Account":"X","Facebook Page":"Facebook","Instagram Account":"Instagram","TikTok Account":"TikTok","Other Digital Asset":"Other Assets"};
+    if(selectedPlatformLabel)selectedPlatformLabel.textContent=selected.length===1?(platformNames[selected[0]]||selected[0]):"Select a platform";
     const hasWeb=!selected.length||selected.some(value=>["Website","E-commerce"].includes(value));
     const hasYoutube=selected.includes("YouTube Channel");
     const hasSocial=selected.some(value=>["Facebook Page","Instagram Account","TikTok Account","X Account"].includes(value));
