@@ -367,3 +367,7 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .approved-listing-cover-placeholder{display:grid;place-items:center;background:linear-gradient(135deg,#e5f5ef,#f8f2df);color:#17634f;font-weight:800;font-size:13px;text-align:center;padding:12px}
 .approved-listing-footer small{color:#16816f;font-weight:800}
 @media(max-width:650px){.approved-listing-cover{height:92px;border-radius:7px;margin-bottom:9px}}
+
+
+/* Marketplace listing card refinements */
+.approved-listing-card{display:flex;flex-direction:column;min-width:0}.approved-listing-seller{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 12px;margin-top:auto;color:#62766a;font-size:10px;border-top:1px solid #edf1ee}.approved-listing-seller b{color:#244b39}.seller-card-rating{white-space:nowrap;color:#9a7413;font-weight:800}.approved-listing-footer{align-items:center}.approved-listing-details-button{display:inline-flex;align-items:center;justify-content:center;padding:8px 13px;border-radius:7px;background:#f4c95d;color:#174a3b;font-size:11px;font-weight:900}.approved-listing-link:hover .approved-listing-details-button{background:#13b0aa;color:#fff}
