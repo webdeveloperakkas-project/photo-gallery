@@ -620,7 +620,9 @@
       initialLanguage = saved === 'bn' || saved === 'en' ? saved : (regionIsBangladesh || dhakaTimezone ? 'bn' : 'en');
     } catch (_) {}
     setLanguage(initialLanguage);
-    languageSelect.addEventListener('change', () => setLanguage(languageSelect.value));
+    const applySelectedLanguage = () => setLanguage(languageSelect.value === 'bn' ? 'bn' : 'en');
+    languageSelect.addEventListener('change', applySelectedLanguage);
+    languageSelect.addEventListener('input', applySelectedLanguage);
   }
 
   const year = document.getElementById('year');
