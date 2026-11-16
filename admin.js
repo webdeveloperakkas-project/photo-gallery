@@ -98,10 +98,15 @@
       alert("Please enter a title, category, valid asking price and currency.");
       button.disabled=false;return;
     }
-    const {error}=await db.from("asset_listings").update({
-      title,category,asking_price:Number(price),price_currency:currency,summary,
-      admin_note:$("admin-note").value.trim()||null
-    }).eq("id",selected.id);
+    const {error}=await db.rpc("admin_update_asset_listing",{
+      p_listing_id:selected.id,
+      p_title:title,
+      p_category:category,
+      p_asking_price:Number(price),
+      p_price_currency:currency,
+      p_summary:summary,
+      p_admin_note:$("admin-note").value.trim()||null
+    });
     button.disabled=false;
     if(error){alert("Could not save listing edits: "+error.message);return;}
     const id=selected.id;
@@ -114,7 +119,7 @@
     if(!selected)return;
     if(!confirm("Permanently delete this listing? This action cannot be undone.\n\n"+selected.title))return;
     const button=$("delete-listing");button.disabled=true;
-    const {error}=await db.from("asset_listings").delete().eq("id",selected.id);
+    const {error}=await db.rpc("admin_delete_asset_listing",{p_listing_id:selected.id});
     button.disabled=false;
     if(error){alert("Could not delete listing: "+error.message);return;}
     modal.hidden=true;selected=null;await load();
