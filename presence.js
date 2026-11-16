@@ -2,7 +2,7 @@
   const SUPABASE_URL="https://hguwdcmwqcpswyxtskcb.supabase.co";
   const SUPABASE_KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2";
   if(!window.supabase?.createClient)return;
-  const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  const client=window.nexaSupabaseClient||(window.nexaSupabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY));
   const HEARTBEAT_MS=60000;
   let userId=null,busy=false,timer=null;
 
