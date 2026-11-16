@@ -2,7 +2,7 @@
 const URL="https://hguwdcmwqcpswyxtskcb.supabase.co",KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2",client=window.supabase.createClient(URL,KEY);
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const id=new URLSearchParams(location.search).get("id"),back=$("detail-back");
-back.addEventListener("click",e=>{if(history.length>1){e.preventDefault();history.back();}});
+back.addEventListener("click",e=>{const ref=document.referrer;try{if(ref&&new URL(ref).origin===location.origin&&new URL(ref).pathname.endsWith("/dashboard.html")){e.preventDefault();history.back();}}catch(_){}});
 const loading=$("asset-detail-loading"),errorBox=$("asset-detail-error"),content=$("asset-detail-content");
 const notice=message=>{const n=$("detail-notice");n.textContent=message;n.hidden=false;};
 const imageUrl=path=>path?client.storage.from("asset-listing-media").getPublicUrl(path).data.publicUrl:"";
