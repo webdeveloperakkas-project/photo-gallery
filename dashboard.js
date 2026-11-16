@@ -48,7 +48,7 @@
   const renderMarketplaceEmpty=(host,title,detail)=>{if(host)host.innerHTML="<div class='marketplace-empty'><span>⌕</span><b>"+safeText(title)+"</b><p>"+safeText(detail)+"</p></div>";};
   const renderApprovedListings=items=>{
     if(!items?.length)return "<div class='marketplace-empty'><span>⌕</span><b>No matching approved listings</b><p>Try changing your filters or clearing them to see more digital assets.</p></div>";
-    return "<div class='approved-listing-grid'>"+items.map(item=>{const social=["YouTube Channel","Facebook Page","Instagram Account","TikTok Account","X Account"].includes(item.category);const audienceLabel=item.category==="YouTube Channel"?"Total Subscribers":"Total Followers";const audience=item.total_followers!==null&&item.total_followers!==undefined?"<span>"+audienceLabel+": "+safeText(Number(item.total_followers).toLocaleString())+"</span>":"";const visitors=item.monthly_visitors!==null&&item.monthly_visitors!==undefined?"<span>Total Monthly Visitors: "+safeText(Number(item.monthly_visitors).toLocaleString())+"</span>":"";return "<article class='approved-listing-card'><div class='approved-listing-top'><span class='approved-listing-category'>"+safeText(item.category)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><p class='approved-listing-summary'>"+safeText(item.summary||"Explore this digital asset.")+"</p><div class='approved-listing-facts'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(social?audience:visitors)+(item.monthly_revenue!==null&&item.monthly_revenue!==undefined?"<span>Monthly Revenue: "+safeText(item.financial_currency||item.price_currency)+" "+safeText(Number(item.monthly_revenue).toLocaleString())+"</span>":"")+"</div><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><small>Listed "+safeText(new Date(item.submitted_at).toLocaleDateString())+"</small></div></article>";}).join("")+"</div>";
+    return "<div class='approved-listing-grid'>"+items.map(item=>{const youtube=item.category==="YouTube Channel";const social=["YouTube Channel","Facebook Page","Instagram Account","TikTok Account","X Account"].includes(item.category);const audienceLabel=youtube?"Total Subscribers":"Total Followers";const audienceValue=youtube?item.total_subscribers:item.total_followers;const audience=social&&audienceValue!==null&&audienceValue!==undefined?"<span>"+audienceLabel+": "+safeText(Number(audienceValue).toLocaleString())+"</span>":"";const visitors=["Website","E-commerce"].includes(item.category)&&item.monthly_visitors!==null&&item.monthly_visitors!==undefined?"<span>Total Monthly Visitors: "+safeText(Number(item.monthly_visitors).toLocaleString())+"</span>":"";return "<article class='approved-listing-card'><div class='approved-listing-top'><span class='approved-listing-category'>"+safeText(item.category)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><p class='approved-listing-summary'>"+safeText(item.summary||"Explore this digital asset.")+"</p><div class='approved-listing-facts'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(social?audience:visitors)+(item.monthly_revenue!==null&&item.monthly_revenue!==undefined?"<span>Monthly Revenue: "+safeText(item.financial_currency||item.price_currency)+" "+safeText(Number(item.monthly_revenue).toLocaleString())+"</span>":"")+"</div><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><small>Listed "+safeText(new Date(item.submitted_at).toLocaleDateString())+"</small></div></article>";}).join("")+"</div>";
   };
   const showRecentListings=items=>{
     const markup=items.length?renderApprovedListings(items.slice(0,6)):"<div class='marketplace-empty'><b>No approved listings yet</b><p>New assets will appear here as soon as they are approved by Nexa.</p></div>";
@@ -63,7 +63,7 @@
   };
   const loadApprovedListings=async()=>{
     [recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>{host.innerHTML="<div class='marketplace-empty'><b>Loading approved listings…</b></div>";});
-    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,monthly_revenue,financial_currency").order("submitted_at",{ascending:false});
+    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency").order("submitted_at",{ascending:false});
     if(error){[recentListingsHost,browseRecentHost].filter(Boolean).forEach(host=>renderMarketplaceEmpty(host,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup."));renderMarketplaceEmpty(browseListingsHost,"Search is unavailable","The public marketplace data setup needs attention.");return;}
     approvedMarketplaceItems=data||[];
     marketplaceLoaded=true;
@@ -209,7 +209,7 @@ true;
       assetType.disabled=!selected;
       const youtube=selected==="YouTube Channel";
       const social=["Facebook Page","Instagram Account","TikTok Account","X Account"].includes(selected);
-      const trafficPlatforms=["Website","SaaS","E-commerce"].includes(selected);
+      const trafficPlatforms=["Website","E-commerce"].includes(selected);
       const showTraffic=trafficPlatforms;
       const showAudience=youtube||social;
       if(trafficLabel){
@@ -225,6 +225,7 @@ true;
         const input=audienceLabel.querySelector("input");
         audienceLabel.childNodes[0].textContent=youtube?"Total Subscribers":"Total Followers";
         input.placeholder="Type here";
+        input.name=youtube?"subscribers":"followers";
         input.disabled=!showAudience;
         if(!showAudience)input.value="";
       }
@@ -249,7 +250,7 @@ true;
     document.getElementById("listing-confirm-accept").addEventListener("click",async()=>{
       const details=[],seen=new Set();
       [...listingForm.querySelectorAll("input,select,textarea")].forEach(el=>{
-        if(el.type==="button"||el.type==="submit"||el.type==="radio"&&!el.checked)return;
+        if(el.disabled||el.type==="button"||el.type==="submit"||el.type==="radio"&&!el.checked)return;
         const key=el.name||el.id||"field"; if(el.type!=="checkbox"&&seen.has(key))return; seen.add(key);
         let value=el.type==="file"?[...(el.files||[])].map(file=>file.name).join(", "):String(el.value||"").trim();
         if(el.type==="checkbox"){if(!el.checked)return;const existing=details.find(row=>row.key===key);if(existing){existing.value+=", "+value;return;}}
