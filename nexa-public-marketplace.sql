@@ -2,7 +2,7 @@
 -- Nexa public marketplace read-only view.
 -- Run ONLY in the Nexa Supabase SQL Editor (never TaskBridge).
 -- Exposes only approved listings and public marketplace statistics.
--- Uses caller permissions and the underlying asset_listings RLS policies.
+-- Uses view-owner permissions so approved public listings can be read despite seller-specific table RLS.
 
 create or replace view public.marketplace_public_listings
 with (security_barrier = true, security_invoker = false)
@@ -11,7 +11,6 @@ select
   l.id,
   l.title,
   l.category,
-  max(d.value) filter (where d.key = 'asset_type') as subcategory,
   l.summary,
   l.asking_price,
   l.price_currency,
@@ -40,7 +39,8 @@ select
       and d.key in ('subscribers', 'followers')
       and d.value ~ '^[0-9]+([.][0-9]+)?$'
     then d.value::numeric
-  end) as total_subscribers
+  end) as total_subscribers,
+  max(d.value) filter (where d.key = 'asset_type') as subcategory
 from public.asset_listings l
 left join lateral (
   select
