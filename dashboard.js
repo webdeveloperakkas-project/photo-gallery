@@ -34,6 +34,26 @@
   sidebarClose?.addEventListener("click",closeSidebar);
   overlay?.addEventListener("click",closeSidebar);
 
+  // Public marketplace: only approved, safe-to-display fields from the public view.
+  const recentListingsHost=document.getElementById("recent-approved-listings");
+  const browseListingsHost=document.getElementById("browse-approved-listings");
+  const renderMarketplaceEmpty=(host,title,detail)=>{if(host)host.innerHTML="<div class='marketplace-empty'><span>⌕</span><b>"+safeText(title)+"</b><p>"+safeText(detail)+"</p></div>";};
+  const renderApprovedListings=items=>{
+    if(!items?.length)return "<div class='marketplace-empty'><span>⌕</span><b>No approved listings yet</b><p>New assets will appear here as soon as they are approved by Nexa.</p></div>";
+    return "<div class='approved-listing-grid'>"+items.map(item=>"<article class='approved-listing-card'><div class='approved-listing-top'><span class='approved-listing-category'>"+safeText(item.category)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><p class='approved-listing-summary'>"+safeText(item.summary||"Explore this digital asset.")+"</p><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><small>Listed "+safeText(new Date(item.submitted_at).toLocaleDateString())+"</small></div></article>").join("")+"</div>";
+  };
+  const loadApprovedListings=async()=>{
+    if(!recentListingsHost&&!browseListingsHost)return;
+    const hosts=[recentListingsHost,browseListingsHost].filter(Boolean);
+    hosts.forEach(host=>{host.innerHTML="<div class='marketplace-empty'><b>Loading approved listings…</b></div>";});
+    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,summary,asking_price,price_currency,submitted_at").order("submitted_at",{ascending:false}).limit(20);
+    if(error){hosts.forEach(host=>renderMarketplaceEmpty(host,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup."));return;}
+    const markup=renderApprovedListings(data||[]);
+    hosts.forEach(host=>{host.innerHTML=markup;});
+  };
+  window.nexaRenderApprovedListings=loadApprovedListings;
+  loadApprovedListings();
+
   // Supabase-backed My Listings.
   const listingsHost=document.getElementById("my-listings-content"),manageModal=document.getElementById("listing-manage-modal"),manageDetails=document.getElementById("listing-manage-details");
   let managingListingId=null;
@@ -62,7 +82,7 @@
     document.querySelectorAll(".page-section").forEach(s=>s.classList.toggle("active",s.id===id));
     document.querySelectorAll(".sidebar-navigation .nav-link").forEach(a=>a.classList.toggle("active",a.dataset.section===id));
     history.replaceState(null,"","#"+id);
-    if(id==="my-listings-section") window.nexaRenderMyListings?.();
+    if(id==="my-listings-section") window.nexaRenderMyListings?.();\n    if(id==="dashboard-section"||id==="browse-assets-section") window.nexaRenderApprovedListings?.();
     closeSidebar();
     window.scrollTo({top:0,behavior:"smooth"});
   };
