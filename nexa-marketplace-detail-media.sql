@@ -117,7 +117,8 @@ select
       'accuracy_confirmed','policy_agreed','payout_methods',
       'transfer_notes','cover_image','logo_image','additional_images'
     )
-  ),'[]'::jsonb) as public_details
+  ),'[]'::jsonb) as public_details,
+  max(d.value) filter (where d.key='payout_methods') as preferred_payment_methods
 from public.asset_listings l
 left join auth.users u on u.id=l.user_id
 left join lateral (
