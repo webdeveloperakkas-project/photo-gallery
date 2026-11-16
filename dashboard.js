@@ -212,7 +212,7 @@ true;
       const showTraffic=trafficPlatforms;
       const showAudience=youtube||social;
       if(trafficLabel){
-        trafficLabel.hidden=!showTraffic;
+        trafficLabel.hidden=!showTraffic;trafficLabel.style.display=showTraffic?"":"none";
         const input=trafficLabel.querySelector("input");
         trafficLabel.childNodes[0].textContent="Total Monthly Visitors";
         input.placeholder="Type here";
@@ -220,7 +220,7 @@ true;
         if(!showTraffic)input.value="";
       }
       if(audienceLabel){
-        audienceLabel.hidden=!showAudience;
+        audienceLabel.hidden=!showAudience;audienceLabel.style.display=showAudience?"":"none";
         const input=audienceLabel.querySelector("input");
         audienceLabel.childNodes[0].textContent=youtube?"Total Subscribers":"Total Followers";
         input.placeholder="Type here";
