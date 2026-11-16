@@ -1,9 +1,4 @@
 
--- Nexa public marketplace read-only view.
--- Run ONLY in the Nexa Supabase SQL Editor (never TaskBridge).
--- Exposes only approved listings and public marketplace statistics.
--- Uses view-owner permissions so approved public listings can be read despite seller-specific table RLS.
-
 create or replace view public.marketplace_public_listings
 with (security_barrier = true, security_invoker = false)
 as
