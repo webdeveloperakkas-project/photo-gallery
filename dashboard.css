@@ -238,20 +238,26 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .listing-manage-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}.listing-manage-spacer{flex:1}
 @media(max-width:650px){.my-listing-card{align-items:stretch;flex-direction:column}.my-listing-side{display:flex;justify-content:space-between;align-items:center}.listing-manage-dialog{padding:16px}.listing-manage-readonly{grid-template-columns:1fr;max-height:260px}.listing-manage-actions{display:grid;grid-template-columns:1fr 1fr}.listing-manage-spacer{display:none}.listing-manage-actions #listing-manage-delete{grid-column:1/-1;grid-row:2}}
 
-/* Live, approved marketplace listings */
+/* Live, approved marketplace listings grouped by platform */
 .marketplace-listings{width:100%;margin:16px 0 24px}
+.marketplace-category-section{margin:0 0 26px}
+.marketplace-category-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:0 0 10px;border-bottom:1px solid var(--tb-line)}
+.marketplace-category-heading h3{margin:0;color:var(--tb-green-dark);font-size:17px;font-weight:800}
+.marketplace-category-heading>span{font-size:10px;color:var(--tb-muted);white-space:nowrap}
 .approved-listing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .approved-listing-card{min-width:0;padding:18px;background:#fff;border:1px solid var(--tb-line);border-radius:13px;box-shadow:0 5px 20px #14322308;display:flex;flex-direction:column}
 .approved-listing-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.approved-listing-category{font-size:10px;font-weight:800;color:var(--tb-green-dark);background:var(--tb-green-light);padding:6px 9px;border-radius:20px}
-.approved-listing-status{font-size:9px;font-weight:800;color:#16845b;background:#e8f8ef;padding:6px 9px;border-radius:20px}
+.approved-listing-subcategory{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:800;color:var(--tb-green-dark);background:var(--tb-green-light);padding:6px 9px;border-radius:20px}
+.approved-listing-status{flex:none;font-size:9px;font-weight:800;color:#16845b;background:#e8f8ef;padding:6px 9px;border-radius:20px}
 .approved-listing-card h3{font-size:15px;line-height:1.4;margin:0 0 7px;color:var(--tb-ink);overflow-wrap:anywhere}
 .approved-listing-summary{font-size:11px;line-height:1.6;color:var(--tb-muted);margin:0 0 18px;flex:1}
+.approved-listing-facts{display:flex;flex-direction:column;gap:6px;margin:0 0 14px}
+.approved-listing-facts span{font-size:10px;line-height:1.45;color:var(--tb-muted);overflow-wrap:anywhere}
 .approved-listing-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;border-top:1px solid var(--tb-line);padding-top:12px}
 .approved-listing-footer strong{font-size:14px;color:var(--tb-green-dark)}
 .approved-listing-footer small{font-size:9px;color:var(--tb-muted);text-align:right}
 @media(max-width:1000px){.approved-listing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:650px){.approved-listing-grid{grid-template-columns:1fr}.approved-listing-card{padding:16px}}
+@media(max-width:650px){.approved-listing-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.approved-listing-card{padding:11px}.approved-listing-card h3{font-size:12px}.approved-listing-summary{font-size:10px;margin-bottom:12px}.approved-listing-top{gap:5px;margin-bottom:9px}.approved-listing-subcategory{font-size:9px;padding:5px 6px}.approved-listing-status{font-size:8px;padding:5px 6px}.approved-listing-footer{gap:5px;align-items:flex-start;flex-direction:column}.approved-listing-footer strong{font-size:12px}.approved-listing-footer small{font-size:8px;text-align:left}}
 
 /* Nexa marketplace search and category filtering */
 .browse-recent-panel{margin:0 0 22px}
