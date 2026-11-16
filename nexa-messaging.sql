@@ -37,18 +37,30 @@ create policy "Nexa participants read conversations"
 on public.nexa_conversations for select to authenticated
 using (auth.uid() = buyer_id or auth.uid() = seller_id);
 
+create or replace function public.nexa_can_start_conversation(p_listing_id uuid,p_seller_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $func$
+  select exists (
+    select 1 from public.asset_listings l
+    where l.id = p_listing_id
+      and l.user_id = p_seller_id
+      and l.status = 'approved'
+  );
+$func$;
+
+grant execute on function public.nexa_can_start_conversation(uuid,uuid) to authenticated;
+
 drop policy if exists "Nexa buyers start conversations for approved listings" on public.nexa_conversations;
 create policy "Nexa buyers start conversations for approved listings"
 on public.nexa_conversations for insert to authenticated
 with check (
   auth.uid() = buyer_id
   and buyer_id <> seller_id
-  and exists (
-    select 1 from public.asset_listings l
-    where l.id = listing_id
-      and l.user_id = seller_id
-      and l.status = 'approved'
-  )
+  and public.nexa_can_start_conversation(listing_id,seller_id)
 );
 
 drop policy if exists "Nexa participants read messages" on public.nexa_messages;
