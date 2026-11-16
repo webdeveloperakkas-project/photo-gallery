@@ -103,6 +103,14 @@
   };
   allCategories?.addEventListener("change",()=>{categoryOptions.forEach(input=>input.checked=false);allCategories.checked=true;allCategories.indeterminate=false;});
   categoryOptions.forEach(input=>input.addEventListener("change",()=>{syncCategoryFilters();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="Filters updated. Click Search Digital Assets to apply."; }));
+  document.querySelectorAll("[data-category-filter]").forEach(link=>link.addEventListener("click",()=>{
+    const category=link.getAttribute("data-category-filter");
+    categoryOptions.forEach(input=>input.checked=input.value===category);
+    syncCategoryFilters();
+    document.getElementById("marketplace-search-button")?.scrollIntoView({behavior:"smooth",block:"center"});
+    const count=document.getElementById("marketplace-results-count");
+    if(count)count.textContent="Category selected. Click Search Digital Assets to apply.";
+  }));
   searchButton?.addEventListener("click",applyMarketplaceSearch);
   document.getElementById("marketplace-keyword")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();applyMarketplaceSearch();}});
   document.getElementById("clear-marketplace-filters")?.addEventListener("click",()=>{
