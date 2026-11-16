@@ -20,3 +20,9 @@
 .workspace-heading{flex-wrap:wrap}.search-control{display:grid;gap:5px;min-width:min(260px,100%);color:var(--muted);font-size:10px;font-weight:700}.search-control input{width:100%;min-height:36px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:11px}
 .coming-soon-view{min-height:420px;display:grid;place-items:center;padding:35px 15px}.coming-soon-card{width:min(100%,560px);padding:42px 34px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 45px #14322309}.coming-soon-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 18px;border-radius:16px;background:#eaf8f7;color:var(--teal-dark);font-size:25px}.coming-soon-card h2{margin:9px 0;font:800 23px Manrope,sans-serif}.coming-soon-card p{max-width:420px;margin:0 auto 18px;color:var(--muted);font-size:12px;line-height:1.8}.coming-soon-status{display:inline-flex;padding:8px 12px;border-radius:30px;background:#fff5df;color:#8d681e;font-size:9px;font-weight:800;letter-spacing:.7px}
 @media(max-width:760px){.search-control{width:100%;min-width:0}.coming-soon-card{padding:30px 20px}}
+
+/* Keep the admin shell stable while only the workspace panel changes */
+.admin-layout{align-items:stretch}.admin-sidebar{height:100vh;position:fixed;top:0;bottom:0}.admin-main-area{min-height:100vh}.admin-top-header{position:sticky;top:0;z-index:500}
+.admin-content>.page-heading,.admin-content>#stats-grid,.admin-content>.listing-workspace,.admin-content>.coming-soon-view{width:100%}
+.coming-soon-view:not([hidden]){display:grid;animation:workspaceFadeIn .18s ease-out}
+@keyframes workspaceFadeIn{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
