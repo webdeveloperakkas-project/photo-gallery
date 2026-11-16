@@ -71,7 +71,17 @@ $("message-form")?.addEventListener("submit",async e=>{
  input.value="";await renderMessages();
 });
 $("checkout-back")?.addEventListener("click",()=>{content.classList.remove("checkout-active");$("checkout-view").hidden=true;});
-$("checkout-continue")?.addEventListener("click",()=>notice("Secure payment processing is not connected yet. No payment has been taken."));
+let selectedCheckoutMethod="";
+const syncCheckoutSelection=()=>{
+ const selected=$("checkout-methods")?.querySelector("input[name='checkout-method']:checked");
+ selectedCheckoutMethod=selected?.value||"";
+ $("checkout-continue").disabled=!selectedCheckoutMethod;
+};
+$("checkout-methods")?.addEventListener("change",syncCheckoutSelection);
+$("checkout-continue")?.addEventListener("click",()=>{
+ if(!selectedCheckoutMethod){notice("Please select one of the seller's listed payout methods first.");return;}
+ notice("Selected method: "+selectedCheckoutMethod+". Secure payment processing is not connected yet. No payment has been taken.");
+});
 
 async function load(){
  if(!id){loading.hidden=true;errorBox.hidden=false;errorBox.textContent="No asset was selected. Return to the Marketplace and choose a listing.";return;}
@@ -115,9 +125,18 @@ $("buy-now").addEventListener("click",()=>{
  $("checkout-title").textContent=currentItem.title||"Digital asset";
  $("checkout-category").textContent=currentItem.subcategory||currentItem.category||"Digital Asset";
  $("checkout-price").textContent=money(currentItem.price_currency,currentItem.asking_price);
- const host=$("checkout-methods");host.innerHTML="";$("checkout-no-methods").hidden=methods.length>0;
- methods.forEach(method=>{const card=document.createElement("div");card.className="checkout-method-option";const logo=document.createElement("span");logo.innerHTML=payoutLogo(method);const name=document.createElement("span");name.textContent=method;card.append(logo.firstElementChild,name);host.append(card);});
- $("checkout-continue").disabled=methods.length===0;
+ const host=$("checkout-methods");host.innerHTML="";$("checkout-no-methods").hidden=methods.length>0;selectedCheckoutMethod="";
+ const mobileDefault=window.matchMedia("(max-width: 700px)").matches;
+ methods.forEach((method,index)=>{
+   const card=document.createElement("label");card.className="checkout-method-option";
+   const radio=document.createElement("input");radio.type="radio";radio.name="checkout-method";radio.value=method;radio.setAttribute("aria-label","Select "+method);
+   if(mobileDefault&&index===0)radio.checked=true;
+   const logo=document.createElement("span");logo.innerHTML=payoutLogo(method);
+   const name=document.createElement("span");name.className="checkout-method-name";name.textContent=method;
+   const mark=document.createElement("span");mark.className="checkout-method-check";mark.setAttribute("aria-hidden","true");
+   card.append(radio,logo.firstElementChild,name,mark);host.append(card);
+ });
+ syncCheckoutSelection();
  content.classList.add("checkout-active");$("checkout-view").hidden=false;window.scrollTo({top:0,behavior:"smooth"});
 });
 
