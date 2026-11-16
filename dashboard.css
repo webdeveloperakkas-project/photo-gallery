@@ -237,3 +237,18 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .listing-price-editor{margin-top:18px;padding:16px;background:#f8fcf9;border:1px solid #e5eee8;border-radius:10px}.listing-price-editor>label{display:block;font-size:12px;font-weight:800;color:#234a37;margin-bottom:8px}.listing-price-input-row{display:flex;align-items:center;gap:9px}.listing-price-input-row span{font-size:13px;font-weight:800;color:#234a37}.listing-price-input-row input{width:100%;max-width:260px;padding:11px;border:1px solid #d8e5dc;border-radius:8px;font:inherit}.listing-price-editor>small{display:block;color:var(--tb-muted);font-size:10px;margin-top:8px}
 .listing-manage-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}.listing-manage-spacer{flex:1}
 @media(max-width:650px){.my-listing-card{align-items:stretch;flex-direction:column}.my-listing-side{display:flex;justify-content:space-between;align-items:center}.listing-manage-dialog{padding:16px}.listing-manage-readonly{grid-template-columns:1fr;max-height:260px}.listing-manage-actions{display:grid;grid-template-columns:1fr 1fr}.listing-manage-spacer{display:none}.listing-manage-actions #listing-manage-delete{grid-column:1/-1;grid-row:2}}
+
+/* Live, approved marketplace listings */
+.marketplace-listings{width:100%;margin:16px 0 24px}
+.approved-listing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.approved-listing-card{min-width:0;padding:18px;background:#fff;border:1px solid var(--tb-line);border-radius:13px;box-shadow:0 5px 20px #14322308;display:flex;flex-direction:column}
+.approved-listing-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.approved-listing-category{font-size:10px;font-weight:800;color:var(--tb-green-dark);background:var(--tb-green-light);padding:6px 9px;border-radius:20px}
+.approved-listing-status{font-size:9px;font-weight:800;color:#16845b;background:#e8f8ef;padding:6px 9px;border-radius:20px}
+.approved-listing-card h3{font-size:15px;line-height:1.4;margin:0 0 7px;color:var(--tb-ink);overflow-wrap:anywhere}
+.approved-listing-summary{font-size:11px;line-height:1.6;color:var(--tb-muted);margin:0 0 18px;flex:1}
+.approved-listing-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;border-top:1px solid var(--tb-line);padding-top:12px}
+.approved-listing-footer strong{font-size:14px;color:var(--tb-green-dark)}
+.approved-listing-footer small{font-size:9px;color:var(--tb-muted);text-align:right}
+@media(max-width:1000px){.approved-listing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.approved-listing-grid{grid-template-columns:1fr}.approved-listing-card{padding:16px}}
