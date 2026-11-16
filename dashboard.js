@@ -101,8 +101,8 @@
     const all=categoryOptions.every(input=>input.checked);
     if(allCategories){allCategories.checked=!any||all;allCategories.indeterminate=any&&!all;}
   };
-  allCategories?.addEventListener("change",()=>{categoryOptions.forEach(input=>input.checked=false);applyMarketplaceSearch();});
-  categoryOptions.forEach(input=>input.addEventListener("change",()=>{syncCategoryFilters();applyMarketplaceSearch();}));
+  allCategories?.addEventListener("change",()=>{categoryOptions.forEach(input=>input.checked=false);allCategories.checked=true;allCategories.indeterminate=false;});
+  categoryOptions.forEach(input=>input.addEventListener("change",()=>{syncCategoryFilters();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="Filters updated. Click Search Digital Assets to apply."; }));
   searchButton?.addEventListener("click",applyMarketplaceSearch);
   document.getElementById("marketplace-keyword")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();applyMarketplaceSearch();}});
   document.getElementById("clear-marketplace-filters")?.addEventListener("click",()=>{
