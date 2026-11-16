@@ -24,7 +24,7 @@ left join lateral (
   from jsonb_array_elements(
     case when jsonb_typeof(l.listing_data->'details') = 'array'
       then l.listing_data->'details' else '[]'::jsonb end
-  ) as item
+  ) as details(item)
 ) d on true
 where l.status = 'approved'
 group by l.id, l.title, l.category, l.summary, l.asking_price, l.price_currency, l.submitted_at;
