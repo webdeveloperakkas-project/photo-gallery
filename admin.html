@@ -162,6 +162,21 @@
     <div class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-title">
       <div class="review-heading"><div><span class="eyebrow">LISTING REVIEW</span><h2 id="review-title">Review listing</h2></div><button type="button" id="close-review" class="close-button" aria-label="Close review">×</button></div>
       <div id="review-details" class="review-details"></div>
+      <div class="review-toolbar">
+        <button type="button" id="edit-listing" class="button button-secondary">Edit listing details</button>
+        <button type="button" id="delete-listing" class="button button-danger">Delete listing</button>
+      </div>
+      <section id="listing-edit-form" class="listing-edit-form" hidden>
+        <h3>Edit listing information</h3>
+        <div class="edit-fields">
+          <label>Listing title<input id="edit-title" type="text" maxlength="180" required></label>
+          <label>Category<input id="edit-category" type="text" maxlength="100" required></label>
+          <label>Asking price<input id="edit-price" type="number" min="0" step="0.01" required></label>
+          <label>Price currency<input id="edit-currency" type="text" maxlength="8" required></label>
+          <label class="edit-summary-field">Summary<textarea id="edit-summary" rows="4" maxlength="5000"></textarea></label>
+        </div>
+        <div class="edit-form-actions"><button type="button" id="cancel-listing-edits" class="button button-secondary">Cancel</button><button type="button" id="save-listing-edits" class="button button-primary">Save changes</button></div>
+      </section>
       <label class="note-label" for="admin-note">Note for seller <span>Optional</span><textarea id="admin-note" rows="4" maxlength="1200" placeholder="Write feedback or explain what needs to be changed…"></textarea></label>
       <div class="review-actions"><button type="button" id="reject-listing" class="button button-danger">Reject listing</button><span></span><button type="button" id="approve-listing" class="button button-primary">Approve listing</button></div>
     </div>
