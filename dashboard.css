@@ -334,3 +334,7 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .logo-youtube{background:#ffeded;color:#d9232e}.logo-facebook{background:#edf3ff;color:#1877f2}.logo-instagram{background:#fff0f6;color:#c13584}.logo-tiktok{background:#eaf7f7;color:#111}.logo-shop{background:#fff6e7;color:#a76b16}.logo-domain{background:#f0efff;color:#6556b4}
 @media(max-width:700px){.platform-picker-list{grid-auto-columns:calc((100% - 32px)/5);gap:8px}.platform-chip{min-height:61px;font-size:8px;padding:6px 2px}.platform-logo{width:23px;height:23px;font-size:14px}}
 @media(max-width:430px){.platform-picker{padding:11px 8px}.platform-picker-list{grid-auto-columns:calc((100% - 24px)/5);gap:6px}.platform-chip{font-size:7px}.marketplace-keyword-row button{min-width:68px;padding:0 10px}}
+
+
+/* On mobile, platform selection inside Search Digital Assets replaces the duplicate Refine Results panel. Desktop sidebar remains visible. */
+@media(max-width:700px){.dashboard-marketplace-search .marketplace-filter-panel{display:none!important}}
