@@ -145,3 +145,14 @@
  .seller-stat-box b{font-size:14px}
  .seller-stat-box span{font-size:8px}
 }
+
+/* Selectable seller payout-method cards in checkout */
+.checkout-method-option{position:relative;display:flex;align-items:center;gap:11px;min-height:72px;padding:12px 42px 12px 13px;border:1.5px solid #dfeae3;border-radius:10px;background:#fff;cursor:pointer;user-select:none;transition:border-color .15s,background .15s,box-shadow .15s}
+.checkout-method-option input[type=radio]{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.checkout-method-option:has(input:checked){border-color:#13b0aa;background:#effaf6;box-shadow:0 0 0 2px #13b0aa22}
+.checkout-method-option:focus-within{outline:3px solid #13b0aa35;outline-offset:2px}
+.checkout-method-option .checkout-method-name{font-weight:800}
+.checkout-method-check{position:absolute;right:13px;top:50%;width:20px;height:20px;transform:translateY(-50%);border:1.5px solid #b9c9bf;border-radius:50%;display:grid;place-items:center;color:transparent;font-size:12px;font-weight:900}
+.checkout-method-option:has(input:checked) .checkout-method-check{border-color:#119b80;background:#119b80;color:#fff}
+.checkout-method-option:has(input:checked) .checkout-method-check:after{content:"✓"}
+.checkout-continue:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.2)}
