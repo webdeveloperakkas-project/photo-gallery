@@ -1,4 +1,7 @@
 -- Nexa marketplace public asset detail + image storage
+-- Seller payout preferences are stored as a comma-separated text value in listing_data.details.
+-- Supported labels include Bank Transfer, Payoneer, Wise, PayPal, bKash, Nagad and Rocket.
+-- Only method names are exposed publicly; account numbers and payout credentials are never exposed.
 -- Run ONLY in the Nexa Supabase SQL Editor.
 
 insert into storage.buckets (id,name,public)
@@ -118,7 +121,7 @@ select
       'transfer_notes','cover_image','logo_image','additional_images'
     )
   ),'[]'::jsonb) as public_details,
-  max(d.value) filter (where d.key='payout_methods') as preferred_payment_methods
+  nullif(trim(max(d.value) filter (where d.key='payout_methods')), '') as preferred_payment_methods
 from public.asset_listings l
 left join auth.users u on u.id=l.user_id
 left join lateral (
