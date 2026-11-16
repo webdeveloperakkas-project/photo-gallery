@@ -145,12 +145,16 @@
   document.querySelectorAll("#marketplace-platform-picker [data-platform]").forEach(button=>button.addEventListener("click",()=>{
     const checkbox=categoryOptions.find(input=>input.value===button.getAttribute("data-platform"));
     if(!checkbox)return;
-    checkbox.checked=!checkbox.checked;
-    button.setAttribute("aria-pressed",String(checkbox.checked));
+    const wasSelected=checkbox.checked;
+    // The top platform picker is single-select: choosing another platform replaces the previous one.
+    categoryOptions.forEach(input=>{input.checked=false;});
+    checkbox.checked=!wasSelected;
     syncCategoryFilters();
     updatePlatformMetricFilters();
     const count=document.getElementById("marketplace-results-count");
-    if(count)count.textContent="Platform selected. Enter the relevant audience or visitor range, then click Search Digital Assets.";
+    if(count)count.textContent=checkbox.checked
+      ?"Platform selected. Enter the relevant audience or visitor range, then click Search Digital Assets."
+      :"No platform selected. All approved categories will be included unless you choose another filter.";
   }));
   searchButton?.addEventListener("click",applyMarketplaceSearch);
   document.getElementById("marketplace-keyword")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();applyMarketplaceSearch();}});
