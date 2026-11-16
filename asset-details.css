@@ -176,5 +176,13 @@
 }
 
 
-/* Soft yellow for unselected payout cards; selected cards retain the green highlight */
-.checkout-method-option:not(:has(input:checked)){background:#fff8e6;border-color:#f0dda0}
+/* Checkout method cards remain white; only the disabled Continue button is soft yellow */
+.checkout-method-option:not(:has(input:checked)){background:#fff;border-color:#dfeae3}
+.checkout-continue:disabled{
+  opacity:1;
+  background:linear-gradient(100deg,#fff3b8,#ffe58a);
+  color:#705b19;
+  cursor:not-allowed;
+  box-shadow:0 3px 12px #f2d56a55;
+  filter:none;
+}
