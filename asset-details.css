@@ -156,3 +156,21 @@
 .checkout-method-option:has(input:checked) .checkout-method-check{border-color:#119b80;background:#119b80;color:#fff}
 .checkout-method-option:has(input:checked) .checkout-method-check:after{content:"✓"}
 .checkout-continue:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.2)}
+
+
+/* Checkout Continue stays visible; its state reflects method selection */
+.checkout-continue:disabled{
+  opacity:1;
+  background:linear-gradient(100deg,#315f50,#244b3c);
+  color:#b8c9bf;
+  cursor:not-allowed;
+  box-shadow:none;
+  filter:none;
+}
+.checkout-continue:not(:disabled){
+  opacity:1;
+  background:linear-gradient(100deg,#13b0aa,#20a56d);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 5px 14px #13b0aa30;
+}
