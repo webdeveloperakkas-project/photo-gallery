@@ -107,3 +107,42 @@
 .checkout-methods{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
 .checkout-method-option{min-height:68px;display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #dfeae3;border-radius:10px;background:#fff;font-size:12px;font-weight:700;color:#315b47}
 .checkout-method-option .payout-brand-logo{width:52px;height:40px;flex-basis:52px;font-size:13px}.checkout-method-option .logo-bank{font-size:20px}.checkout-method-option .logo-bkash{font-size:11px}.checkout-method-option .logo-nagad,.checkout-method-option .logo-rocket{font-size:23px}
+
+
+/* Seller profile card: aligned identity, activity, reputation and marketplace stats */
+.seller-profile-card{display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;column-gap:15px;row-gap:13px}
+.seller-profile-main{display:contents}
+.seller-avatar{grid-column:1;grid-row:1 / span 2}
+.seller-name-row{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;margin:0}
+.seller-name-row h3{min-width:0}
+.seller-name-row .user-presence{margin:0;white-space:nowrap}
+.seller-meta-row{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:3px}
+.seller-meta-row span{font-size:10px;color:#7a8980}
+.seller-meta-row strong{font-size:10px;font-weight:700;color:#405b4a;text-align:right}
+.seller-lower-row{grid-column:1/-1;display:grid;grid-template-columns:minmax(125px,.7fr) minmax(0,2fr);align-items:stretch;gap:12px}
+.seller-rating{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;gap:4px;padding:11px 12px;border:1px solid #e8efea;border-radius:9px;background:#fff}
+.seller-rating strong{font-size:20px;color:#9aa69e}
+.seller-rating span{font-size:10px;font-weight:700;color:#53675b}
+.seller-rating small{font-size:9px;color:#77867c;line-height:1.4}
+.seller-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
+.seller-stat-box{display:flex;flex-direction:column;justify-content:center;gap:5px;min-width:0;padding:11px 9px;border:1px solid #e3eee7;border-radius:9px;background:#f5faf7}
+.seller-stat-box b{font:800 17px Manrope,sans-serif;color:#17634f}
+.seller-stat-box span{font-size:9px;line-height:1.35;color:#718178}
+@media(max-width:520px){
+ .seller-profile-card{grid-template-columns:42px minmax(0,1fr);column-gap:10px;row-gap:11px;padding:13px}
+ .seller-avatar{width:42px;height:42px;font-size:16px}
+ .seller-name-row{gap:7px}
+ .seller-name-row h3{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .seller-name-row .user-presence{font-size:9px;gap:5px}
+ .seller-name-row .presence-dot{width:7px;height:7px}
+ .seller-meta-row span,.seller-meta-row strong{font-size:9px}
+ .seller-lower-row{grid-template-columns:minmax(88px,.7fr) minmax(0,2fr);gap:7px}
+ .seller-rating{padding:9px 8px}
+ .seller-rating strong{font-size:17px}
+ .seller-rating span{font-size:9px}
+ .seller-rating small{font-size:8px}
+ .seller-stats{gap:5px}
+ .seller-stat-box{padding:9px 6px;gap:4px}
+ .seller-stat-box b{font-size:14px}
+ .seller-stat-box span{font-size:8px}
+}
