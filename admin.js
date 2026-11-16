@@ -82,7 +82,7 @@
   async function logout(){if(!db)return;const {error}=await db.auth.signOut();if(error){alert("Could not sign out. Please try again.");return;}location.reload();}
   $("sidebar-logout").addEventListener("click",logout);$("header-logout").addEventListener("click",logout);
   $("refresh-listings").addEventListener("click",load);
-  $("status-filter").addEventListener("change",()=>{const f=$("status-filter").value;const title=f==="all"?"All Listings":f[0].toUpperCase()+f.slice(1)+" Listings";setFilter(f,title);});
+  $("status-filter").addEventListener("change",()=>{const f=$("status-filter").value;const title=({pending:"Pending Approval",approved:"Approved Listings",rejected:"Rejected Listings",all:"All Listings"})[f];showView("marketplace",title,f);});
   $("listing-list").addEventListener("click",e=>{const b=e.target.closest("[data-review]");if(b)openReview(b.dataset.review);});
   $("close-review").addEventListener("click",()=>{modal.hidden=true;selected=null;});
   modal.addEventListener("click",e=>{if(e.target===modal){modal.hidden=true;selected=null;}});
