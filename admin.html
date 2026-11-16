@@ -51,18 +51,48 @@
 
       <nav class="admin-navigation" aria-label="Admin navigation">
         <div class="nav-section">
-          <p class="nav-section-title">WORKSPACE</p>
-          <a href="#overview" class="admin-nav-link active" data-filter="all" data-title="Dashboard Overview"><span class="nav-symbol">▦</span><span>Dashboard Overview</span></a>
+          <p class="nav-section-title">OVERVIEW</p>
+          <a href="#overview" class="admin-nav-link active" data-view="overview" data-filter="all" data-title="Dashboard Overview"><span class="nav-symbol">▦</span><span>Dashboard Overview</span></a>
         </div>
         <div class="nav-section">
-          <p class="nav-section-title">MARKETPLACE</p>
-          <a href="#pending" class="admin-nav-link" data-filter="pending" data-title="Pending Listings"><span class="nav-symbol">◷</span><span>Pending Listings</span><span class="nav-count" id="nav-pending-count">0</span></a>
-          <a href="#approved" class="admin-nav-link" data-filter="approved" data-title="Approved Listings"><span class="nav-symbol">✓</span><span>Approved Listings</span></a>
-          <a href="#rejected" class="admin-nav-link" data-filter="rejected" data-title="Rejected Listings"><span class="nav-symbol">×</span><span>Rejected Listings</span></a>
-          <a href="#all-listings" class="admin-nav-link" data-filter="all" data-title="All Listings"><span class="nav-symbol">▤</span><span>All Listings</span></a>
+          <p class="nav-section-title">FINANCE MANAGEMENT</p>
+          <a href="#transactions" class="admin-nav-link" data-view="finance-transactions" data-title="All Transactions"><span class="nav-symbol">⇄</span><span>All Transactions</span></a>
+          <a href="#buyer-payments" class="admin-nav-link" data-view="finance-buyer-payments" data-title="Buyer Payments"><span class="nav-symbol">▣</span><span>Buyer Payments</span></a>
+          <a href="#payment-history" class="admin-nav-link" data-view="finance-history" data-title="Payment History"><span class="nav-symbol">◷</span><span>Payment History</span></a>
+          <a href="#currency-transactions" class="admin-nav-link" data-view="finance-currency" data-title="Currency-wise Transactions"><span class="nav-symbol">＄</span><span>Currency-wise Transactions</span></a>
+          <a href="#seller-payouts" class="admin-nav-link" data-view="finance-payouts" data-title="Seller Payouts"><span class="nav-symbol">↗</span><span>Seller Payouts</span></a>
+          <a href="#fees" class="admin-nav-link" data-view="finance-fees" data-title="Platform Fees & Revenue"><span class="nav-symbol">％</span><span>Platform Fees & Revenue</span></a>
+          <a href="#refunds" class="admin-nav-link" data-view="finance-refunds" data-title="Refunds & Disputes"><span class="nav-symbol">↩</span><span>Refunds & Disputes</span></a>
         </div>
         <div class="nav-section">
-          <p class="nav-section-title">ACCOUNT</p>
+          <p class="nav-section-title">MARKETPLACE MANAGEMENT</p>
+          <a href="#pending" class="admin-nav-link" data-view="marketplace" data-filter="pending" data-title="Pending Approval"><span class="nav-symbol">◷</span><span>Pending Approval</span><span class="nav-count" id="nav-pending-count">0</span></a>
+          <a href="#approved" class="admin-nav-link" data-view="marketplace" data-filter="approved" data-title="Approved Listings"><span class="nav-symbol">✓</span><span>Approved Listings</span></a>
+          <a href="#rejected" class="admin-nav-link" data-view="marketplace" data-filter="rejected" data-title="Rejected Listings"><span class="nav-symbol">×</span><span>Rejected Listings</span></a>
+          <a href="#all-listings" class="admin-nav-link" data-view="marketplace" data-filter="all" data-title="All Listings"><span class="nav-symbol">▤</span><span>All Listings</span></a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">SELLER MANAGEMENT</p>
+          <a href="#all-sellers" class="admin-nav-link" data-view="seller-all" data-title="All Sellers"><span class="nav-symbol">♙</span><span>All Sellers</span></a>
+          <a href="#seller-verification" class="admin-nav-link" data-view="seller-account" data-title="Account Verification"><span class="nav-symbol">✓</span><span>Account Verification</span></a>
+          <a href="#id-verification" class="admin-nav-link" data-view="seller-id" data-title="ID Verification"><span class="nav-symbol">▣</span><span>ID Verification</span></a>
+          <a href="#address-verification" class="admin-nav-link" data-view="seller-address" data-title="Address Verification"><span class="nav-symbol">⌖</span><span>Address Verification</span></a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">BUYER MANAGEMENT</p>
+          <a href="#all-buyers" class="admin-nav-link" data-view="buyer-all" data-title="All Buyers"><span class="nav-symbol">♧</span><span>All Buyers</span></a>
+          <a href="#buyer-details" class="admin-nav-link" data-view="buyer-details" data-title="Buyer Account Details"><span class="nav-symbol">▤</span><span>Buyer Account Details</span></a>
+          <a href="#buyer-activity" class="admin-nav-link" data-view="buyer-activity" data-title="Buyer Activity"><span class="nav-symbol">◷</span><span>Buyer Activity</span></a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">SUPPORT & SECURITY</p>
+          <a href="#support" class="admin-nav-link" data-view="support" data-title="Support Tickets"><span class="nav-symbol">✉</span><span>Support Tickets</span></a>
+          <a href="#reports" class="admin-nav-link" data-view="reports" data-title="User Reports"><span class="nav-symbol">⚑</span><span>User Reports</span></a>
+          <a href="#activity-logs" class="admin-nav-link" data-view="logs" data-title="Admin Activity Logs"><span class="nav-symbol">≡</span><span>Admin Activity Logs</span></a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-section-title">SYSTEM</p>
+          <a href="#settings" class="admin-nav-link" data-view="settings" data-title="Platform Settings"><span class="nav-symbol">⚙</span><span>Platform Settings</span></a>
           <a href="index.html" class="admin-nav-link"><span class="nav-symbol">↗</span><span>Visit Nexa Website</span></a>
         </div>
       </nav>
@@ -109,10 +139,20 @@
         <section class="listing-workspace">
           <div class="workspace-heading">
             <div><span class="eyebrow">SELLER SUBMISSIONS</span><h2 id="listing-section-title">Pending Listings</h2><p>Open a listing to review the details and take action.</p></div>
+            <label class="search-control"><span>Search listings</span><input id="listing-search" type="search" placeholder="Search title, category or seller ID"></label>
             <label class="filter-control"><span>Filter by status</span><select id="status-filter"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All listings</option></select></label>
           </div>
           <p id="list-message" class="list-message" role="status" aria-live="polite"></p>
           <div id="listing-list" class="listing-list"><div class="empty-state">Loading listing submissions…</div></div>
+        </section>
+        <section id="coming-soon-view" class="coming-soon-view" hidden>
+          <div class="coming-soon-card">
+            <span class="coming-soon-icon">✦</span>
+            <span class="eyebrow">NEXA ADMIN WORKSPACE</span>
+            <h2 id="coming-soon-title">Section setup</h2>
+            <p id="coming-soon-description">This section is part of the planned Nexa administration panel.</p>
+            <span class="coming-soon-status">DATABASE & WORKFLOW SETUP REQUIRED</span>
+          </div>
         </section>
       </main>
     </div>
