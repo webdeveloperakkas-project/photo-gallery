@@ -109,7 +109,6 @@
                 <label class="category-filter-option"><input type="checkbox" value="Facebook Page"><span>Facebook</span></label>
                 <label class="category-filter-option"><input type="checkbox" value="Instagram Account"><span>Instagram</span></label>
                 <label class="category-filter-option"><input type="checkbox" value="TikTok Account"><span>TikTok</span></label>
-                <label class="category-filter-option"><input type="checkbox" value="Other Digital Asset"><span>Other Assets</span></label>
               </div>
             </aside>
             <div class="marketplace-search-main">
@@ -117,14 +116,14 @@
                 <div class="marketplace-search-title"><div><span class="eyebrow">FIND YOUR NEXT OPPORTUNITY</span><h2>Search Digital Assets</h2><p>Choose your filters, then search to see matching approved listings.</p></div></div>
                 <div class="marketplace-keyword-field"><label for="marketplace-keyword">Keyword Search</label><div class="marketplace-keyword-row"><input id="marketplace-keyword" type="search" placeholder="Search websites, SaaS, channels, domains…"><button type="button" id="marketplace-keyword-search" aria-label="Search by keyword">Search</button></div></div>
                 <div class="platform-picker"><div class="platform-picker-heading"><b>Select Your Platform</b><span id="selected-platform-label" class="selected-platform-badge">Select a platform</span></div><div class="platform-picker-list" id="marketplace-platform-picker" aria-label="Select asset platforms">
+                  <button type="button" class="platform-chip platform-chip-all" data-all-platforms aria-pressed="true"><span class="platform-logo logo-all">▦</span><span>All Categories</span></button>
                   <button type="button" class="platform-chip" data-platform="Website" aria-pressed="false"><span class="platform-logo logo-web">W</span><span>Website</span></button>
-                  <button type="button" class="platform-chip" data-platform="E-commerce" aria-pressed="false"><span class="platform-logo logo-shop">▣</span><span>Shop</span></button>
                   <button type="button" class="platform-chip" data-platform="YouTube Channel" aria-pressed="false"><span class="platform-logo logo-youtube">▶</span><span>YouTube</span></button>
-                  <button type="button" class="platform-chip" data-platform="X Account" aria-pressed="false"><span class="platform-logo">𝕏</span><span>X</span></button>
                   <button type="button" class="platform-chip" data-platform="Facebook Page" aria-pressed="false"><span class="platform-logo logo-facebook">f</span><span>Facebook</span></button>
                   <button type="button" class="platform-chip" data-platform="Instagram Account" aria-pressed="false"><span class="platform-logo logo-instagram">◎</span><span>Instagram</span></button>
+                  <button type="button" class="platform-chip" data-platform="E-commerce" aria-pressed="false"><span class="platform-logo logo-shop">▣</span><span>Shop</span></button>
+                  <button type="button" class="platform-chip" data-platform="X Account" aria-pressed="false"><span class="platform-logo">𝕏</span><span>X</span></button>
                   <button type="button" class="platform-chip" data-platform="TikTok Account" aria-pressed="false"><span class="platform-logo logo-tiktok">♪</span><span>TikTok</span></button>
-                  <button type="button" class="platform-chip" data-platform="Other Digital Asset" aria-pressed="false"><span class="platform-logo logo-other">＋</span><span>Other</span></button>
                 </div></div>
                 <div class="marketplace-filter-grid">
                   <label class="marketplace-filter-field"><span>Country</span><select id="marketplace-country"><option value="">All Countries</option></select></label>
@@ -154,7 +153,7 @@
           <form id="nexa-listing-form" class="listing-form" novalidate>
 <div class="listing-progress-panel"><div class="listing-progress-top"><div><span class="eyebrow">YOUR LISTING CHECKLIST</span><h2>Complete your advertisement</h2><p>Finish four information steps, review everything in Preview, then submit for verification.</p></div><strong id="listing-progress-count">0 / 4 steps complete</strong></div><div class="listing-progress-track"><span id="listing-progress-bar"></span></div><div class="listing-progress-steps"><span>1. Product</span><span>2. Finance</span><span>3. Details</span><span>4. Transfer</span><span>5. Preview</span></div></div>
 <section class="listing-form-section" data-listing-section><div class="listing-section-heading"><span class="listing-section-number">01</span><div><h2>Product Details</h2><p>Describe your digital asset, add images and share its performance.</p></div><span class="listing-section-status">Incomplete</span></div><div class="listing-fields-grid">
-<label class="listing-field listing-field-full">Select Platform *<select name="platform" id="listing-platform" required><option value="">Select platform</option><option>Website</option><option>E-commerce</option><option>YouTube Channel</option><option>X Account</option><option>Facebook Page</option><option>Instagram Account</option><option>TikTok Account</option><option>Other Digital Asset</option></select></label>
+<label class="listing-field listing-field-full">Select Platform *<select name="platform" id="listing-platform" required><option value="">Select platform</option><option>Website</option><option>E-commerce</option><option>YouTube Channel</option><option>X Account</option><option>Facebook Page</option><option>Instagram Account</option><option>TikTok Account</option></select></label>
 <label class="listing-field listing-field-full">Category *<select name="asset_type" id="listing-asset-type" required disabled><option value="">Select platform first</option></select><small>Choose the type or niche of this asset, such as General, Business, Education or Entertainment.</small></label>
 <label class="listing-field">Country *<input name="country" required maxlength="80" placeholder="Primary country of the asset"></label>
 <label class="listing-field listing-field-full">Asset Title *<input name="title" required maxlength="100" placeholder="Enter your asset title"></label>
