@@ -125,7 +125,7 @@ true;
     document.getElementById("marketplace-keyword").value="";
     if(countryFilter)countryFilter.value="";
     document.getElementById("marketplace-price-currency").value="";
-    ["marketplace-price-min","marketplace-price-max","marketplace-visitors-min","marketplace-visitors-max","marketplace-revenue-min","marketplace-revenue-max"].forEach(id=>document.getElementById(id).value="");
+    ["marketplace-price-min","marketplace-price-max","marketplace-visitors-min","marketplace-visitors-max"].forEach(id=>{const field=document.getElementById(id);if(field)field.value="";});
     document.getElementById("marketplace-sort").value="newest";
     categoryOptions.forEach(input=>input.checked=false);
     document.querySelectorAll("#marketplace-platform-picker [data-platform]").forEach(button=>button.setAttribute("aria-pressed","false"));
