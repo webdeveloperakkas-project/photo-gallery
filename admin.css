@@ -26,3 +26,15 @@
 .admin-content>.page-heading,.admin-content>#stats-grid,.admin-content>.listing-workspace,.admin-content>.coming-soon-view{width:100%}
 .coming-soon-view:not([hidden]){display:grid;animation:workspaceFadeIn .18s ease-out}
 @keyframes workspaceFadeIn{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Listing review: admin edit and moderation controls */
+.review-toolbar{display:flex;justify-content:space-between;gap:10px;margin:18px 0 4px}
+.listing-edit-form{margin-top:14px;padding:17px;border:1px solid #cfe9e5;border-radius:11px;background:#f7fcfb}
+.listing-edit-form h3{margin:0 0 13px;font:800 14px Manrope,sans-serif}
+.edit-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.edit-fields label{display:grid;gap:6px;color:var(--text);font-size:10px;font-weight:800}
+.edit-fields input,.edit-fields textarea{width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:500 12px "DM Sans",Arial,sans-serif}
+.edit-fields input:focus,.edit-fields textarea:focus{outline:2px solid #13b0aa30;border-color:var(--teal)}
+.edit-summary-field{grid-column:1/-1}
+.edit-form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:13px}
+@media(max-width:520px){.review-toolbar{flex-direction:column}.review-toolbar button{width:100%}.edit-fields{grid-template-columns:1fr}.edit-summary-field{grid-column:auto}.edit-form-actions{display:grid;grid-template-columns:1fr 1fr}}
