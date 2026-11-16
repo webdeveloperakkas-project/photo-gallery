@@ -66,18 +66,59 @@
     $("review-title").textContent=selected.title;
     const rows=selected.listing_data?.details||[];
     $("review-details").innerHTML="<div class='review-meta'><span>Category<strong>"+esc(selected.category)+"</strong></span><span>Asking price<strong>"+esc(selected.price_currency)+" "+esc(selected.asking_price)+"</strong></span><span>Status<strong>"+esc(label(selected.status))+"</strong></span><span>Seller ID<strong>"+esc(selected.user_id)+"</strong></span><span>Submitted<strong>"+esc(new Date(selected.submitted_at).toLocaleString())+"</strong></span></div><p class='summary'>"+esc(selected.summary)+"</p><div class='detail-grid'>"+rows.filter(x=>x.value).map(x=>"<div><small>"+esc(x.label)+"</small><strong>"+esc(x.value)+"</strong></div>").join("")+"</div><p class='file-note'>Submitted file names: "+esc((selected.listing_data?.submitted_file_names||[]).join(", ")||"No file names recorded")+"</p>";
+    $("edit-title").value=selected.title||"";
+    $("edit-category").value=selected.category||"";
+    $("edit-price").value=selected.asking_price??"";
+    $("edit-currency").value=selected.price_currency||"";
+    $("edit-summary").value=selected.summary||"";
     $("admin-note").value=selected.admin_note||"";
-    $("approve-listing").hidden=selected.status!=="pending";$("reject-listing").hidden=selected.status!=="pending";
+    $("listing-edit-form").hidden=true;
+    $("approve-listing").textContent=selected.status==="approved"?"Keep Approved":"Approve listing";
+    $("reject-listing").textContent=selected.status==="rejected"?"Keep Rejected":"Reject listing";
     modal.hidden=false;
   }
   async function review(status){
     if(!selected)return;
     const button=status==="approved"?$("approve-listing"):$("reject-listing");button.disabled=true;
     const {data:auth}=await db.auth.getUser();
-    const {error}=await db.from("asset_listings").update({status,admin_note:$("admin-note").value.trim()||null,reviewed_by:auth.user.id,reviewed_at:new Date().toISOString()}).eq("id",selected.id);
+    const {error}=await db.from("asset_listings").update({status,admin_note:$("admin-note").value.trim()||null,reviewed_by:auth.user?.id||null,reviewed_at:new Date().toISOString()}).eq("id",selected.id);
     button.disabled=false;
     if(error){alert("Could not update listing: "+error.message);return;}
     modal.hidden=true;selected=null;await load();
+  }
+  async function saveListingEdits(){
+    if(!selected)return;
+    const button=$("save-listing-edits");button.disabled=true;
+    const title=$("edit-title").value.trim();
+    const category=$("edit-category").value.trim();
+    const price=$("edit-price").value.trim();
+    const currency=$("edit-currency").value.trim().toUpperCase();
+    const summary=$("edit-summary").value.trim();
+    if(!title||!category||!price||!currency||!Number.isFinite(Number(price))||Number(price)<0){
+      alert("Please enter a title, category, valid asking price and currency.");
+      button.disabled=false;return;
+    }
+    const {error}=await db.from("asset_listings").update({
+      title,category,asking_price:Number(price),price_currency:currency,summary,
+      admin_note:$("admin-note").value.trim()||null
+    }).eq("id",selected.id);
+    button.disabled=false;
+    if(error){alert("Could not save listing edits: "+error.message);return;}
+    const id=selected.id;
+    await load();
+    const refreshed=listings.find(x=>x.id===id);
+    if(refreshed){openReview(id);$("listing-edit-form").hidden=true;}
+    alert("Listing details updated successfully.");
+  }
+  async function deleteListing(){
+    if(!selected)return;
+    if(!confirm("Permanently delete this listing? This action cannot be undone.\n\n"+selected.title))return;
+    const button=$("delete-listing");button.disabled=true;
+    const {error}=await db.from("asset_listings").delete().eq("id",selected.id);
+    button.disabled=false;
+    if(error){alert("Could not delete listing: "+error.message);return;}
+    modal.hidden=true;selected=null;await load();
+    alert("Listing deleted successfully.");
   }
   $("admin-login-form").addEventListener("submit",async e=>{
     e.preventDefault();if(!db){message("login-message","Supabase is unavailable.");return;}
@@ -97,6 +138,10 @@
   modal.addEventListener("click",e=>{if(e.target===modal){modal.hidden=true;selected=null;}});
   $("approve-listing").addEventListener("click",()=>review("approved"));
   $("reject-listing").addEventListener("click",()=>review("rejected"));
+  $("edit-listing").addEventListener("click",()=>{$("listing-edit-form").hidden=false;$("edit-title").focus();});
+  $("cancel-listing-edits").addEventListener("click",()=>{$("listing-edit-form").hidden=true;});
+  $("save-listing-edits").addEventListener("click",saveListingEdits);
+  $("delete-listing").addEventListener("click",deleteListing);
   const viewCopy={
     "finance-transactions":["All Transactions","A complete ledger of buyer payments, seller payouts, refunds and transaction statuses will appear here after the finance database and payment integrations are configured."],
     "finance-buyer-payments":["Buyer Payments","Review buyer checkout payments, payment methods, currencies, provider references and payment outcomes. This view requires the finance schema and payment integration."],
