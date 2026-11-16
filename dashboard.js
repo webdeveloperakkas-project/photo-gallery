@@ -1,7 +1,7 @@
 (() => {
   const SUPABASE_URL = "https://hguwdcmwqcpswyxtskcb.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2";
-  const client = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY) : null;
+  const client = window.nexaSupabaseClient || (window.supabase?.createClient ? (window.nexaSupabaseClient = window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY)) : null);
   const home = "https://webdeveloperakkas-project.github.io/photo-gallery/";
   const logout = document.getElementById("logout-button");
   const sidebar = document.getElementById("nexa-sidebar");
