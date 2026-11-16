@@ -76,7 +76,7 @@ const syncCheckoutSelection=()=>{
  const selected=$("checkout-methods")?.querySelector("input[name='checkout-method']:checked");
  selectedCheckoutMethod=selected?.value||"";
  const continueButton=$("checkout-continue");
- if(continueButton){continueButton.disabled=!selectedCheckoutMethod;continueButton.hidden=!selectedCheckoutMethod;}
+ if(continueButton){continueButton.hidden=false;continueButton.disabled=!selectedCheckoutMethod;}
 };
 $("checkout-methods")?.addEventListener("change",syncCheckoutSelection);
 $("checkout-continue")?.addEventListener("click",()=>{
@@ -132,12 +132,16 @@ $("buy-now").addEventListener("click",()=>{
    const card=document.createElement("label");card.className="checkout-method-option";
    const radio=document.createElement("input");radio.type="radio";radio.name="checkout-method";radio.value=method;radio.setAttribute("aria-label","Select "+method);
    if(mobileDefault&&index===0)radio.checked=true;
-   radio.addEventListener("click",event=>{
-     if(radio.checked){event.preventDefault();radio.checked=false;syncCheckoutSelection();}
-   });
    const logo=document.createElement("span");logo.innerHTML=payoutLogo(method);
    const name=document.createElement("span");name.className="checkout-method-name";name.textContent=method;
    const mark=document.createElement("span");mark.className="checkout-method-check";mark.setAttribute("aria-hidden","true");
+   card.addEventListener("click",event=>{
+     event.preventDefault();
+     const wasSelected=radio.checked;
+     host.querySelectorAll("input[name='checkout-method']").forEach(input=>{input.checked=false;});
+     radio.checked=!wasSelected;
+     syncCheckoutSelection();
+   });
    card.append(radio,logo.firstElementChild,name,mark);host.append(card);
  });
  syncCheckoutSelection();
