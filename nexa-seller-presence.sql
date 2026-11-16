@@ -11,16 +11,26 @@ create index if not exists seller_presence_last_seen_idx
 
 alter table public.seller_presence enable row level security;
 
+create or replace function public.is_approved_nexa_seller(p_user_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select exists (
+    select 1 from public.asset_listings l
+    where l.user_id = p_user_id and l.status = 'approved'
+  );
+$;
+
+revoke all on function public.is_approved_nexa_seller(uuid) from public;
+grant execute on function public.is_approved_nexa_seller(uuid) to anon, authenticated;
+
 drop policy if exists "Public can view approved Nexa seller presence" on public.seller_presence;
 create policy "Public can view approved Nexa seller presence"
   on public.seller_presence for select to anon, authenticated
-  using (
-    exists (
-      select 1 from public.asset_listings l
-      where l.user_id = seller_presence.user_id
-        and l.status = 'approved'
-    )
-  );
+  using (public.is_approved_nexa_seller(user_id));
 
 drop policy if exists "Sellers insert own Nexa presence" on public.seller_presence;
 create policy "Sellers insert own Nexa presence"
