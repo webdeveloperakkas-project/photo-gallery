@@ -20,6 +20,14 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSidebar();});
 client.auth.getSession().then(({data,error})=>{if(error||!data?.session?.user){location.replace("index.html#auth-login");return;}const u=data.session.user,m=u.user_metadata||{},name=m.display_name||[m.first_name,m.last_name].filter(Boolean).join(" ")||"Nexa member",initial=name.trim().charAt(0).toUpperCase()||"N";$("dash-avatar-initial").textContent=initial;$("dash-dropdown-avatar").textContent=initial;$("dash-dropdown-name").textContent=name;$("dash-dropdown-email").textContent=u.email||"";});
 $("logout-button")?.addEventListener("click",async()=>{const {error}=await client.auth.signOut();if(error){alert("Could not log out. Please try again.");return;}location.replace("index.html");});
 
+
+const imageLightbox=$("image-lightbox"),lightboxImage=$("image-lightbox-image");
+function openImageLightbox(src,alt){lightboxImage.src=src;lightboxImage.alt=alt||"Enlarged product image";imageLightbox.hidden=false;document.body.classList.add("image-lightbox-open");$("image-lightbox-close").focus();}
+function closeImageLightbox(){imageLightbox.hidden=true;lightboxImage.removeAttribute("src");document.body.classList.remove("image-lightbox-open");}
+$("image-lightbox-close")?.addEventListener("click",closeImageLightbox);
+imageLightbox?.addEventListener("click",event=>{if(event.target===imageLightbox)closeImageLightbox();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&imageLightbox&&!imageLightbox.hidden)closeImageLightbox();});
+
 const messageModal=$("message-modal"),messageThread=$("message-thread"),messageFeedback=$("message-feedback"),sellerConversationList=$("seller-conversation-list");
 const stopMessagePolling=()=>{if(messageTimer)clearInterval(messageTimer);messageTimer=null;};
 const closeMessages=()=>{messageModal.hidden=true;stopMessagePolling();activeConversationId=null;};
@@ -94,6 +102,17 @@ $("detail-category-pill").textContent=item.subcategory||item.category||"Digital 
  const cover=imageUrl(item.cover_image_path),coverEl=$("detail-cover"),coverFrame=$("detail-cover-frame");if(cover){coverEl.src=cover;coverEl.alt=(item.title||"Digital asset")+" preview";coverFrame.hidden=false;}else{coverFrame.hidden=true;}coverEl.onerror=()=>{coverFrame.hidden=true;};
  $("detail-overview").innerHTML=detailRows(item.public_details)||"<div><small>Listing information</small><strong>Additional details were not provided.</strong></div>";
  const description=item.full_description||"The seller has not provided a full description.";$("detail-description").textContent=description;
+ const galleryPaths=[item.logo_image_path,...(Array.isArray(item.gallery_image_paths)?item.gallery_image_paths:[])].filter(Boolean);
+ const gallery=$("detail-image-gallery"),galleryGrid=$("detail-image-gallery-grid");
+ galleryGrid.innerHTML="";
+ galleryPaths.forEach((path,index)=>{
+   const src=imageUrl(path);if(!src)return;
+   const card=document.createElement("button");card.type="button";card.className="detail-image-gallery-card";card.setAttribute("aria-label","View product image "+(index+1));
+   const img=document.createElement("img");img.src=src;img.alt=(item.title||"Product")+" image "+(index+1);img.loading="lazy";
+   card.append(img);card.addEventListener("click",()=>openImageLightbox(src,img.alt));galleryGrid.append(card);
+ });
+ gallery.hidden=galleryPaths.length===0;
+
  const seller=item.seller_name||"Nexa Seller";$("seller-name").textContent=seller;$("seller-avatar").textContent=seller.trim().charAt(0).toUpperCase()||"N";$("seller-member-since").textContent=item.seller_member_since?new Date(item.seller_member_since).toLocaleDateString():"—";$("seller-stats").innerHTML="<div class=\"seller-stat-box\"><b>"+Number(item.seller_all_listings||0)+"</b><span>Total listings</span></div><div class=\"seller-stat-box\"><b>—</b><span>Successful sales</span></div><div class=\"seller-stat-box\"><b>"+Number(item.seller_total_listings||0)+"</b><span>Approved listings</span></div>";
  $("seller-rating-value").textContent="—";$("seller-rating-note").textContent="No verified reviews yet";
  const presenceText=$("user-presence-text"),presenceDot=$("user-presence")?.querySelector(".presence-dot");
