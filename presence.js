@@ -9,7 +9,7 @@
     if(!userId||busy||document.visibilityState!=="visible")return;
     busy=true;
     try{
-      const {error}=await client.from("seller_presence").upsert(
+      const {error}=await client.from("user_presence").upsert(
         {user_id:userId,last_seen_at:new Date().toISOString()},
         {onConflict:"user_id"}
       );
