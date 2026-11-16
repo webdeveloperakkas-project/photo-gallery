@@ -110,8 +110,7 @@ $("contact-seller").addEventListener("click",async()=>{
  catch(error){notice("Could not open messages: "+(error.message||"Please try again."));}
 });
 $("buy-now").addEventListener("click",()=>{
- const methodsRow=(currentItem.public_details||[]).find(row=>String(row.key||"").toLowerCase()==="payout_methods"||String(row.label||"").toLowerCase().includes("preferred payment"));
- const methods=String(methodsRow?.value||"").split(",").map(x=>x.trim()).filter(Boolean);
+ const methods=String(currentItem.preferred_payment_methods||"").split(",").map(x=>x.trim()).filter(Boolean);
  $("checkout-title").textContent=currentItem.title||"Digital asset";
  $("checkout-category").textContent=currentItem.subcategory||currentItem.category||"Digital Asset";
  $("checkout-price").textContent=money(currentItem.price_currency,currentItem.asking_price);
