@@ -185,7 +185,6 @@
   // Supabase-backed My Listings.
   const listingsHost=document.getElementById("my-listings-content"),manageModal=document.getElementById("listing-manage-modal"),manageDetails=document.getElementById("listing-manage-details");
   let managingListingId=null;
-  const safeText=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   const statusLabel=status=>({pending:"Waiting for Approval",approved:"Approved",rejected:"Rejected"}[status]||"Waiting for Approval");
   const loadMyListings=async()=>{
     if(!listingsHost)return;
