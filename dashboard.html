@@ -26,7 +26,7 @@
         <div class="nav-section">
           <p class="nav-section-title">MAIN MENU</p>
           <a class="nav-link active" href="#dashboard-section" data-section="dashboard-section"><span class="nav-symbol">▦</span>Dashboard</a>
-          <a class="nav-link" href="#browse-assets-section" data-section="browse-assets-section"><span class="nav-symbol">⌕</span>Browse Assets</a>
+
           <a class="nav-link" href="#post-ad-section" data-section="post-ad-section"><span class="nav-symbol">＋</span>Post Your Advertisement</a>
           <a class="nav-link" href="#my-listings-section" data-section="my-listings-section"><span class="nav-symbol">▤</span>My Listings</a>
           <a class="nav-link" href="#saved-assets-section" data-section="saved-assets-section"><span class="nav-symbol">♡</span>Saved Assets</a>
@@ -86,7 +86,7 @@
               <h1>Welcome back<span>.</span></h1>
               <p>Buy, sell and manage digital assets — all from one place.</p>
               <div class="welcome-actions">
-                <a href="#browse-assets-section" class="primary-button" data-section="browse-assets-section">Explore Assets</a>
+                <a href="#dashboard-section" class="primary-button" data-section="dashboard-section">Explore Assets</a>
                 <a href="#post-ad-section" class="secondary-button" data-section="post-ad-section">＋ Post Your Advertisement</a>
               </div>
             </div>
@@ -94,7 +94,7 @@
           </section>
 
           <section class="content-panel recent-assets-panel">
-            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#browse-assets-section" data-section="browse-assets-section" class="view-all-link">Browse marketplace →</a></div>
+            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#dashboard-section" data-section="dashboard-section" class="view-all-link">Browse marketplace →</a></div>
             <div id="recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Loading recent approved listings…</b></div></div>
           </section>
 
@@ -106,28 +106,20 @@
             <article class="nexa-stat-card"><span class="stat-icon">⇄</span><p>Sales</p><strong>—</strong><small>Your completed sales</small></article>
           </section>
 
-          <section class="dashboard-section-heading category-heading"><div><span class="eyebrow">EXPLORE THE MARKETPLACE</span><h2>Browse by Category</h2><p>Find the type of digital asset you want to buy or sell.</p></div><a href="#browse-assets-section" data-section="browse-assets-section" class="view-all-link">View all assets →</a></section>
+          <section class="dashboard-section-heading category-heading"><div><span class="eyebrow">EXPLORE THE MARKETPLACE</span><h2>Browse by Category</h2><p>Find the type of digital asset you want to buy or sell.</p></div><a href="#dashboard-section" data-section="dashboard-section" class="view-all-link">View all assets →</a></section>
           <section class="asset-category-grid">
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🌐</span><b>Websites</b><small>Established websites</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>⚙️</span><b>SaaS</b><small>Software businesses</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🛒</span><b>E-commerce</b><small>Online stores</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🔗</span><b>Domains</b><small>Domain names</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>▶️</span><b>YouTube</b><small>Channels</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>📘</span><b>Facebook</b><small>Pages &amp; communities</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>📸</span><b>Instagram</b><small>Accounts</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🎵</span><b>TikTok</b><small>Accounts</small></a>
-            <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>＋</span><b>Other Assets</b><small>More digital assets</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Website" class="asset-category"><span>🌐</span><b>Websites</b><small>Established websites</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="SaaS" class="asset-category"><span>⚙️</span><b>SaaS</b><small>Software businesses</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="E-commerce" class="asset-category"><span>🛒</span><b>E-commerce</b><small>Online stores</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Domain" class="asset-category"><span>🔗</span><b>Domains</b><small>Domain names</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="YouTube Channel" class="asset-category"><span>▶️</span><b>YouTube</b><small>Channels</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Facebook Page" class="asset-category"><span>📘</span><b>Facebook</b><small>Pages &amp; communities</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Instagram Account" class="asset-category"><span>📸</span><b>Instagram</b><small>Accounts</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="TikTok Account" class="asset-category"><span>🎵</span><b>TikTok</b><small>Accounts</small></a>
+            <a href="#dashboard-section" data-section="dashboard-section" data-category-filter="Other Digital Asset" class="asset-category"><span>＋</span><b>Other Assets</b><small>More digital assets</small></a>
           </section>
 
-        </section>
-
-        <section id="browse-assets-section" class="page-section">
-          <div class="section-page-header"><div class="account-back-row"><a class="back-link dashboard-back-link" href="#dashboard-section" data-section="dashboard-section"><span aria-hidden="true">←</span> Back to Dashboard</a></div><div class="section-heading"><div><span class="eyebrow">BUY DIGITAL ASSETS</span><h1>Browse Assets</h1><p>Discover websites, online businesses, domains and social media assets.</p></div></div></div>
-          <section class="content-panel browse-recent-panel">
-            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>The newest approved opportunities, shown first.</p></div><span class="recent-live-label">LATEST LISTINGS</span></div>
-            <div id="browse-recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><b>Loading recent assets…</b></div></div>
-          </section>
-          <section class="marketplace-search-layout">
+<section class="marketplace-search-layout dashboard-marketplace-search">
             <aside class="marketplace-filter-panel">
               <div class="filter-panel-heading"><div><span class="eyebrow">REFINE RESULTS</span><h2>Categories</h2></div><button type="button" id="clear-marketplace-filters" class="filter-clear-button">Clear all</button></div>
               <label class="category-filter-option category-filter-all"><input type="checkbox" id="filter-all-categories" checked><span>All Categories</span></label>
@@ -165,6 +157,7 @@
               <div id="browse-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Ready when you are</b><p>All Categories and All Countries are selected by default. Click Search Digital Assets to view listings.</p></div></div>
             </div>
           </section>
+
         </section>
 
         <section id="post-ad-section" class="page-section">
