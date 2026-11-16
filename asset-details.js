@@ -6,6 +6,7 @@ let currentItem=null,currentUser=null,activeConversationId=null,messageTimer=nul
 const notice=message=>{const n=$("detail-notice");n.textContent=message;n.hidden=false;};
 const imageUrl=path=>path?client.storage.from("asset-listing-media").getPublicUrl(path).data.publicUrl:"";
 const money=(currency,value)=>currency+" "+Number(value||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const payoutLogo=method=>{const key=String(method||"").toLowerCase();const map={"bank transfer":["logo-bank","▤"],"payoneer":["logo-payoneer","P"],"wise":["logo-wise","W"],"paypal":["logo-paypal","P"],"bkash":["logo-bkash","bKash"],"nagad":["logo-nagad","N"],"rocket":["logo-rocket","R"]};const item=map[key]||["logo-bank","▤"];return "<i class=\"payout-brand-logo "+item[0]+"\" aria-hidden=\"true\">"+item[1]+"</i>";};
 const detailRows=details=>(Array.isArray(details)?details:[]).filter(x=>{if(!x||x.value==null||String(x.value).trim()==="")return false;const key=String(x.key||"").toLowerCase().replace(/[^a-z]/g,""),label=String(x.label||"").toLowerCase().replace(/[^a-z]/g,"");return !["assettitle","title","shortsummary","summary","fulldescription","description"].includes(key)&&!["assettitle","title","shortsummary","summary","fulldescription","description"].includes(label);}).map(x=>"<div><small>"+esc(x.label||x.key)+"</small><strong>"+esc(x.value)+"</strong></div>").join("");
 const sidebar=$("nexa-sidebar"),overlay=$("sidebar-overlay"),menu=$("menu-toggle"),close=$("sidebar-close");
 const closeSidebar=()=>{sidebar?.classList.remove("open");overlay?.classList.remove("show");menu?.setAttribute("aria-expanded","false");};
@@ -115,7 +116,7 @@ $("buy-now").addEventListener("click",()=>{
  $("checkout-category").textContent=currentItem.subcategory||currentItem.category||"Digital Asset";
  $("checkout-price").textContent=money(currentItem.price_currency,currentItem.asking_price);
  const host=$("checkout-methods");host.innerHTML="";$("checkout-no-methods").hidden=methods.length>0;
- methods.forEach((method,index)=>{const label=document.createElement("label");label.className="checkout-method-option";const radio=document.createElement("input");radio.type="radio";radio.name="checkout-payment-method";radio.value=method;radio.checked=index===0;const span=document.createElement("span");span.textContent=method;label.append(radio,span);host.append(label);});
+ methods.forEach(method=>{const card=document.createElement("div");card.className="checkout-method-option";const logo=document.createElement("span");logo.innerHTML=payoutLogo(method);const name=document.createElement("span");name.textContent=method;card.append(logo.firstElementChild,name);host.append(card);});
  $("checkout-continue").disabled=methods.length===0;
  content.classList.add("checkout-active");$("checkout-view").hidden=false;window.scrollTo({top:0,behavior:"smooth"});
 });
