@@ -25,8 +25,9 @@ $("detail-category-pill").textContent=item.subcategory||item.category||"Digital 
  $("detail-title").textContent=item.title||"Digital Asset";$("detail-summary").textContent=item.summary||"Explore this digital asset.";
  $("detail-price").textContent=money(item.price_currency,item.asking_price);$("detail-date").textContent="Listed "+new Date(item.submitted_at).toLocaleDateString();
  const cover=imageUrl(item.cover_image_path),coverEl=$("detail-cover");if(cover){coverEl.src=cover;coverEl.alt=(item.title||"Asset")+" preview";}else{coverEl.hidden=true;}
- const thumbs=$("detail-gallery-thumbs"),paths=[item.logo_image_path,...(Array.isArray(item.gallery_image_paths)?item.gallery_image_paths:[])].filter(Boolean);
- thumbs.innerHTML=paths.map(p=>"<img src='"+esc(imageUrl(p))+"' alt='Additional asset image' loading='lazy'>").join("");thumbs.hidden=paths.length===0;
+ const thumbs=$("detail-gallery-thumbs"),gallery=coverEl.closest(".detail-gallery"),paths=[item.logo_image_path,...(Array.isArray(item.gallery_image_paths)?item.gallery_image_paths:[])].filter(Boolean);
+ thumbs.innerHTML=paths.map(p=>"<img src='"+esc(imageUrl(p))+"' alt='Additional asset image' loading='lazy'>").join("");thumbs.hidden=paths.length===0;gallery.hidden=!cover&&!paths.length;
+ coverEl.onerror=()=>{coverEl.hidden=true;if(!paths.length)gallery.hidden=true;};
  $("detail-overview").innerHTML=detailRows(item.public_details)||"<div><small>Listing information</small><strong>Additional details were not provided.</strong></div>";
  $("detail-description").textContent=item.full_description||"";
  const stats=[];if(item.monthly_visitors!=null)stats.push(["Monthly Visitors",Number(item.monthly_visitors).toLocaleString()]);if(item.total_subscribers!=null)stats.push(["Subscribers",Number(item.total_subscribers).toLocaleString()]);if(item.total_followers!=null)stats.push(["Followers",Number(item.total_followers).toLocaleString()]);if(item.monthly_revenue!=null)stats.push(["Monthly Revenue",money(item.financial_currency||item.price_currency,item.monthly_revenue)]);if(item.monthly_expenses!=null)stats.push(["Monthly Expenses",money(item.financial_currency||item.price_currency,item.monthly_expenses)]);if(item.monthly_profit!=null)stats.push(["Net Monthly Profit",money(item.financial_currency||item.price_currency,item.monthly_profit)]);
