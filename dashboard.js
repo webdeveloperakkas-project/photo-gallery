@@ -79,7 +79,7 @@
     const selected=categoryOptions.filter(input=>input.checked).map(input=>input.value);
     const selectedPlatformLabel=document.getElementById("selected-platform-label");
     const platformNames={"Website":"Website","E-commerce":"Shop","YouTube Channel":"YouTube","X Account":"X","Facebook Page":"Facebook","Instagram Account":"Instagram","TikTok Account":"TikTok","Other Digital Asset":"Other Assets"};
-    if(selectedPlatformLabel)selectedPlatformLabel.textContent=selected.length===1?(platformNames[selected[0]]||selected[0]):"Select a platform";
+    if(selectedPlatformLabel)selectedPlatformLabel.textContent=selected.length===1?(platformNames[selected[0]]||selected[0]):"All Categories";
     const hasWeb=!selected.length||selected.some(value=>["Website","E-commerce"].includes(value));
     const hasYoutube=selected.includes("YouTube Channel");
     const hasSocial=selected.some(value=>["Facebook Page","Instagram Account","TikTok Account","X Account"].includes(value));
@@ -132,8 +132,12 @@
     const any=categoryOptions.some(input=>input.checked);
     const all=categoryOptions.every(input=>input.checked);
     if(allCategories){allCategories.checked=!any||all;allCategories.indeterminate=any&&!all;}
+    const allButton=document.querySelector("#marketplace-platform-picker [data-all-platforms]");
+    if(allButton)allButton.setAttribute("aria-pressed",String(!any||all));
   };
-  allCategories?.addEventListener("change",()=>{categoryOptions.forEach(input=>input.checked=false);allCategories.checked=true;allCategories.indeterminate=false;updatePlatformMetricFilters();});
+  const selectAllCategories=()=>{categoryOptions.forEach(input=>input.checked=false);if(allCategories){allCategories.checked=true;allCategories.indeterminate=false;}syncCategoryFilters();updatePlatformMetricFilters();};
+  allCategories?.addEventListener("change",selectAllCategories);
+  document.querySelector("#marketplace-platform-picker [data-all-platforms]")?.addEventListener("click",()=>{selectAllCategories();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="All categories selected. Click Search Digital Assets to see all approved listings.";});
   categoryOptions.forEach(input=>input.addEventListener("change",()=>{syncCategoryFilters();updatePlatformMetricFilters();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="Filters updated. Enter the relevant audience or visitor range, then click Search Digital Assets."; }));
   document.querySelectorAll("[data-category-filter]").forEach(link=>link.addEventListener("click",()=>{
     const category=link.getAttribute("data-category-filter");
@@ -149,7 +153,7 @@
     const checkbox=categoryOptions.find(input=>input.value===button.getAttribute("data-platform"));
     if(!checkbox)return;
     const wasSelected=checkbox.checked;
-    // The top platform picker is single-select: choosing another platform replaces the previous one.
+    // Selecting the active platform again returns the picker to All Categories.
     categoryOptions.forEach(input=>{input.checked=false;});
     checkbox.checked=!wasSelected;
     syncCategoryFilters();
@@ -157,7 +161,7 @@
     const count=document.getElementById("marketplace-results-count");
     if(count)count.textContent=checkbox.checked
       ?"Platform selected. Enter the relevant audience or visitor range, then click Search Digital Assets."
-      :"No platform selected. All approved categories will be included unless you choose another filter.";
+      :"All categories selected. Click Search Digital Assets to see all approved listings.";
   }));
   searchButton?.addEventListener("click",applyMarketplaceSearch);
   document.getElementById("marketplace-keyword")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();applyMarketplaceSearch();}});
@@ -168,8 +172,8 @@
     ["marketplace-price-min","marketplace-price-max","marketplace-visitors-min","marketplace-visitors-max"].forEach(id=>{const field=document.getElementById(id);if(field)field.value="";});
     document.getElementById("marketplace-sort").value="newest";
     categoryOptions.forEach(input=>input.checked=false);
-    document.querySelectorAll("#marketplace-platform-picker [data-platform]").forEach(button=>button.setAttribute("aria-pressed","false"));
     if(allCategories){allCategories.checked=true;allCategories.indeterminate=false;}
+    syncCategoryFilters();
     updatePlatformMetricFilters();
     applyMarketplaceSearch();
   });
