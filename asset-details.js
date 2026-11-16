@@ -69,7 +69,7 @@ $("message-form")?.addEventListener("submit",async e=>{
  send.disabled=false;if(error){showMessageFeedback("Message was not sent: "+error.message);return;}
  input.value="";await renderMessages();
 });
-$("checkout-back")?.addEventListener("click",()=>{$("checkout-view").hidden=true;content.hidden=false;});
+$("checkout-back")?.addEventListener("click",()=>{content.classList.remove("checkout-active");$("checkout-view").hidden=true;});
 $("checkout-continue")?.addEventListener("click",()=>notice("Secure payment processing is not connected yet. No payment has been taken."));
 
 async function load(){
@@ -117,7 +117,7 @@ $("buy-now").addEventListener("click",()=>{
  const host=$("checkout-methods");host.innerHTML="";$("checkout-no-methods").hidden=methods.length>0;
  methods.forEach((method,index)=>{const label=document.createElement("label");label.className="checkout-method-option";const radio=document.createElement("input");radio.type="radio";radio.name="checkout-payment-method";radio.value=method;radio.checked=index===0;const span=document.createElement("span");span.textContent=method;label.append(radio,span);host.append(label);});
  $("checkout-continue").disabled=methods.length===0;
- content.hidden=true;$("checkout-view").hidden=false;window.scrollTo({top:0,behavior:"smooth"});
+ content.classList.add("checkout-active");$("checkout-view").hidden=false;window.scrollTo({top:0,behavior:"smooth"});
 });
 
 load();
