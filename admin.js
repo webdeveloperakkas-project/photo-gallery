@@ -1,7 +1,7 @@
 (() => {
   const URL="https://hguwdcmwqcpswyxtskcb.supabase.co";
   const KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2";
-  const db=window.supabase?.createClient(URL,KEY);
+  const db=window.supabase?.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:"nexa-admin-auth"}});
   const $=id=>document.getElementById(id);
   const login=$("admin-login"),app=$("admin-app"),modal=$("review-modal");
   let listings=[],selected=null,currentView="overview";
@@ -17,17 +17,26 @@
     render();
   };
   const closeSidebar=()=>{$("admin-sidebar").classList.remove("open");$("admin-overlay").classList.remove("show");$("menu-toggle").setAttribute("aria-expanded","false");};
-  async function session(){
-    if(!db){login.hidden=false;message("login-message","Supabase could not be initialized. Please refresh the page.");return;}
-    const {data,error}=await db.auth.getSession();
-    if(error||!data.session){login.hidden=false;app.hidden=true;return;}
-    const email=data.session.user.email||"Admin account";
+  let loadedUserId=null;
+  function showSignedInUser(user){
+    if(!user){login.hidden=false;app.hidden=true;loadedUserId=null;return;}
+    const email=user.email||"Admin account";
     $("sidebar-email").textContent=email;$("header-admin-email").textContent=email;
     const initial=(email[0]||"A").toUpperCase();
     ["sidebar-avatar","header-avatar","dropdown-avatar"].forEach(id=>$(id).textContent=initial);
     login.hidden=true;app.hidden=false;
-    await load();
+    if(loadedUserId!==user.id){loadedUserId=user.id;load();}
   }
+  async function session(){
+    if(!db){login.hidden=false;message("login-message","Supabase could not be initialized. Please refresh the page.");return;}
+    const {data,error}=await db.auth.getSession();
+    if(error){login.hidden=false;app.hidden=true;message("login-message","Could not restore your admin session: "+error.message);return;}
+    showSignedInUser(data.session?.user||null);
+  }
+  db?.auth.onAuthStateChange((event,session)=>{
+    if(event==="SIGNED_OUT"){showSignedInUser(null);return;}
+    if(session?.user)showSignedInUser(session.user);
+  });
   async function load(){
     message("list-message","Loading listings…");
     const {data,error}=await db.from("asset_listings").select("*").order("submitted_at",{ascending:false});
@@ -111,20 +120,18 @@
   function showView(view,title,filter="all"){
     currentView=view;
     document.querySelectorAll(".admin-nav-link[data-view]").forEach(a=>a.classList.toggle("active",a.dataset.view===view&&a.dataset.title===title));
-    $("current-page-title").textContent=title;$("page-heading-title").textContent=title;
-    $("admin-dashboard").querySelector(".page-heading").hidden=view!=="overview"&&view!=="marketplace";
+    $("current-page-title").textContent=title;
+    $("page-heading-title").textContent=title;
+    const isListingView=view==="overview"||view==="marketplace";
+    $("admin-dashboard").querySelector(".page-heading").hidden=!isListingView;
     $("stats-grid").hidden=view!=="overview";
-    $("listing-workspace").hidden=view!=="overview"&&view!=="marketplace";
-    $("coming-soon-view").hidden=!viewCopy[view];
+    $("listing-workspace").hidden=!isListingView;
+    $("coming-soon-view").hidden=!Boolean(viewCopy[view]);
     if(viewCopy[view]){
       $("coming-soon-title").textContent=viewCopy[view][0];
       $("coming-soon-description").textContent=viewCopy[view][1];
     }
-    if(view==="overview"||view==="marketplace"){
-      $("admin-dashboard").querySelector(".page-heading").hidden=false;
-      $("stats-grid").hidden=view!=="overview";
-      $("listing-workspace").hidden=false;
-      $("page-heading-title").textContent=title;
+    if(isListingView){
       $("listing-section-title").textContent=view==="overview"?"Recent Listing Submissions":title;
       $("status-filter").value=filter;
       render();
@@ -136,7 +143,6 @@
     showView(link.dataset.view,link.dataset.title,link.dataset.filter||"all");
   }));
   $("listing-search").addEventListener("input",render);
-  $("stats-grid").id="stats-grid";
 
   $("menu-toggle").addEventListener("click",()=>{const open=!$("admin-sidebar").classList.contains("open");$("admin-sidebar").classList.toggle("open",open);$("admin-overlay").classList.toggle("show",open);$("menu-toggle").setAttribute("aria-expanded",String(open));});
   $("sidebar-close").addEventListener("click",closeSidebar);$("admin-overlay").addEventListener("click",closeSidebar);
