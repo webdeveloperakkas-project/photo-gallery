@@ -5,7 +5,7 @@ const id=new URLSearchParams(location.search).get("id"),loading=$("asset-detail-
 const notice=message=>{const n=$("detail-notice");n.textContent=message;n.hidden=false;};
 const imageUrl=path=>path?client.storage.from("asset-listing-media").getPublicUrl(path).data.publicUrl:"";
 const money=(currency,value)=>currency+" "+Number(value||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
-const detailRows=details=>(Array.isArray(details)?details:[]).filter(x=>x&&x.value).map(x=>"<div><small>"+esc(x.label||x.key)+"</small><strong>"+esc(x.value)+"</strong></div>").join("");
+const detailRows=details=>(Array.isArray(details)?details:[]).filter(x=>{if(!x||x.value==null||String(x.value).trim()==="")return false;const key=String(x.key||"").toLowerCase().replace(/[^a-z]/g,""),label=String(x.label||"").toLowerCase().replace(/[^a-z]/g,"");return !["assettitle","title","shortsummary","summary","fulldescription","description"].includes(key)&&!["assettitle","title","shortsummary","summary","fulldescription","description"].includes(label);}).map(x=>"<div><small>"+esc(x.label||x.key)+"</small><strong>"+esc(x.value)+"</strong></div>").join("");
 const sidebar=$("nexa-sidebar"),overlay=$("sidebar-overlay"),menu=$("menu-toggle"),close=$("sidebar-close");
 const closeSidebar=()=>{sidebar?.classList.remove("open");overlay?.classList.remove("show");menu?.setAttribute("aria-expanded","false");};
 menu?.addEventListener("click",()=>{const open=!sidebar.classList.contains("open");sidebar.classList.toggle("open",open);overlay.classList.toggle("show",open);menu.setAttribute("aria-expanded",String(open));});
@@ -28,7 +28,7 @@ $("detail-category-pill").textContent=item.subcategory||item.category||"Digital 
  thumbs.innerHTML=paths.map(p=>"<img src='"+esc(imageUrl(p))+"' alt='Additional asset image' loading='lazy'>").join("");thumbs.hidden=paths.length===0;gallery.hidden=!cover&&!paths.length;
  coverEl.onerror=()=>{coverEl.hidden=true;if(!paths.length)gallery.hidden=true;};
  $("detail-overview").innerHTML=detailRows(item.public_details)||"<div><small>Listing information</small><strong>Additional details were not provided.</strong></div>";
- $("detail-description").textContent=item.full_description||"The seller has not provided a full description.";
+ const description=item.full_description||"The seller has not provided a full description.";$("detail-description").textContent=description;
  const seller=item.seller_name||"Nexa Seller";$("seller-name").textContent=seller;$("seller-avatar").textContent=seller.trim().charAt(0).toUpperCase()||"N";$("seller-member-since").textContent=item.seller_member_since?"Member since "+new Date(item.seller_member_since).toLocaleDateString():"Nexa marketplace seller";$("seller-stats").innerHTML="<span><b>"+Number(item.seller_total_listings||0)+"</b> approved listings</span><span><b>—</b> successful sales (not available yet)</span>";
  $("seller-rating-value").textContent="—";$("seller-rating-note").textContent="No verified reviews yet";
  loading.hidden=true;content.hidden=false;
