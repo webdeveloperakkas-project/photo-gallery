@@ -93,6 +93,11 @@
             <div class="welcome-art" aria-hidden="true"><div class="art-circle">N</div><span class="art-chip chip-one">Websites</span><span class="art-chip chip-two">Social Media</span><span class="art-chip chip-three">SaaS</span></div>
           </section>
 
+          <section class="content-panel recent-assets-panel">
+            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#browse-assets-section" data-section="browse-assets-section" class="view-all-link">Browse marketplace →</a></div>
+            <div id="recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Loading recent approved listings…</b></div></div>
+          </section>
+
           <section class="dashboard-section-heading"><div><span class="eyebrow">OVERVIEW</span><h2>Your Marketplace at a Glance</h2><p>A quick look at your buying and selling activity.</p></div></section>
           <section class="nexa-stats-grid">
             <article class="nexa-stat-card"><span class="stat-icon">▤</span><p>Active Listings</p><strong>—</strong><small>Your published advertisements</small></article>
@@ -113,18 +118,53 @@
             <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>🎵</span><b>TikTok</b><small>Accounts</small></a>
             <a href="#browse-assets-section" data-section="browse-assets-section" class="asset-category"><span>＋</span><b>Other Assets</b><small>More digital assets</small></a>
           </section>
-          <section class="content-panel recent-assets-panel">
-            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>New opportunities from across the marketplace.</p></div><a href="#browse-assets-section" data-section="browse-assets-section" class="view-all-link">Browse marketplace →</a></div>
-            <div id="recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Loading recent approved listings…</b></div></div>
-          </section>
+
         </section>
 
         <section id="browse-assets-section" class="page-section">
           <div class="section-page-header"><div class="account-back-row"><a class="back-link dashboard-back-link" href="#dashboard-section" data-section="dashboard-section"><span aria-hidden="true">←</span> Back to Dashboard</a></div><div class="section-heading"><div><span class="eyebrow">BUY DIGITAL ASSETS</span><h1>Browse Assets</h1><p>Discover websites, online businesses, domains and social media assets.</p></div></div></div>
-          <div class="asset-category-grid browse-category-grid">
-            <div class="asset-category"><span>◇</span><b>Websites</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>SaaS</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>E-commerce</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Domains</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>YouTube</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Facebook</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Instagram</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>TikTok</b><small>Listings will appear here</small></div><div class="asset-category"><span>◇</span><b>Other Assets</b><small>Listings will appear here</small></div>
-          </div>
-          <div id="browse-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Loading approved listings…</b></div></div>
+          <section class="content-panel browse-recent-panel">
+            <div class="panel-heading"><div><h2>Recently Added Assets</h2><p>The newest approved opportunities, shown first.</p></div><span class="recent-live-label">LATEST LISTINGS</span></div>
+            <div id="browse-recent-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><b>Loading recent assets…</b></div></div>
+          </section>
+          <section class="marketplace-search-layout">
+            <aside class="marketplace-filter-panel">
+              <div class="filter-panel-heading"><div><span class="eyebrow">REFINE RESULTS</span><h2>Categories</h2></div><button type="button" id="clear-marketplace-filters" class="filter-clear-button">Clear all</button></div>
+              <label class="category-filter-option category-filter-all"><input type="checkbox" id="filter-all-categories" checked><span>All Categories</span></label>
+              <div id="marketplace-category-options" class="marketplace-category-options">
+                <label class="category-filter-option"><input type="checkbox" value="Website"><span>Websites</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="SaaS"><span>SaaS</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="E-commerce"><span>E-commerce</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="Domain"><span>Domains</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="YouTube Channel"><span>YouTube</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="Facebook Page"><span>Facebook</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="Instagram Account"><span>Instagram</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="TikTok Account"><span>TikTok</span></label>
+                <label class="category-filter-option"><input type="checkbox" value="Other Digital Asset"><span>Other Assets</span></label>
+              </div>
+            </aside>
+            <div class="marketplace-search-main">
+              <section class="marketplace-search-panel">
+                <div class="marketplace-search-title"><div><span class="eyebrow">FIND YOUR NEXT OPPORTUNITY</span><h2>Search Digital Assets</h2><p>Choose your filters, then search to see matching approved listings.</p></div></div>
+                <label class="marketplace-keyword-field"><span>Keyword Search</span><input id="marketplace-keyword" type="search" placeholder="Search websites, SaaS, channels, domains…"></label>
+                <div class="marketplace-filter-grid">
+                  <label class="marketplace-filter-field"><span>Country</span><select id="marketplace-country"><option value="">All Countries</option></select></label>
+                  <label class="marketplace-filter-field"><span>Price Currency</span><select id="marketplace-price-currency"><option value="">All Currencies</option><option>USD</option><option>EUR</option><option>GBP</option><option>BDT</option></select></label>
+                  <label class="marketplace-filter-field"><span>Minimum Price</span><input id="marketplace-price-min" type="number" min="0" placeholder="Min"></label>
+                  <label class="marketplace-filter-field"><span>Maximum Price</span><input id="marketplace-price-max" type="number" min="0" placeholder="Max"></label>
+                  <label class="marketplace-filter-field"><span>Minimum Monthly Visitors</span><input id="marketplace-visitors-min" type="number" min="0" placeholder="Min visitors"></label>
+                  <label class="marketplace-filter-field"><span>Maximum Monthly Visitors</span><input id="marketplace-visitors-max" type="number" min="0" placeholder="Max visitors"></label>
+                  <label class="marketplace-filter-field"><span>Revenue Currency</span><select id="marketplace-revenue-currency"><option value="">All Currencies</option><option>USD</option><option>EUR</option><option>GBP</option><option>BDT</option></select></label>
+                  <label class="marketplace-filter-field"><span>Minimum Monthly Revenue</span><input id="marketplace-revenue-min" type="number" min="0" step=".01" placeholder="Min revenue"></label>
+                  <label class="marketplace-filter-field"><span>Maximum Monthly Revenue</span><input id="marketplace-revenue-max" type="number" min="0" step=".01" placeholder="Max revenue"></label>
+                  <label class="marketplace-filter-field"><span>Sort By</span><select id="marketplace-sort"><option value="newest">Recently Added</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="revenue-high">Monthly Revenue: High to Low</option></select></label>
+                </div>
+                <button type="button" class="marketplace-search-button" id="marketplace-search-button"><span>⌕</span> Search Digital Assets</button>
+              </section>
+              <div class="marketplace-results-heading"><div><h2>Search Results</h2><p id="marketplace-results-count">Select your filters and click Search Digital Assets.</p></div></div>
+              <div id="browse-approved-listings" class="marketplace-listings"><div class="marketplace-empty"><span>⌕</span><b>Ready when you are</b><p>All Categories and All Countries are selected by default. Click Search Digital Assets to view listings.</p></div></div>
+            </div>
+          </section>
         </section>
 
         <section id="post-ad-section" class="page-section">
@@ -133,6 +173,7 @@
 <div class="listing-progress-panel"><div class="listing-progress-top"><div><span class="eyebrow">YOUR LISTING CHECKLIST</span><h2>Complete your advertisement</h2><p>Finish four information steps, review everything in Preview, then submit for verification.</p></div><strong id="listing-progress-count">0 / 4 steps complete</strong></div><div class="listing-progress-track"><span id="listing-progress-bar"></span></div><div class="listing-progress-steps"><span>1. Product</span><span>2. Finance</span><span>3. Details</span><span>4. Transfer</span><span>5. Preview</span></div></div>
 <section class="listing-form-section" data-listing-section><div class="listing-section-heading"><span class="listing-section-number">01</span><div><h2>Product Details</h2><p>Describe your digital asset, add images and share its performance.</p></div><span class="listing-section-status">Incomplete</span></div><div class="listing-fields-grid">
 <label class="listing-field listing-field-full">Asset Category *<select name="category" id="listing-category" required><option value="">Select category</option><option>Website</option><option>SaaS</option><option>E-commerce</option><option>Domain</option><option>YouTube Channel</option><option>Facebook Page</option><option>Instagram Account</option><option>TikTok Account</option><option>Other Digital Asset</option></select></label>
+<label class="listing-field">Country *<input name="country" required maxlength="80" placeholder="Primary country of the asset"></label>
 <label class="listing-field listing-field-full">Asset Title *<input name="title" required maxlength="100" placeholder="Enter your asset title"></label>
 <label class="listing-field listing-field-full">Short Summary *<input name="summary" required maxlength="180" placeholder="A short introduction for buyers"></label>
 <label class="listing-field listing-field-full">Full Description *<textarea name="description" required rows="5" maxlength="3000" placeholder="Describe the asset, its history, strengths and audience..."></textarea></label></div><div id="listing-category-fields" class="listing-category-fields" hidden></div>
