@@ -379,3 +379,10 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .approved-listing-footer{align-items:center}
 .approved-details-link{display:inline-flex;align-items:center;justify-content:center;min-width:76px;padding:8px 13px;border-radius:7px;background:#f4c95d;color:#174a3b;font-size:10px;font-weight:900;letter-spacing:.2px}
 .approved-listing-link:hover .approved-details-link{background:#174f40;color:#fff}
+
+/* Seller payout method wordmarks and selectable logo cards */
+.listing-choice-grid .payout-choice-content{display:flex;align-items:center;gap:10px;min-width:0}
+.payout-brand-logo{display:inline-flex;align-items:center;justify-content:center;flex:0 0 46px;width:46px;height:34px;padding:3px 5px;border-radius:7px;background:#f4f7f5;font-style:normal;font-size:11px;font-weight:900;letter-spacing:-.3px;white-space:nowrap}
+.logo-bank{color:#176b4c;background:#e8f5ed;font-size:19px}.logo-payoneer{color:#e34f32;background:#fff0eb;font-size:21px}.logo-wise{color:#176f59;background:#e7f7ef;font-size:20px}.logo-paypal{color:#145da0;background:#eaf3fc;font-size:21px}.logo-bkash{color:#d12072;background:#fff0f6;font-size:10px}.logo-nagad{color:#ed6b22;background:#fff3e9;font-size:21px;border:1px solid #ffe0c8}.logo-rocket{color:#7136a7;background:#f4edfb;font-size:21px}
+.listing-choice-grid .payout-brand-logo{height:38px}.listing-choice-grid label{align-items:center}.listing-choice-grid .payout-choice-content>span:last-child{min-width:0}
+.payout-preview-logos{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px}.payout-preview-logos>span{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid #e1ece5;border-radius:8px;background:#fff;font-size:10px}
