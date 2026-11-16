@@ -1,3 +1,4 @@
+
 -- Nexa: move activity tracking from seller-only to all user accounts.
 -- Run this file in the Nexa Supabase SQL Editor.
 -- The old seller_presence table is intentionally retained during migration.
