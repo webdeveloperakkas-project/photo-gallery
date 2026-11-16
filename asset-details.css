@@ -36,3 +36,11 @@
 .user-presence .presence-dot{width:8px;height:8px;border-radius:50%;background:#aab5ad;box-shadow:0 0 0 3px #eef2ef}
 .user-presence.is-online{color:#14834b}
 .user-presence.is-online .presence-dot{background:#18a957;box-shadow:0 0 0 3px #e1f5e9}
+
+
+/* Keep user online/last-active status aligned to the seller's full name */
+.seller-name-row{display:flex;align-items:center;justify-content:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.seller-name-row h3{margin:0}
+.seller-name-row .user-presence{margin:0;white-space:nowrap}
+.seller-profile-main>#seller-member-since{display:block;margin-top:3px}
+@media(max-width:520px){.seller-name-row{gap:9px}.seller-name-row h3{font-size:14px}.seller-name-row .user-presence{font-size:10px}}
