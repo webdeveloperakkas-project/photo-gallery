@@ -127,11 +127,9 @@ $("buy-now").addEventListener("click",()=>{
  $("checkout-category").textContent=currentItem.subcategory||currentItem.category||"Digital Asset";
  $("checkout-price").textContent=money(currentItem.price_currency,currentItem.asking_price);
  const host=$("checkout-methods");host.innerHTML="";$("checkout-no-methods").hidden=methods.length>0;selectedCheckoutMethod="";
- const mobileDefault=window.matchMedia("(max-width: 700px)").matches;
- methods.forEach((method,index)=>{
+ methods.forEach(method=>{
    const card=document.createElement("label");card.className="checkout-method-option";
    const radio=document.createElement("input");radio.type="radio";radio.name="checkout-method";radio.value=method;radio.setAttribute("aria-label","Select "+method);
-   if(mobileDefault&&index===0)radio.checked=true;
    const logo=document.createElement("span");logo.innerHTML=payoutLogo(method);
    const name=document.createElement("span");name.className="checkout-method-name";name.textContent=method;
    const mark=document.createElement("span");mark.className="checkout-method-check";mark.setAttribute("aria-hidden","true");
