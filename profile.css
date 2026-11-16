@@ -65,3 +65,13 @@
 
 /* Back navigation sits above the account heading, separate from the three verification steps. */
 .account-back-row{display:flex;justify-content:flex-start;align-items:center;margin:0 0 14px}.account-back-row .profile-back-button{min-height:40px;padding:0 16px;border-radius:10px;background:#fff;border:1px solid #cfe6d8;color:#128052;box-shadow:0 3px 10px rgba(20,90,55,.06);transition:background .18s ease,transform .18s ease}.account-back-row .profile-back-button:hover{background:#eff9f3;transform:translateX(-2px)}.profile-toolbar{padding:0;background:transparent;border:0;border-radius:0;margin-bottom:20px}.step-tabs{width:100%}@media(max-width:760px){.account-back-row{margin-bottom:12px}.account-back-row .profile-back-button{min-height:38px}}
+
+
+/* Keep the account pages' top header identical to the Nexa dashboard. */
+.nexa-top-header{background:linear-gradient(105deg,#103f35 0%,#126b5d 48%,#13a69a 100%);color:#fff;border-bottom:1px solid #ffffff24;box-shadow:0 5px 20px #0b3c3020}
+.nexa-top-header .menu-toggle,.nexa-top-header .wallet-nav-button,.nexa-top-header .profile-nav-button{color:#fff}
+.nexa-top-header .wallet-nav-button{background:#ffffff16;border:1px solid #ffffff35;border-radius:11px}
+.nexa-top-header .wallet-nav-copy small,.nexa-top-header .wallet-nav-copy b,.nexa-top-header .wallet-chevron{color:#fff}
+.nexa-top-header .menu-toggle{background:#ffffff16;border:1px solid #ffffff35;border-radius:9px}
+.nexa-top-header .profile-nav-button{background:#ffffff18;border:1px solid #ffffff40;border-radius:12px}
+.nexa-top-header .profile-avatar-small{background:#f4c95d;color:#174a3b}
