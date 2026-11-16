@@ -174,3 +174,7 @@
   cursor:pointer;
   box-shadow:0 5px 14px #13b0aa30;
 }
+
+
+/* Soft yellow for unselected payout cards; selected cards retain the green highlight */
+.checkout-method-option:not(:has(input:checked)){background:#fff8e6;border-color:#f0dda0}
