@@ -311,7 +311,20 @@
       const submitButton=document.getElementById("listing-confirm-accept");submitButton.disabled=true;submitButton.textContent="Submitting…";
       try {
         const {data:authData,error:authError}=await client.auth.getUser();if(authError||!authData?.user)throw new Error("Please log in again.");
-        const payload={user_id:authData.user.id,title:listingForm.elements.title.value,category:listingForm.elements.platform.value,summary:listingForm.elements.summary.value,asking_price:Number(listingForm.elements.asking_price.value),price_currency:listingForm.elements.price_currency.value,status:"pending",listing_data:{details,submitted_file_names:[...(cover.files||[]),...(extras.files||[]),...(document.getElementById("listing-proof-files")?.files||[])].map(file=>file.name)}};
+        const listingId=crypto.randomUUID();
+        const uploadImage=async(file,kind,index=0)=>{
+          if(!file)return null;
+          const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+          const path=authData.user.id+"/"+listingId+"/"+kind+(index?"-"+index:"")+"."+ext;
+          const {error:uploadError}=await client.storage.from("asset-listing-media").upload(path,file,{upsert:false,contentType:file.type});
+          if(uploadError)throw new Error("Image upload failed ("+file.name+"): "+uploadError.message);
+          return path;
+        };
+        const coverPath=await uploadImage(cover.files?.[0],"cover");
+        const logoPath=await uploadImage(logo?.files?.[0],"logo");
+        const galleryPaths=[];
+        for(let i=0;i<(extras.files?.length||0);i++)galleryPaths.push(await uploadImage(extras.files[i],"gallery",i+1));
+        const payload={id:listingId,user_id:authData.user.id,title:listingForm.elements.title.value,category:listingForm.elements.platform.value,summary:listingForm.elements.summary.value,asking_price:Number(listingForm.elements.asking_price.value),price_currency:listingForm.elements.price_currency.value,status:"pending",listing_data:{details,cover_image_path:coverPath,logo_image_path:logoPath,gallery_image_paths:galleryPaths,submitted_file_names:[...(cover.files||[]),...(logo?.files||[]),...(extras.files||[]),...(document.getElementById("listing-proof-files")?.files||[])].map(file=>file.name)}};
         const {error}=await client.from("asset_listings").insert(payload);if(error)throw error;
         confirmModal.hidden=true;hideScreens();view="status";statusScreen.hidden=false;const note=statusScreen.querySelector(".listing-status-note");if(note)note.hidden=true;await window.nexaRenderMyListings?.();listingForm.reset();renderDynamic();renderImages();
       } catch(error) {feedback.hidden=false;feedback.textContent="Could not submit listing: "+(error.message||"Please try again.");}
