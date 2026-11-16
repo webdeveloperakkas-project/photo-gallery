@@ -44,3 +44,54 @@
 .seller-name-row .user-presence{margin:0;white-space:nowrap}
 .seller-profile-main>#seller-member-since{display:block;margin-top:3px}
 @media(max-width:520px){.seller-name-row{gap:9px}.seller-name-row h3{font-size:14px}.seller-name-row .user-presence{font-size:10px}}
+
+/* Buyer-seller messaging bottom sheet */
+.message-modal-backdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;background:#102b22a8;backdrop-filter:blur(3px);padding:0 18px}
+.message-modal-backdrop[hidden],.checkout-view[hidden]{display:none}
+.message-sheet{width:min(850px,100%);height:min(72vh,760px);min-height:480px;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -18px 60px #102b2233;display:flex;flex-direction:column;overflow:hidden;padding:0 22px max(16px,env(safe-area-inset-bottom));animation:message-rise .24s ease-out}
+@keyframes message-rise{from{transform:translateY(35px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.message-sheet-handle{width:48px;height:5px;border-radius:8px;background:#d9e5dd;margin:10px auto 12px;flex:none}
+.message-header{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;padding:0 0 13px;border-bottom:1px solid #e9efeb}
+.message-header .eyebrow,.checkout-heading .eyebrow{font-size:9px;font-weight:800;letter-spacing:.12em;color:#16816f}
+.message-header h2{font:800 19px Manrope,sans-serif;margin:3px 0;color:#204a38}
+.message-header p{font-size:11px;color:#7a8980;margin:0}
+.message-close{border:0;background:#f0f5f1;border-radius:50%;width:34px;height:34px;font-size:22px;color:#315b47;cursor:pointer}
+.message-safety{margin:12px 0;padding:10px 13px;background:#fff8e5;border:1px solid #f1d98f;border-left:4px solid #e2ad24;border-radius:8px;flex:none}
+.message-safety strong{display:block;color:#785713;font-size:11px}
+.message-safety p{font-size:10px;line-height:1.55;color:#765f2b;margin:4px 0 0}
+.message-thread{flex:1;min-height:100px;overflow:auto;padding:10px 4px;display:flex;flex-direction:column;gap:10px}
+.message-empty{margin:auto;color:#87948c;font-size:12px;text-align:center}
+.message-bubble{max-width:min(78%,560px);padding:10px 13px;border-radius:13px;background:#f0f5f2;color:#355444;align-self:flex-start;overflow-wrap:anywhere}
+.message-bubble.mine{align-self:flex-end;background:#e2f6ef;color:#155d49}
+.message-bubble p{font-size:12px;line-height:1.6;margin:0;white-space:pre-wrap}
+.message-bubble small{display:block;margin-top:5px;font-size:9px;color:#7d8b82}
+.message-compose{display:flex;align-items:flex-end;gap:9px;padding-top:12px;border-top:1px solid #e9efeb}
+.message-compose textarea{flex:1;resize:none;border:1px solid #dbe7df;border-radius:10px;padding:11px 12px;font:12px "DM Sans",sans-serif;outline:none}
+.message-compose textarea:focus{border-color:#13b0aa;box-shadow:0 0 0 3px #13b0aa1a}
+.message-compose button,.checkout-continue{border:0;border-radius:9px;background:linear-gradient(100deg,#13b0aa,#108653);color:#fff;font-size:11px;font-weight:800;padding:12px 20px;cursor:pointer;min-height:42px}
+.message-compose button:disabled{opacity:.55;cursor:not-allowed}
+.message-feedback{min-height:14px;font-size:10px;color:#a45b25;margin:5px 0 0}
+.seller-conversation-list{max-height:100px;overflow:auto;border-bottom:1px solid #e9efeb;padding:4px 0 9px}
+.seller-conversation-item{display:flex;width:100%;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #e2ece5;background:#f8fbf9;border-radius:8px;margin:4px 0;text-align:left;color:#315b47;cursor:pointer;font-size:11px}
+.seller-conversation-item.active{border-color:#13b0aa;background:#e9f8f3}
+.seller-conversation-item small{color:#829087}
+.checkout-view{max-width:980px;margin:18px auto 45px}
+.checkout-heading{margin-bottom:18px}
+.checkout-back{display:block;border:0;background:#eaf6f0;color:#17634f;border-radius:8px;padding:9px 13px;font-size:11px;font-weight:800;margin-bottom:20px;cursor:pointer}
+.checkout-heading h1{font:800 25px Manrope,sans-serif;color:#204a38;margin:5px 0}
+.checkout-heading p,.checkout-method-intro{font-size:12px;color:#718178}
+.checkout-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.checkout-card{background:#fff;border:1px solid #e3ece6;border-radius:14px;padding:21px;box-shadow:0 7px 24px #14322308}
+.checkout-card h2{font:800 16px Manrope,sans-serif;color:#204a38;margin:0 0 14px}
+.checkout-product{display:flex;justify-content:space-between;gap:12px;padding:14px;background:#f5faf7;border-radius:10px}
+.checkout-product strong{font-size:13px;color:#244b39}
+.checkout-product small{display:block;font-size:10px;color:#7a8980;margin-top:5px}
+.checkout-note,.checkout-disclaimer{font-size:10px;line-height:1.65;color:#839087;margin:12px 0 0}
+.checkout-methods{display:grid;gap:8px}
+.checkout-method-option{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #dfeae3;border-radius:9px;cursor:pointer;font-size:12px;color:#315b47}
+.checkout-method-option:has(input:checked){border-color:#13b0aa;background:#effaf6}
+.checkout-method-option input{accent-color:#13a18a}
+.checkout-empty{padding:14px;background:#fff8e5;border-radius:8px;color:#785713;font-size:11px;line-height:1.6}
+.checkout-continue{width:100%;margin-top:15px}
+.checkout-disclaimer{color:#a06d24}
+@media(max-width:700px){.message-modal-backdrop{padding:0}.message-sheet{height:82vh;min-height:430px;border-radius:18px 18px 0 0;padding-left:14px;padding-right:14px}.checkout-layout{grid-template-columns:1fr}.checkout-view{margin-top:8px}.checkout-card{padding:16px}}
