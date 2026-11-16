@@ -82,7 +82,8 @@
     document.querySelectorAll(".page-section").forEach(s=>s.classList.toggle("active",s.id===id));
     document.querySelectorAll(".sidebar-navigation .nav-link").forEach(a=>a.classList.toggle("active",a.dataset.section===id));
     history.replaceState(null,"","#"+id);
-    if(id==="my-listings-section") window.nexaRenderMyListings?.();\n    if(id==="dashboard-section"||id==="browse-assets-section") window.nexaRenderApprovedListings?.();
+    if(id==="my-listings-section") window.nexaRenderMyListings?.();
+    if(id==="dashboard-section"||id==="browse-assets-section") window.nexaRenderApprovedListings?.();
     closeSidebar();
     window.scrollTo({top:0,behavior:"smooth"});
   };
