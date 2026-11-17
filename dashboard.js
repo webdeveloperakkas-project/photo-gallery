@@ -73,7 +73,8 @@
   };
   const loadApprovedListings=async()=>{
     renderMarketplaceEmpty(browseListingsHost,"Loading approved listings…","Please wait while the latest approved digital assets are loaded.");
-    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,subcategory,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency,cover_image_path,seller_name,monetization_status").order("submitted_at",{ascending:false});
+    let {data,error}=await client.from("marketplace_public_listings").select("id,title,category,subcategory,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency,cover_image_path,seller_name,monetization_status").order("submitted_at",{ascending:false});
+    if(error&&/monetization_status|column/i.test(error.message||"")){({data,error}=await client.from("marketplace_public_listings").select("id,title,category,subcategory,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency,cover_image_path,seller_name").order("submitted_at",{ascending:false}));}
     if(error){renderMarketplaceEmpty(browseListingsHost,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup.");return;}
     approvedMarketplaceItems=data||[];
     marketplaceLoaded=true;
