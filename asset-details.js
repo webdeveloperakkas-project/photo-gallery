@@ -116,16 +116,26 @@ $("checkout-continue")?.addEventListener("click",()=>{
  $("checkout-payment-status").hidden=true;
  window.scrollTo({top:0,behavior:"smooth"});
 });
-$("checkout-payment-form")?.addEventListener("submit",event=>{
+$("checkout-payment-form")?.addEventListener("submit",async event=>{
  event.preventDefault();
  const transactionId=$("checkout-transaction-id").value.trim();
  if(!transactionId){$("checkout-transaction-id").focus();return;}
- const status=$("checkout-payment-status");
- status.textContent="Your payment is being processed. Nexa will verify the transaction before the seller's wallet is credited.";
+ if(!currentUser?.id||!currentItem?.id){notice("Please sign in again before submitting payment.");return;}
+ const submit=$("checkout-submit-payment"),status=$("checkout-payment-status");
+ submit.disabled=true;submit.textContent="Submitting…";
+ const {data,error}=await client.rpc("nexa_submit_marketplace_payment",{
+  p_listing_id:currentItem.id,
+  p_payment_method:selectedCheckoutMethod,
+  p_transaction_number:transactionId
+ });
+ if(error){
+  status.textContent="Payment submission failed: "+error.message;
+  status.hidden=false;submit.disabled=false;submit.textContent="Submit Payment";return;
+ }
+ status.textContent="Your payment is being processed. Transaction reference: "+transactionId+". Nexa will verify it before the seller's wallet is credited.";
  status.hidden=false;
  $("checkout-transaction-id").disabled=true;
- $("checkout-submit-payment").disabled=true;
- $("checkout-submit-payment").textContent="Payment Submitted";
+ submit.disabled=true;submit.textContent="Payment Submitted";
 });
 $("checkout-copy-bank")?.addEventListener("click",async()=>{
  try{await navigator.clipboard.writeText("0000");$("checkout-copy-bank").textContent="Copied";}
