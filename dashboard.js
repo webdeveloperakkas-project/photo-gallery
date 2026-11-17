@@ -36,6 +36,45 @@
     if(error){if(notificationList)notificationList.innerHTML="<div class='notification-empty'><b>Notifications are temporarily unavailable</b><p>Please refresh the page in a moment.</p></div>";return;}
     notificationRows=data||[];renderNotifications();
   };
+  let walletRows = [];
+  let walletChannel = null;
+  const walletMethodNames = {bank_transfer:"Bank Transfer",payoneer:"Payoneer",wise:"Wise",paypal:"PayPal",bkash:"bKash",nagad:"Nagad",rocket:"Rocket"};
+  const walletMethodMarks = {bank_transfer:"▤",payoneer:"P",wise:"W",paypal:"P",bkash:"bK",nagad:"N",rocket:"R"};
+  const walletMoney = (value,currency) => new Intl.NumberFormat(undefined,{style:"currency",currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(value)||0);
+  const walletEscape = value => String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  const walletTotals = currency => walletRows.filter(row=>row.currency===currency).reduce((sum,row)=>({available:sum.available+Number(row.available_balance||0),pending:sum.pending+Number(row.pending_balance||0)}),{available:0,pending:0});
+  const renderWalletTotals = () => {
+    ["USD","BDT"].forEach(currency=>{
+      const totals=walletTotals(currency),suffix=currency.toLowerCase();
+      const available=walletMoney(totals.available,currency),pending=walletMoney(totals.pending,currency);
+      ["wallet-total-available-","header-wallet-available-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=available;});
+      ["wallet-total-pending-","header-wallet-pending-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=pending;});
+    });
+  };
+  const renderWalletCards = () => {
+    const host=document.getElementById("wallet-cards-grid");
+    if(!host)return;
+    if(!walletRows.length){host.innerHTML="<div class='wallet-loading-state'>No wallet accounts were found. Please contact support to activate your wallet accounts.</div>";renderWalletTotals();return;}
+    host.innerHTML=walletRows.map(row=>{
+      const method=String(row.payment_method||"").toLowerCase(),currency=String(row.currency||"USD").toUpperCase();
+      const available=Number(row.available_balance||0),pending=Number(row.pending_balance||0),earned=Number(row.total_earned||0);
+      const status=pending>0?"Pending":available>0?"Available":"No funds yet";
+      const statusClass=pending>0?"is-pending":available>0?"is-available":"is-empty";
+      return "<article class='wallet-method-card'><div class='wallet-method-card-top'><span class='wallet-method-mark wallet-mark-"+walletEscape(method)+"'>"+walletEscape(walletMethodMarks[method]||"¤")+"</span><span class='wallet-method-title'><b>"+walletEscape(walletMethodNames[method]||row.payment_method)+"</b><small>"+walletEscape(currency)+" wallet</small></span><span class='wallet-status "+statusClass+"'>"+status+"</span></div><div class='wallet-method-balance'><small>Available Balance</small><strong>"+walletMoney(available,currency)+"</strong></div><div class='wallet-method-details'><div><span>Pending</span><b>"+walletMoney(pending,currency)+"</b></div><div><span>Total Earned</span><b>"+walletMoney(earned,currency)+"</b></div></div><div class='wallet-method-card-footer'><span>Funds are released after buyer confirmation</span><button type='button' disabled title='Withdrawal processing will be enabled in the next wallet stage'>Withdraw</button></div></article>";
+    }).join("");
+    renderWalletTotals();
+  };
+  const loadWallets = async userId => {
+    const host=document.getElementById("wallet-cards-grid");
+    const {data,error}=await client.from("wallet_accounts").select("id,payment_method,currency,available_balance,pending_balance,total_earned,total_withdrawn").eq("user_id",userId).order("currency").order("payment_method");
+    if(error){if(host)host.innerHTML="<div class='wallet-loading-state wallet-load-error'>Wallet accounts are not set up yet. The wallet database setup must be completed before live balances can appear.</div>";return;}
+    walletRows=data||[];renderWalletCards();
+  };
+  const initWallet = userId => {
+    loadWallets(userId);
+    if(walletChannel)client.removeChannel(walletChannel);
+    walletChannel=client.channel("nexa-wallet-"+userId).on("postgres_changes",{event:"*",schema:"public",table:"wallet_accounts",filter:"user_id=eq."+userId},()=>loadWallets(userId)).subscribe();
+  };
   const initNotifications = userId => {
     loadNotifications(userId);
     if(notificationChannel)client.removeChannel(notificationChannel);
@@ -59,6 +98,7 @@
     setText("dash-dropdown-name",displayName);
     setText("dash-dropdown-email",user.email || "");
     initNotifications(user.id);
+    initWallet(user.id);
   });
 
   const closeSidebar = () => { sidebar?.classList.remove("open"); overlay?.classList.remove("show"); menuToggle?.setAttribute("aria-expanded","false"); };
