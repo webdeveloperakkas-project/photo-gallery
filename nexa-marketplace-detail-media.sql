@@ -162,4 +162,7 @@ group by
   l.id,l.title,l.category,l.summary,l.asking_price,l.price_currency,
   l.submitted_at,l.user_id,u.raw_user_meta_data,u.created_at,l.listing_data,l.monetization_status;
 
-grant select on public.marketplace_public_listings to anon,authenticated;
+-- A view is not an RLS-enabled table. Keep this view read-only and
+-- expose it only to the public roles that need approved marketplace data.
+revoke all on public.marketplace_public_listings from public, anon, authenticated;
+grant select on public.marketplace_public_listings to anon, authenticated;
