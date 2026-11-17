@@ -399,3 +399,7 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .seller-payout-box .listing-choice-grid b{font-size:11px}
 .seller-payout-box .listing-choice-grid small{font-size:9px}
 .seller-payout-box .payout-note{display:block;margin-top:8px}
+
+/* Monetization status shown on marketplace listing cards */
+.approved-monetization-status{flex:none;font-size:9px;font-weight:800;padding:6px 9px;border-radius:20px;white-space:nowrap}.approved-monetization-status.is-monetized{color:#147548;background:#e8f8ef}.approved-monetization-status.is-not-monetized{color:#8a641c;background:#fff5df}
+@media(max-width:650px){.approved-monetization-status{font-size:8px;padding:5px 6px}}
