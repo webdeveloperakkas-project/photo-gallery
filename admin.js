@@ -4,7 +4,7 @@
   const db=window.supabase?.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage,storageKey:"nexa-admin-auth"}});
   const $=id=>document.getElementById(id);
   const login=$("admin-login"),app=$("admin-app"),modal=$("review-modal");
-  let listings=[],selected=null,currentView="overview";
+  let listings=[],selected=null,currentView="overview",verificationRows=[],selectedVerification=null,currentVerificationType="identity";
   const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const label=s=>({pending:"Pending review",approved:"Approved",rejected:"Rejected"}[s]||s);
   const message=(id,value)=>$(id).textContent=value||"";
@@ -157,8 +157,6 @@
     "finance-refunds":["Refunds & Disputes","Track buyer refund requests, disputes, decisions and supporting records after the dispute workflow is created."],
     "seller-all":["All Sellers","Seller directory, account status and listing activity will be connected to the Nexa profile and verification tables."],
     "seller-account":["Account Verification","Review seller profile completeness and verification status. Full seller verification is not yet connected to this admin panel."],
-    "seller-id":["ID Verification","Secure identity-document review will be added after the profile verification tables, private file storage and access policies are configured."],
-    "seller-address":["Address Verification","Review seller address evidence after the verification database and private document storage are configured."],
     "buyer-all":["All Buyers","Buyer directory and account status will be connected after the buyer profile and account-management workflow is prepared."],
     "buyer-details":["Buyer Account Details","Buyer profile information and account history will be shown here after the relevant profile data is connected."],
     "buyer-activity":["Buyer Activity","Buyer browsing, purchase and account activity will be available after activity tracking is implemented."],
@@ -167,20 +165,23 @@
     "logs":["Admin Activity Logs","A secure audit trail of administrator actions will be added before operational launch."],
     "settings":["Platform Settings","Marketplace-wide settings will be added after the settings schema and safe update controls are prepared."]
   };
+  async function loadVerifications(type){currentVerificationType=type;$("verification-section-title").textContent=type==="identity"?"ID Verification":"Address Verification";message("verification-message","Loading private submissions…");const {data,error}=await db.from("user_verification_submissions").select("*").eq("verification_type",type).order("submitted_at",{ascending:false});if(error){verificationRows=[];message("verification-message","Could not load submissions: "+error.message+" — check the Nexa verification table and admin access.");$("verification-list").innerHTML="<div class='empty-state'>Verification records are unavailable.</div>";return;}verificationRows=data||[];await renderVerifications();}
+  async function renderVerifications(){const filter=$("verification-filter").value,rows=verificationRows.filter(r=>filter==="all"||r.status===filter);message("verification-message",rows.length+" submission(s) shown · "+verificationRows.length+" total");if(!rows.length){$("verification-list").innerHTML="<div class='empty-state'>No verification submissions in this status.</div>";return;}const cards=await Promise.all(rows.map(async row=>{const links=[],fields=currentVerificationType==="identity"?[["Front of ID",row.front_path],["Back of ID",row.back_path],["Live selfie",row.selfie_path]]:[["Proof of address",row.address_document_path]];for(const [label,path] of fields){if(!path)continue;const {data,error}=await db.storage.from("nexa-private-verification").createSignedUrl(path,600);if(!error&&data?.signedUrl)links.push("<a class='verification-file-link' href='"+esc(data.signedUrl)+"' target='_blank' rel='noopener noreferrer'>"+esc(label)+" ↗</a>");}const details=currentVerificationType==="identity"?"Document: "+esc(row.document_type||"—")+" · Country: "+esc(row.country||"—"):"Address: "+esc([row.address_line,row.city,row.region,row.postal_code,row.address_country].filter(Boolean).join(", "))+" · Proof: "+esc(row.address_document_type||"—");const statusText=({pending_review:"Pending review",approved:"Verified",rejected:"Needs resubmission"})[row.status]||esc(row.status);return "<article class='listing-row verification-admin-card'><div class='listing-copy'><span class='status "+(row.status==="approved"?"approved":row.status==="rejected"?"rejected":"")+"'>"+statusText+"</span><h3>"+(currentVerificationType==="identity"?"Identity submission":"Address submission")+"</h3><p>"+details+"</p><small>User ID: "+esc(row.user_id)+"</small><small>Submitted: "+esc(new Date(row.submitted_at).toLocaleString())+"</small><div class='verification-file-links'>"+(links.join("")||"<span class='file-note'>No document files found</span>")+"</div></div><button type='button' class='button button-primary' data-verification-review='"+esc(row.id)+"'>Review submission →</button></article>";}));$("verification-list").innerHTML=cards.join();}
+  async function openVerificationReview(id){selectedVerification=verificationRows.find(r=>r.id===id);if(!selectedVerification)return;const row=selectedVerification,type=row.verification_type;$("verification-review-title").textContent=type==="identity"?"Review ID verification":"Review address verification";$("verification-admin-note").value=row.admin_note||"";const fields=type==="identity"?[["Document type",row.document_type],["Issuing country",row.country],["Submitted",new Date(row.submitted_at).toLocaleString()],["User ID",row.user_id]]:[["Street address",row.address_line],["City",row.city],["Region",row.region],["Postal code",row.postal_code],["Country",row.address_country],["Proof type",row.address_document_type],["Submitted",new Date(row.submitted_at).toLocaleString()],["User ID",row.user_id]];const paths=type==="identity"?[["Front of ID",row.front_path],["Back of ID",row.back_path],["Live selfie",row.selfie_path]]:[["Proof of address",row.address_document_path]],links=[];for(const [label,path] of paths){if(!path)continue;const {data,error}=await db.storage.from("nexa-private-verification").createSignedUrl(path,600);if(!error&&data?.signedUrl)links.push("<a class='verification-file-link' href='"+esc(data.signedUrl)+"' target='_blank' rel='noopener noreferrer'>"+esc(label)+" ↗</a>");}$("verification-review-details").innerHTML="<div class='review-meta'>"+fields.map(([k,v])=>"<span>"+esc(k)+"<strong>"+esc(v||"—")+"</strong></span>").join("")+"</div><div class='verification-file-links verification-modal-files'>"+(links.join("")||"<span class='file-note'>No private documents were found.</span>")+"</div><p class='file-note'>Document links are private and expire after 10 minutes.</p>";$("request-verification-again").textContent=row.status==="rejected"?"Keep request for changes":"Need more information";$("approve-verification").textContent=row.status==="approved"?"Keep Verified":"Approve verification";$("verification-review-modal").hidden=false;}
+  async function updateVerification(status){if(!selectedVerification)return;const note=$("verification-admin-note").value.trim();if(status==="rejected"&&!note){alert("Please explain what the user needs to correct before requesting resubmission.");$("verification-admin-note").focus();return;}const buttons=[$("approve-verification"),$("request-verification-again")];buttons.forEach(b=>b.disabled=true);const {error}=await db.from("user_verification_submissions").update({status,admin_note:note||null,updated_at:new Date().toISOString()}).eq("id",selectedVerification.id);buttons.forEach(b=>b.disabled=false);if(error){alert("Could not update verification: "+error.message);return;}$("verification-review-modal").hidden=true;selectedVerification=null;await loadVerifications(currentVerificationType);}
   function showView(view,title,filter="all"){
     currentView=view;
     document.querySelectorAll(".admin-nav-link[data-view]").forEach(a=>a.classList.toggle("active",a.dataset.view===view&&a.dataset.title===title));
     $("current-page-title").textContent=title;
     $("page-heading-title").textContent=title;
-    const isListingView=view==="overview"||view==="marketplace";
+    const isListingView=view==="overview"||view==="marketplace",isVerificationView=view==="seller-id"||view==="seller-address";
     $("admin-dashboard").querySelector(".page-heading").hidden=!isListingView;
     $("stats-grid").hidden=view!=="overview";
     $("listing-workspace").hidden=!isListingView;
-    $("coming-soon-view").hidden=!Boolean(viewCopy[view]);
-    if(viewCopy[view]){
-      $("coming-soon-title").textContent=viewCopy[view][0];
-      $("coming-soon-description").textContent=viewCopy[view][1];
-    }
+    $("verification-workspace").hidden=!isVerificationView;
+    $("coming-soon-view").hidden=isVerificationView||!Boolean(viewCopy[view]);
+    if(viewCopy[view]){$("coming-soon-title").textContent=viewCopy[view][0];$("coming-soon-description").textContent=viewCopy[view][1];}
+    if(isVerificationView){$("verification-filter").value="pending_review";loadVerifications(view==="seller-id"?"identity":"address");}
     if(isListingView){
       $("listing-section-title").textContent=view==="overview"?"Recent Listing Submissions":title;
       $("status-filter").value=filter;
@@ -193,11 +194,19 @@
     showView(link.dataset.view,link.dataset.title,link.dataset.filter||"all");
   }));
   $("listing-search").addEventListener("input",render);
+  $("verification-filter").addEventListener("change",renderVerifications);
+  $("refresh-verifications").addEventListener("click",()=>loadVerifications(currentVerificationType));
+  $("verification-list").addEventListener("click",e=>{const b=e.target.closest("[data-verification-review]");if(b)openVerificationReview(b.dataset.verificationReview);});
+  $("close-verification-review").addEventListener("click",()=>{$("verification-review-modal").hidden=true;selectedVerification=null;});
+  $("verification-review-modal").addEventListener("click",e=>{if(e.target===$("verification-review-modal")){$("verification-review-modal").hidden=true;selectedVerification=null;}});
+  $("approve-verification").addEventListener("click",()=>updateVerification("approved"));
+  $("request-verification-again").addEventListener("click",()=>updateVerification("rejected"));
+
 
   $("menu-toggle").addEventListener("click",()=>{const open=!$("admin-sidebar").classList.contains("open");$("admin-sidebar").classList.toggle("open",open);$("admin-overlay").classList.toggle("show",open);$("menu-toggle").setAttribute("aria-expanded",String(open));});
   $("sidebar-close").addEventListener("click",closeSidebar);$("admin-overlay").addEventListener("click",closeSidebar);
   $("admin-profile-toggle").addEventListener("click",()=>{const opening=$("admin-profile-dropdown").hidden;$("admin-profile-dropdown").hidden=!opening;$("admin-profile-toggle").setAttribute("aria-expanded",String(opening));});
   document.addEventListener("click",e=>{const wrap=$("admin-profile-wrap");if(!wrap.contains(e.target)){$("admin-profile-dropdown").hidden=true;$("admin-profile-toggle").setAttribute("aria-expanded","false");}});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeSidebar();modal.hidden=true;$("admin-profile-dropdown").hidden=true;}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeSidebar();modal.hidden=true;$("verification-review-modal").hidden=true;$("admin-profile-dropdown").hidden=true;}});
   session();
 })();
