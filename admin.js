@@ -203,7 +203,7 @@
     $("listing-workspace").hidden=!isListingView;
     $("verification-workspace").hidden=!isVerificationView;
     $("finance-transactions-workspace").hidden=!isFinanceView;
-    $("coming-soon-view").hidden=isVerificationView||!Boolean(viewCopy[view]);
+    $("coming-soon-view").hidden=isVerificationView||isFinanceView||!Boolean(viewCopy[view]);
     if(viewCopy[view]){$("coming-soon-title").textContent=viewCopy[view][0];$("coming-soon-description").textContent=viewCopy[view][1];}
     if(isVerificationView){$("verification-filter").value="pending_review";loadVerifications(view==="seller-id"?"identity":"address");}
     if(isFinanceView)loadFinanceTransactions();
