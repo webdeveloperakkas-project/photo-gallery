@@ -75,3 +75,16 @@
 .nexa-top-header .menu-toggle{background:#ffffff16;border:1px solid #ffffff35;border-radius:9px}
 .nexa-top-header .profile-nav-button{background:#ffffff18;border:1px solid #ffffff40;border-radius:12px}
 .nexa-top-header .profile-avatar-small{background:#f4c95d;color:#174a3b}
+
+/* Verification result cards */
+.verification-result{display:flex;align-items:flex-start;gap:16px;padding:25px;border:1px solid #dcebe5;border-radius:15px;background:#fff;box-shadow:0 10px 28px rgba(20,70,48,.06)}
+.verification-result-icon{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:15px;font-size:23px;font-weight:900}
+.verification-result.pending{border-color:#f1dfb3;background:linear-gradient(120deg,#fffdf7,#fff)}.verification-result.pending .verification-result-icon{background:#fff2d4;color:#a87516}
+.verification-result.verified{border-color:#cbe9d8;background:linear-gradient(120deg,#f7fdf9,#fff)}.verification-result.verified .verification-result-icon{background:#e2f6e9;color:#16834d}
+.verification-result.rejected{border-color:#f1d4d1;background:linear-gradient(120deg,#fff9f8,#fff)}.verification-result.rejected .verification-result-icon{background:#ffebe8;color:#c34e4e}
+.verification-result-copy{min-width:0;flex:1}.verification-result-kicker{color:#648477;font-size:9px;font-weight:850;letter-spacing:1.1px}
+.verification-result h3{margin:6px 0 7px;color:#183c30;font:800 17px Manrope,sans-serif}.verification-result p{margin:0 0 11px;color:#66776e;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.verification-result-badge{display:inline-flex;align-items:center;padding:7px 11px;border-radius:30px;font-size:9px;font-weight:850;letter-spacing:.55px}
+.verification-result-badge.pending{background:#fff1d0;color:#95650c}.verification-result-badge.verified{background:#e3f6e9;color:#167a48}.verification-result-badge.rejected{background:#ffebe8;color:#b84545}
+.verification-admin-note{padding:10px 12px;border-left:3px solid #d99b38;background:#fff8e9;border-radius:0 8px 8px 0}.verification-edit-button{align-self:center;flex:0 0 auto;padding:10px 14px;border:1px solid #cce6d8;border-radius:9px;background:#fff;color:#128052;font-size:11px;font-weight:800}.verification-edit-button:hover{background:#eff9f3}
+@media(max-width:600px){.verification-result{flex-wrap:wrap;padding:18px;gap:12px}.verification-result-copy{flex-basis:calc(100% - 62px)}.verification-edit-button{margin-left:60px}}
