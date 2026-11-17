@@ -37,6 +37,33 @@
     if(error){if(notificationList)notificationList.innerHTML="<div class='notification-empty'><b>Notifications are temporarily unavailable</b><p>Please refresh the page in a moment.</p></div>";return;}
     notificationRows=data||[];renderNotifications();
   };
+  let transactionChannel = null;
+  const transactionStatusLabel = status => ({processing:"Processing",paid:"Paid",not_paid:"Not Paid"}[status]||status||"Processing");
+  const renderTransactions = rows => {
+    const host=document.getElementById("wallet-transactions-list");if(!host)return;
+    if(!rows.length){host.innerHTML="<div class='marketplace-empty'><span>⇄</span><b>No transactions yet</b><p>Buyer payments and seller receipts will appear here.</p></div>";return;}
+    host.innerHTML=rows.map(row=>{
+      const buyer=row.buyer_user_id===window.nexaCurrentUserId;
+      const ownId=buyer?row.buyer_user_id:row.user_id,ownEmail=buyer?row.buyer_email:row.email;
+      const status=buyer?transactionStatusLabel(row.buyer_payment_status):"Pending";
+      const cls=buyer?(row.buyer_payment_status==="paid"?"is-paid":row.buyer_payment_status==="not_paid"?"is-not-paid":"is-processing"):"is-pending";
+      const role=buyer?"Payment Sent":"Payment Received";
+      const method=String(row.payment_method||"").replace(/_/g," ").replace(/\b\w/g,ch=>ch.toUpperCase());
+      const date=row.created_at?new Date(row.created_at).toLocaleString():"—";
+      return "<article class='wallet-transaction-card'><div class='wallet-transaction-top'><span class='wallet-transaction-role'>"+walletEscape(role)+"</span><span class='wallet-transaction-status "+cls+"'>"+walletEscape(status)+"</span></div><div class='wallet-transaction-grid'><div><small>Date &amp; Time</small><b>"+walletEscape(date)+"</b></div><div><small>User ID</small><b>"+walletEscape(ownId)+"</b></div><div><small>Email</small><b>"+walletEscape(ownEmail)+"</b></div><div><small>Transaction ID</small><b>"+walletEscape(row.transaction_number||"—")+"</b></div><div><small>Payment Method</small><b>"+walletEscape(method)+"</b></div><div><small>Amount</small><b>"+walletEscape(row.currency)+" "+walletEscape(Number(row.amount||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</b></div></div></article>";
+    }).join("");
+  };
+  const loadTransactions = async userId => {
+    const host=document.getElementById("wallet-transactions-list");if(!host)return;
+    const {data,error}=await client.from("wallet_transactions").select("id,user_id,email,buyer_user_id,buyer_email,transaction_number,payment_method,buyer_payment_status,amount,currency,created_at,reference_type").or("user_id.eq."+userId+",buyer_user_id.eq."+userId).eq("reference_type","order").order("created_at",{ascending:false}).limit(100);
+    if(error){host.innerHTML="<div class='wallet-loading-state wallet-load-error'>Transactions could not be loaded. Apply the shared transaction SQL migration, then refresh.</div>";return;}
+    renderTransactions(data||[]);
+  };
+  const initTransactions = userId => {
+    window.nexaCurrentUserId=userId;loadTransactions(userId);
+    if(transactionChannel)client.removeChannel(transactionChannel);
+    transactionChannel=client.channel("nexa-transactions-"+userId).on("postgres_changes",{event:"*",schema:"public",table:"wallet_transactions"},()=>loadTransactions(userId)).subscribe();
+  };
   let walletRows = [];
   let walletChannel = null;
   const walletMethodNames = {bank_transfer:"Bank Transfer",payoneer:"Payoneer",wise:"Wise",paypal:"PayPal",bkash:"bKash",nagad:"Nagad",rocket:"Rocket"};
@@ -129,6 +156,7 @@
     setText("dash-dropdown-email",user.email || "");
     initNotifications(user.id);
     initWallet(user.id);
+    initTransactions(user.id);
     resolveWalletCountry(user.id);
   });
 
