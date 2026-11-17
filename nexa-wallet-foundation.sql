@@ -65,10 +65,10 @@ as $$
     (p_user_id, 'bkash', 'BDT'),
     (p_user_id, 'nagad', 'BDT'),
     (p_user_id, 'rocket', 'BDT'),
-    (p_user_id, 'wise', 'USD'),
-    (p_user_id, 'payoneer', 'USD'),
-    (p_user_id, 'paypal', 'USD'),
-    (p_user_id, 'bank_transfer', 'USD')
+    (p_user_id, 'wise', 'USD'), (p_user_id, 'wise', 'EUR'), (p_user_id, 'wise', 'GBP'),
+    (p_user_id, 'payoneer', 'USD'), (p_user_id, 'payoneer', 'EUR'), (p_user_id, 'payoneer', 'GBP'),
+    (p_user_id, 'paypal', 'USD'), (p_user_id, 'paypal', 'EUR'), (p_user_id, 'paypal', 'GBP'),
+    (p_user_id, 'bank_transfer', 'USD'), (p_user_id, 'bank_transfer', 'EUR'), (p_user_id, 'bank_transfer', 'GBP')
   on conflict (user_id, payment_method, currency) do nothing;
 $$;
 
@@ -97,9 +97,27 @@ select u.id, v.payment_method, v.currency
 from auth.users u
 cross join (values
   ('bkash','BDT'),('nagad','BDT'),('rocket','BDT'),
-  ('wise','USD'),('payoneer','USD'),('paypal','USD'),('bank_transfer','USD')
+  ('wise','USD'),('wise','EUR'),('wise','GBP'),
+  ('payoneer','USD'),('payoneer','EUR'),('payoneer','GBP'),
+  ('paypal','USD'),('paypal','EUR'),('paypal','GBP'),
+  ('bank_transfer','USD'),('bank_transfer','EUR'),('bank_transfer','GBP')
 ) as v(payment_method,currency)
 on conflict (user_id, payment_method, currency) do nothing;
+
+-- Keep the wallet header and My Wallet page in sync with server-side balance changes.
+do $
+begin
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
+     and not exists (
+       select 1 from pg_publication_tables
+       where pubname = 'supabase_realtime'
+         and schemaname = 'public'
+         and tablename = 'wallet_accounts'
+     ) then
+    alter publication supabase_realtime add table public.wallet_accounts;
+  end if;
+end
+$;
 
 -- Keep balance writes server-controlled. The authenticated client can only read its own wallet.
 -- Sale/payment/release and withdrawal posting will be connected to the Nexa order workflow in the next stage.
