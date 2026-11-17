@@ -90,8 +90,8 @@ const syncCheckoutSelection=()=>{
 $("checkout-methods")?.addEventListener("change",syncCheckoutSelection);
 $("checkout-continue")?.addEventListener("click",()=>{
  if(!selectedCheckoutMethod){notice("Please select a payment method first.");return;}
- $("checkout-heading").hidden=true;
- $("checkout-layout").hidden=true;
+ document.querySelector(".checkout-heading").hidden=true;
+ document.querySelector(".checkout-layout").hidden=true;
  $("checkout-payment-page").hidden=false;
  $("checkout-payment-title").textContent="Complete Your "+selectedCheckoutMethod+" Payment";
  $("checkout-payment-intro").textContent="Use the Nexa company receiving details below to pay for this listing.";
@@ -104,8 +104,8 @@ $("checkout-continue")?.addEventListener("click",()=>{
 });
 $("checkout-payment-back")?.addEventListener("click",()=>{
  $("checkout-payment-page").hidden=true;
- $("checkout-heading").hidden=false;
- $("checkout-layout").hidden=false;
+ document.querySelector(".checkout-heading").hidden=false;
+ document.querySelector(".checkout-layout").hidden=false;
  window.scrollTo({top:0,behavior:"smooth"});
 });
 $("checkout-copy-bkash")?.addEventListener("click",async()=>{
