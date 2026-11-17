@@ -116,16 +116,30 @@ $("checkout-continue")?.addEventListener("click",()=>{
  $("checkout-payment-status").hidden=true;
  window.scrollTo({top:0,behavior:"smooth"});
 });
-$("checkout-payment-form")?.addEventListener("submit",event=>{
+$("checkout-payment-form")?.addEventListener("submit",async event=>{
  event.preventDefault();
  const transactionId=$("checkout-transaction-id").value.trim();
  if(!transactionId){$("checkout-transaction-id").focus();return;}
- const status=$("checkout-payment-status");
- status.textContent="Your payment is being processed. Nexa will verify the transaction before the seller's wallet is credited.";
+ if(!currentUser||!currentItem){notice("Your account or listing information is not ready. Please refresh and try again.");return;}
+ const button=$("checkout-submit-payment"),input=$("checkout-transaction-id"),status=$("checkout-payment-status");
+ button.disabled=true;button.textContent="Submitting…";
+ status.hidden=true;status.classList.remove("is-error");
+ const {data,error}=await client.rpc("nexa_submit_marketplace_payment",{
+   p_listing_id:currentItem.id,
+   p_payment_method:selectedCheckoutMethod,
+   p_provider_transaction_id:transactionId
+ });
+ if(error){
+   status.textContent="Your payment reference could not be saved: "+error.message;
+   status.hidden=false;status.classList.add("is-error");
+   button.disabled=false;button.textContent="Submit Payment";
+   return;
+ }
+ const saved=Array.isArray(data)?data[0]:data;
+ status.textContent="Your payment record has been saved with status: Processing. Nexa Transaction No.: "+(saved?.transaction_number||"Created")+". You can track it from Transactions in your dashboard.";
  status.hidden=false;
- $("checkout-transaction-id").disabled=true;
- $("checkout-submit-payment").disabled=true;
- $("checkout-submit-payment").textContent="Payment Submitted";
+ input.disabled=true;
+ button.disabled=true;button.textContent="Payment Submitted";
 });
 $("checkout-copy-bank")?.addEventListener("click",async()=>{
  try{await navigator.clipboard.writeText("0000");$("checkout-copy-bank").textContent="Copied";}
