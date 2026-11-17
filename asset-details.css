@@ -260,3 +260,11 @@ body.image-lightbox-open{overflow:hidden}
 .checkout-payment-status[hidden]{display:none!important}
 .checkout-payment-warning{margin:14px 0 0;padding:12px 14px;border-radius:9px;background:#fff8e5;color:#795e25;font-size:11px;line-height:1.65}
 @media(max-width:600px){.payment-information-card{padding:18px 14px;margin:10px auto 28px}.payment-information-heading h1{font-size:21px}.payment-destination{padding:14px}.payment-detail-row{grid-template-columns:minmax(90px,1fr) minmax(0,1.3fr) auto;gap:7px}.payment-detail-row strong{font-size:11px}.payment-copy-button{padding:7px 8px;font-size:9px}}
+
+
+/* Explicitly hide checkout selection UI on the payment information step.
+   The grid display rule otherwise overrides the browser's default [hidden] style. */
+.checkout-heading[hidden],
+.checkout-layout[hidden]{
+  display:none !important;
+}
