@@ -26,8 +26,6 @@ function renderStatus(){
   const showForm=!hasResult||editing;
   form.hidden=!showForm;
   host.hidden=!hasResult||editing;
-  form.style.display=showForm?"":"none";
-  host.style.display=hasResult&&!editing?"block":"none";
   if(row){
    const approved=row.status==="approved",pending=row.status==="pending_review",rejected=row.status==="rejected";
    const heading=approved?(type==="identity"?"Your account has been successfully verified":"Your address verification has been successfully verified"):pending?(type==="identity"?"Your ID verification is under review":"Your address verification is under review"):"We need you to verify again";
