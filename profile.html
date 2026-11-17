@@ -38,17 +38,27 @@
         </div>
         <div class="wallet-menu-wrap" id="dash-wallet-menu-wrap">
           <button class="wallet-nav-button" id="dash-wallet-toggle" aria-label="Open wallet menu" aria-expanded="false" aria-controls="dash-wallet-dropdown">
-            <span class="wallet-icon">▣</span><span class="wallet-nav-copy"><small>AVAILABLE BALANCE</small><b>Wallet</b></span><span class="wallet-chevron">⌄</span>
+            <svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="15" rx="2.5"/><path d="M3 9V5.5A2.5 2.5 0 0 1 5.5 3H19"/><path d="M16 14h5"/><circle cx="16" cy="14" r=".7" fill="currentColor"/></svg><span class="wallet-currency-display" id="header-wallet-currency">USD</span><span class="wallet-chevron">⌄</span>
           </button>
           <div class="wallet-dropdown" id="dash-wallet-dropdown" hidden>
             <span class="wallet-dropdown-label">WALLET OVERVIEW</span>
-            <b>Your Nexa wallet is coming soon</b>
-            <p>Your available balance and supported currency wallets will appear here after the wallet service is connected.</p>
+            <div id="header-wallet-balance-rows"><div class="wallet-dropdown-balance-row"><span>Available · USD</span><b id="header-wallet-available-usd">$0.00</b></div><div class="wallet-dropdown-balance-row"><span>Pending · USD</span><b id="header-wallet-pending-usd">$0.00</b></div></div>
+            <a class="wallet-dropdown-link" href="dashboard.html#wallet-section">View My Wallet →</a>
           </div>
         </div>
         <div class="header-right">
+          <div class="notification-menu-wrap" id="dash-notification-menu-wrap">
+            <button class="notification-nav-button" id="dash-notification-toggle" type="button" aria-label="Notifications" aria-expanded="false" aria-controls="dash-notification-dropdown">
+              <svg class="notification-bell-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+              <span class="notification-count" id="dash-notification-count" hidden>0</span>
+            </button>
+            <section class="notification-dropdown" id="dash-notification-dropdown" aria-label="Notifications" hidden>
+              <div class="notification-dropdown-heading"><div><span class="notification-eyebrow">YOUR ACTIVITY</span><h3>Notifications</h3></div><button type="button" id="dash-notification-mark-all" class="notification-mark-all">Mark all read</button></div>
+              <div class="notification-list" id="dash-notification-list"><div class="notification-empty"><span>♧</span><b>You're all caught up</b><p>New updates will appear here.</p></div></div>
+            </section>
+          </div>
           <div class="profile-menu-wrap" id="dash-profile-menu-wrap">
-            <button class="profile-nav-button" id="dash-profile-toggle" aria-label="Open profile menu" aria-expanded="false"><span class="profile-avatar-small" id="dash-avatar-initial">N</span><span class="profile-chevron">⌄</span></button>
+            <button class="profile-nav-button" id="dash-profile-toggle" type="button" aria-label="Open profile menu" aria-expanded="false" aria-controls="dash-profile-dropdown"><svg class="profile-icon-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.6-3.3 3.2-5.2 7-5.2s6.4 1.9 7 5.2"/></svg></button>
             <div class="profile-dropdown" id="dash-profile-dropdown" hidden>
               <div class="profile-dropdown-head"><span class="profile-avatar-small" id="dash-dropdown-avatar">N</span><span><b id="dash-dropdown-name">Nexa member</b><small id="dash-dropdown-email">Signed in</small></span></div>
               <a href="profile.html">Profile</a><a href="settings.html">Settings</a>
