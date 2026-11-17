@@ -147,6 +147,11 @@
           <div id="listing-list" class="listing-list"><div class="empty-state">Loading listing submissions…</div></div>
         </section>
         <section id="verification-workspace" class="listing-workspace" hidden><div class="workspace-heading"><div><span class="eyebrow">SECURE DOCUMENT REVIEW</span><h2 id="verification-section-title">ID Verification</h2><p>Review private documents and update the user's verification status.</p></div><div class="verification-controls"><label class="filter-control">Filter by status<select id="verification-filter"><option value="pending_review">Pending review</option><option value="all">All submissions</option><option value="approved">Verified</option><option value="rejected">Needs resubmission</option></select></label><button type="button" class="button button-secondary" id="refresh-verifications">↻ Refresh</button></div></div><p id="verification-message" class="list-message" role="status" aria-live="polite">Loading verification submissions…</p><div id="verification-list" class="listing-list"><div class="empty-state">Loading secure submissions…</div></div></section>
+        <section id="finance-transactions-workspace" class="listing-workspace" hidden>
+          <div class="workspace-heading"><div><span class="eyebrow">SHARED WALLET LEDGER</span><h2>Marketplace Payments</h2><p>One transaction record shared by buyer and seller. Confirm the buyer payment to credit the seller's Pending wallet balance.</p></div><button type="button" id="refresh-finance-transactions" class="button button-secondary">↻ Refresh</button></div>
+          <p id="finance-transactions-message" class="list-message" role="status" aria-live="polite">Loading marketplace payments…</p>
+          <div id="finance-transactions-list" class="listing-list"><div class="empty-state">Loading payment records…</div></div>
+        </section>
         <section id="coming-soon-view" class="coming-soon-view" hidden><div class="coming-soon-card"><span class="coming-soon-icon">✦</span><span class="eyebrow">NEXA ADMIN WORKSPACE</span><h2 id="coming-soon-title">Section setup</h2><p id="coming-soon-description">This section is part of the planned Nexa administration panel.</p><span class="coming-soon-status">DATABASE & WORKFLOW SETUP REQUIRED</span></div></section>
       </main>
     </div>
