@@ -11,14 +11,12 @@ function setText(id,value){const e=$(id);if(e)e.textContent=value}
 function busy(id,on,label){const e=$(id);if(!e)return;e.disabled=on;e.textContent=on?"Please wait…":label}
 function fillCountries(id){const s=$(id);countries.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;s.append(o)})}
 ["personalCountry","idCountry","addressCountry"].forEach(fillCountries);
-function showTab(tab){if(!["personal","identity","address"].includes(tab))tab="personal";document.querySelectorAll(".step-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));["personal","identity","address"].forEach(t=>$(t+"Panel").hidden=t!==tab);try{sessionStorage.setItem("nexa-profile-active-tab",tab)}catch(e){}}
+function updateOverallStatus(tab){const row=tab==="address"?addressRow:identityRow||addressRow;const value=row?.status==="approved"?"Verified":row?.status==="rejected"?"Rejected":row?.status==="pending_review"?"Under Review":"Not Verified";setText("overallStatus",value)}
+function showTab(tab){if(!["personal","identity","address"].includes(tab))tab="personal";document.querySelectorAll(".step-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));["personal","identity","address"].forEach(t=>$(t+"Panel").hidden=t!==tab);updateOverallStatus(tab);try{sessionStorage.setItem("nexa-profile-active-tab",tab)}catch(e){}}
 document.querySelectorAll(".step-tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 function status(row){return row?.status==="approved"?"Verified":row?.status==="pending_review"?"Pending Review":row?.status==="rejected"?"Rejected":"Not submitted"}
 function renderStatus(){
- const identityState=identityRow?.status;
- const addressState=addressRow?.status;
- const overall=identityState==="approved"?"Verified":identityState==="rejected"?"Rejected":identityState==="pending_review"?"Under Review":addressState==="approved"?"Verified":addressState==="rejected"?"Rejected":addressState==="pending_review"?"Under Review":"Not Verified";
- setText("overallStatus",overall);
+ updateOverallStatus(document.querySelector(".step-tab.active")?.dataset.tab||"personal");
  setText("identityTabStatus",status(identityRow));
  setText("addressTabStatus",status(addressRow));
  for(const [type,row] of [["identity",identityRow],["address",addressRow]]){
