@@ -335,7 +335,9 @@
   const loadMyListings=async()=>{
     if(!listingsHost)return;
     listingsHost.innerHTML="<div class='marketplace-empty'><b>Loading your listings…</b></div>";
-    const {data,error}=await client.from("asset_listings").select("*").order("submitted_at",{ascending:false});
+    const {data:authData,error:authError}=await client.auth.getUser();
+    if(authError||!authData?.user){listingsHost.innerHTML="<div class='marketplace-empty'><b>Please sign in to view your listings.</b></div>";return;}
+    const {data,error}=await client.from("asset_listings").select("*").eq("user_id",authData.user.id).order("submitted_at",{ascending:false});
     if(error){listingsHost.innerHTML="<div class='marketplace-empty'><b>Could not load listings</b><p>"+safeText(error.message)+"</p><p>Run the Nexa listing SQL migration in Supabase.</p></div>";return;}
     if(!data?.length){listingsHost.innerHTML="<div class='marketplace-empty'><span>▤</span><b>You have no listings yet</b><p>After you submit an advertisement, it will appear here with its review status.</p></div>";return;}
     listingsHost.innerHTML=data.map(item=>{const cls=item.status==="approved"?"approved":item.status==="rejected"?"rejected":"pending";return "<article class='my-listing-card'><div class='my-listing-main'><div class='my-listing-category'>"+safeText(item.category)+"</div><h2>"+safeText(item.title)+"</h2><p>"+safeText(item.summary)+"</p><div class='my-listing-meta'><span>Asking Price <strong>"+safeText(item.price_currency)+" "+safeText(item.asking_price)+"</strong></span><span>Submitted <strong>"+safeText(new Date(item.submitted_at).toLocaleDateString())+"</strong></span></div></div><div class='my-listing-side'><span class='my-listing-status "+cls+"'>"+safeText(statusLabel(item.status))+"</span><button type='button' class='primary-button my-listing-edit' data-manage-listing='"+safeText(item.id)+"'>Edit / Manage</button></div></article>";}).join("");
