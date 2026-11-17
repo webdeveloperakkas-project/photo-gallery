@@ -146,15 +146,8 @@
           <p id="list-message" class="list-message" role="status" aria-live="polite"></p>
           <div id="listing-list" class="listing-list"><div class="empty-state">Loading listing submissions…</div></div>
         </section>
-        <section id="coming-soon-view" class="coming-soon-view" hidden>
-          <div class="coming-soon-card">
-            <span class="coming-soon-icon">✦</span>
-            <span class="eyebrow">NEXA ADMIN WORKSPACE</span>
-            <h2 id="coming-soon-title">Section setup</h2>
-            <p id="coming-soon-description">This section is part of the planned Nexa administration panel.</p>
-            <span class="coming-soon-status">DATABASE & WORKFLOW SETUP REQUIRED</span>
-          </div>
-        </section>
+        <section id="verification-workspace" class="listing-workspace" hidden><div class="workspace-heading"><div><span class="eyebrow">SECURE DOCUMENT REVIEW</span><h2 id="verification-section-title">ID Verification</h2><p>Review private documents and update the user's verification status.</p></div><div class="verification-controls"><label class="filter-control">Filter by status<select id="verification-filter"><option value="pending_review">Pending review</option><option value="all">All submissions</option><option value="approved">Verified</option><option value="rejected">Needs resubmission</option></select></label><button type="button" class="button button-secondary" id="refresh-verifications">↻ Refresh</button></div></div><p id="verification-message" class="list-message" role="status" aria-live="polite">Loading verification submissions…</p><div id="verification-list" class="listing-list"><div class="empty-state">Loading secure submissions…</div></div></section>
+        <section id="coming-soon-view" class="coming-soon-view" hidden><div class="coming-soon-card"><span class="coming-soon-icon">✦</span><span class="eyebrow">NEXA ADMIN WORKSPACE</span><h2 id="coming-soon-title">Section setup</h2><p id="coming-soon-description">This section is part of the planned Nexa administration panel.</p><span class="coming-soon-status">DATABASE & WORKFLOW SETUP REQUIRED</span></div></section>
       </main>
     </div>
   </div>
@@ -182,5 +175,6 @@
       <div class="review-actions"><button type="button" id="reject-listing" class="button button-danger">Reject listing</button><span></span><button type="button" id="approve-listing" class="button button-primary">Approve listing</button></div>
     </div>
   </div>
+  <div id="verification-review-modal" class="review-overlay" hidden><div class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="verification-review-title"><div class="review-heading"><div><span class="eyebrow">PRIVATE VERIFICATION REVIEW</span><h2 id="verification-review-title">Review submission</h2></div><button type="button" id="close-verification-review" class="close-button" aria-label="Close verification review">×</button></div><div id="verification-review-details" class="review-details"></div><label class="note-label" for="verification-admin-note">Message to user <span>Required when requesting resubmission</span><textarea id="verification-admin-note" rows="3" maxlength="1200" placeholder="Explain what needs to be corrected…"></textarea></label><div class="review-actions"><button type="button" id="request-verification-again" class="button button-danger">Need more information</button><span></span><button type="button" id="approve-verification" class="button button-primary">Approve verification</button></div></div></div>
 </body>
 </html>
