@@ -88,8 +88,24 @@ const syncCheckoutSelection=()=>{
 };
 $("checkout-methods")?.addEventListener("change",syncCheckoutSelection);
 $("checkout-continue")?.addEventListener("click",()=>{
- if(!selectedCheckoutMethod){notice("Please select one of the seller's listed payout methods first.");return;}
- notice("Selected method: "+selectedCheckoutMethod+". Secure payment processing is not connected yet. No payment has been taken.");
+ if(!selectedCheckoutMethod){notice("Please select a payment method first.");return;}
+ const paymentDetails=$("checkout-payment-details"),methods=$("checkout-methods"),intro=$("checkout-payment-intro"),title=$("checkout-payment-title"),bkash=$("checkout-bkash-destination"),unavailable=$("checkout-payment-unavailable");
+ methods.hidden=true;$("checkout-continue").hidden=true;$("checkout-no-methods").hidden=true;$("checkout-method-disclaimer").hidden=true;
+ paymentDetails.hidden=false;
+ title.textContent=selectedCheckoutMethod+" payment";
+ if(selectedCheckoutMethod.toLowerCase()==="bkash"){
+  intro.textContent="Send the exact order amount to Nexa's company bKash number below. Do not send money to a seller-provided number.";
+  bkash.hidden=false;unavailable.hidden=true;
+ }else{
+  intro.textContent="This payment method is available as a seller preference, but Nexa has not yet configured a company receiving destination for it.";
+  bkash.hidden=true;unavailable.hidden=false;unavailable.textContent="Company receiving details for "+selectedCheckoutMethod+" have not been configured. Please choose bKash or contact Nexa support.";
+ }
+});
+$("checkout-payment-back")?.addEventListener("click",()=>{
+ $("checkout-payment-details").hidden=true;$("checkout-methods").hidden=false;$("checkout-continue").hidden=false;$("checkout-method-disclaimer").hidden=false;syncCheckoutSelection();
+});
+$("checkout-copy-bkash")?.addEventListener("click",async()=>{
+ try{await navigator.clipboard.writeText("01840398000");$("checkout-copy-bkash").textContent="Copied";}catch(_){notice("Please copy the bKash number manually: 01840398000");}
 });
 
 async function load(){
