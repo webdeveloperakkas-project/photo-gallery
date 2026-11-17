@@ -502,3 +502,11 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 @media(max-width:1000px){.wallet-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.wallet-cards-grid{grid-template-columns:1fr}.wallet-section-heading{align-items:flex-start;flex-direction:column}.wallet-method-card{padding:15px}.wallet-summary-card{padding:14px}.wallet-summary-card strong{font-size:20px}.wallet-dropdown{right:-44px;left:auto;transform:none;width:min(310px,calc(100vw - 28px))}}
 @media(max-width:390px){.wallet-summary-grid{gap:9px}.wallet-summary-card{padding:11px}.wallet-summary-card strong{font-size:17px}.wallet-method-balance strong{font-size:22px}}
+
+/* Compact country-aware wallet currency control */
+.wallet-nav-button{min-width:0;width:auto;padding:7px 11px;gap:10px}
+.wallet-currency-display{display:inline-block;min-width:32px;color:inherit;font-size:13px;font-weight:800;letter-spacing:.25px}
+.wallet-nav-copy{display:none!important}
+.wallet-nav-button .wallet-chevron{margin-left:0}
+.wallet-summary-card[hidden]{display:none!important}
+@media(max-width:700px){.wallet-nav-button{padding:6px 8px;gap:7px}.wallet-currency-display{font-size:12px}.wallet-icon-svg{width:20px;height:20px;flex-basis:20px}}
