@@ -169,19 +169,44 @@
   async function renderVerifications(){const filter=$("verification-filter").value,rows=verificationRows.filter(r=>filter==="all"||r.status===filter);message("verification-message",rows.length+" submission(s) shown · "+verificationRows.length+" total");if(!rows.length){$("verification-list").innerHTML="<div class='empty-state'>No verification submissions in this status.</div>";return;}const cards=await Promise.all(rows.map(async row=>{const links=[],fields=currentVerificationType==="identity"?[["Front of ID",row.front_path],["Back of ID",row.back_path],["Live selfie",row.selfie_path]]:[["Proof of address",row.address_document_path]];for(const [label,path] of fields){if(!path)continue;const {data,error}=await db.storage.from("nexa-private-verification").createSignedUrl(path,600);if(!error&&data?.signedUrl)links.push("<a class='verification-file-link' href='"+esc(data.signedUrl)+"' target='_blank' rel='noopener noreferrer'>"+esc(label)+" ↗</a>");}const details=currentVerificationType==="identity"?"Document: "+esc(row.document_type||"—")+" · Country: "+esc(row.country||"—"):"Address: "+esc([row.address_line,row.city,row.region,row.postal_code,row.address_country].filter(Boolean).join(", "))+" · Proof: "+esc(row.address_document_type||"—");const statusText=({pending_review:"Pending review",approved:"Verified",rejected:"Needs resubmission"})[row.status]||esc(row.status);return "<article class='listing-row verification-admin-card'><div class='listing-copy'><span class='status "+(row.status==="approved"?"approved":row.status==="rejected"?"rejected":"")+"'>"+statusText+"</span><h3>"+(currentVerificationType==="identity"?"Identity submission":"Address submission")+"</h3><p>"+details+"</p><small>User ID: "+esc(row.user_id)+"</small><small>Submitted: "+esc(new Date(row.submitted_at).toLocaleString())+"</small><div class='verification-file-links'>"+(links.join("")||"<span class='file-note'>No document files found</span>")+"</div></div><button type='button' class='button button-primary' data-verification-review='"+esc(row.id)+"'>Review submission →</button></article>";}));$("verification-list").innerHTML=cards.join();}
   async function openVerificationReview(id){selectedVerification=verificationRows.find(r=>r.id===id);if(!selectedVerification)return;const row=selectedVerification,type=row.verification_type;$("verification-review-title").textContent=type==="identity"?"Review ID verification":"Review address verification";$("verification-admin-note").value=row.admin_note||"";const fields=type==="identity"?[["Document type",row.document_type],["Issuing country",row.country],["Submitted",new Date(row.submitted_at).toLocaleString()],["User ID",row.user_id]]:[["Street address",row.address_line],["City",row.city],["Region",row.region],["Postal code",row.postal_code],["Country",row.address_country],["Proof type",row.address_document_type],["Submitted",new Date(row.submitted_at).toLocaleString()],["User ID",row.user_id]];const paths=type==="identity"?[["Front of ID",row.front_path],["Back of ID",row.back_path],["Live selfie",row.selfie_path]]:[["Proof of address",row.address_document_path]],links=[];for(const [label,path] of paths){if(!path)continue;const {data,error}=await db.storage.from("nexa-private-verification").createSignedUrl(path,600);if(!error&&data?.signedUrl)links.push("<a class='verification-file-link' href='"+esc(data.signedUrl)+"' target='_blank' rel='noopener noreferrer'>"+esc(label)+" ↗</a>");}$("verification-review-details").innerHTML="<div class='review-meta'>"+fields.map(([k,v])=>"<span>"+esc(k)+"<strong>"+esc(v||"—")+"</strong></span>").join("")+"</div><div class='verification-file-links verification-modal-files'>"+(links.join("")||"<span class='file-note'>No private documents were found.</span>")+"</div><p class='file-note'>Document links are private and expire after 10 minutes.</p>";$("request-verification-again").textContent=row.status==="rejected"?"Keep request for changes":"Need more information";$("approve-verification").textContent=row.status==="approved"?"Keep Verified":"Approve verification";$("revoke-verification").hidden=row.status!=="approved";$("verification-review-modal").hidden=false;}
   async function updateVerification(status){if(!selectedVerification)return;const note=$("verification-admin-note").value.trim();if(status==="rejected"&&!note){alert("Please explain what the user needs to correct before requesting resubmission.");$("verification-admin-note").focus();return;}const buttons=[$("approve-verification"),$("request-verification-again")];buttons.forEach(b=>b.disabled=true);const {error}=await db.from("user_verification_submissions").update({status,admin_note:note||null,updated_at:new Date().toISOString()}).eq("id",selectedVerification.id);buttons.forEach(b=>b.disabled=false);if(error){alert("Could not update verification: "+error.message);return;}$("verification-review-modal").hidden=true;selectedVerification=null;await loadVerifications(currentVerificationType);}
+  let financeRows=[];
+  async function loadFinanceTransactions(){
+    const host=$("finance-transactions-list");if(!host)return;
+    message("finance-transactions-message","Loading shared wallet transactions…");
+    const {data,error}=await db.from("wallet_transactions").select("id,user_id,email,buyer_user_id,buyer_email,transaction_number,payment_method,buyer_payment_status,amount,currency,created_at,reference_type,transaction_type").eq("reference_type","order").order("created_at",{ascending:false}).limit(200);
+    if(error){financeRows=[];message("finance-transactions-message","Could not load transactions: "+error.message+" · Apply nexa-shared-marketplace-transactions.sql in Supabase.");host.innerHTML="<div class='empty-state'>Shared payment records are unavailable until the SQL migration is applied.</div>";return;}
+    financeRows=data||[];message("finance-transactions-message",financeRows.length+" marketplace payment(s)");
+    if(!financeRows.length){host.innerHTML="<div class='empty-state'>No buyer payments have been submitted yet.</div>";return;}
+    host.innerHTML=financeRows.map(row=>{
+      const status=row.buyer_payment_status||"processing";
+      const method=String(row.payment_method||"").replace(/_/g," ").replace(/\b\w/g,ch=>ch.toUpperCase());
+      const badge=status==="paid"?"approved":status==="not_paid"?"rejected":"pending";
+      return "<article class='listing-row finance-transaction-row'><div class='listing-copy'><span class='status "+badge+"'>"+esc(status==="paid"?"Paid":status==="not_paid"?"Not Paid":"Processing")+"</span><h3>"+esc(row.currency)+" "+esc(Number(row.amount||0).toFixed(2))+" · "+esc(method)+"</h3><p>Transaction ID: <b>"+esc(row.transaction_number||"—")+"</b></p><small>Date &amp; Time: "+esc(new Date(row.created_at).toLocaleString())+"</small><small>Buyer ID: "+esc(row.buyer_user_id||"—")+" · "+esc(row.buyer_email||"—")+"</small><small>Seller ID: "+esc(row.user_id)+" · "+esc(row.email)+"</small><small>Seller wallet: "+(status==="paid"?"Pending balance credited":"Awaiting admin payment confirmation")+"</small></div><div class='finance-transaction-actions'><button type='button' class='button button-primary' data-payment-status='paid' data-transaction=' "+esc(row.id)+"' "+(status==="paid"?"disabled":"")+">Confirm Paid</button><button type='button' class='button button-secondary' data-payment-status='not_paid' data-transaction='"+esc(row.id)+"' "+(status==="not_paid"?"disabled":"")+">Mark Not Paid</button></div></article>";
+    }).join("");
+  }
+  async function setFinancePaymentStatus(id,status){
+    const button=document.querySelector("[data-transaction='"+CSS.escape(id)+"'][data-payment-status='"+status+"']");
+    if(button)button.disabled=true;
+    const {error}=await db.rpc("admin_set_marketplace_payment_status",{p_transaction_id:id,p_status:status});
+    if(error){if(button)button.disabled=false;alert("Could not update payment: "+error.message);return;}
+    await loadFinanceTransactions();
+  }
   function showView(view,title,filter="all"){
     currentView=view;
     document.querySelectorAll(".admin-nav-link[data-view]").forEach(a=>a.classList.toggle("active",a.dataset.view===view&&a.dataset.title===title));
     $("current-page-title").textContent=title;
     $("page-heading-title").textContent=title;
     const isListingView=view==="overview"||view==="marketplace",isVerificationView=view==="seller-id"||view==="seller-address";
+    const isFinanceView=view==="finance-transactions"||view==="finance-buyer-payments";
     $("admin-dashboard").querySelector(".page-heading").hidden=!isListingView;
     $("stats-grid").hidden=view!=="overview";
     $("listing-workspace").hidden=!isListingView;
     $("verification-workspace").hidden=!isVerificationView;
+    $("finance-transactions-workspace").hidden=!isFinanceView;
     $("coming-soon-view").hidden=isVerificationView||!Boolean(viewCopy[view]);
     if(viewCopy[view]){$("coming-soon-title").textContent=viewCopy[view][0];$("coming-soon-description").textContent=viewCopy[view][1];}
     if(isVerificationView){$("verification-filter").value="pending_review";loadVerifications(view==="seller-id"?"identity":"address");}
+    if(isFinanceView)loadFinanceTransactions();
     if(isListingView){
       $("listing-section-title").textContent=view==="overview"?"Recent Listing Submissions":title;
       $("status-filter").value=filter;
@@ -194,6 +219,8 @@
     showView(link.dataset.view,link.dataset.title,link.dataset.filter||"all");
   }));
   $("listing-search").addEventListener("input",render);
+  $("refresh-finance-transactions").addEventListener("click",loadFinanceTransactions);
+  $("finance-transactions-list").addEventListener("click",e=>{const b=e.target.closest("[data-payment-status]");if(b)setFinancePaymentStatus(b.dataset.transaction.trim(),b.dataset.paymentStatus);});
   $("verification-filter").addEventListener("change",renderVerifications);
   $("refresh-verifications").addEventListener("click",()=>loadVerifications(currentVerificationType));
   $("verification-list").addEventListener("click",e=>{const b=e.target.closest("[data-verification-review]");if(b)openVerificationReview(b.dataset.verificationReview);});
