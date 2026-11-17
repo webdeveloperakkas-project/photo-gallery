@@ -46,8 +46,8 @@
     host.innerHTML=rows.map(row=>{
       const buyer=row.buyer_user_id===window.nexaCurrentUserId;
       const ownId=buyer?row.buyer_user_id:row.user_id,ownEmail=buyer?row.buyer_email:row.email;
-      const status=buyer?transactionStatusLabel(row.buyer_payment_status):"Pending";
-      const cls=buyer?(row.buyer_payment_status==="paid"?"is-paid":row.buyer_payment_status==="not_paid"?"is-not-paid":"is-processing"):"is-pending";
+      const status=buyer?transactionStatusLabel(row.buyer_payment_status):(row.buyer_payment_status==="not_paid"?"Not Paid":"Pending");
+      const cls=buyer?(row.buyer_payment_status==="paid"?"is-paid":row.buyer_payment_status==="not_paid"?"is-not-paid":"is-processing"):(row.buyer_payment_status==="not_paid"?"is-not-paid":"is-pending");
       const role=buyer?"Payment Sent":"Payment Received";
       const method=String(row.payment_method||"").replace(/_/g," ").replace(/\b\w/g,ch=>ch.toUpperCase());
       const date=row.created_at?new Date(row.created_at).toLocaleString():"—";
