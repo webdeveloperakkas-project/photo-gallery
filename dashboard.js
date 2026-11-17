@@ -105,64 +105,6 @@
     if(walletChannel)client.removeChannel(walletChannel);
     walletChannel=client.channel("nexa-wallet-"+userId).on("postgres_changes",{event:"*",schema:"public",table:"wallet_accounts",filter:"user_id=eq."+userId},()=>loadWallets(userId)).subscribe();
   };
-
-  // Marketplace payment transaction history: each party sees their own account identity.
-  let transactionUserId = null;
-  const transactionEscape = value => String(value ?? "").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-  const transactionMoney = (amount,currency) => {
-    const value=Number(amount||0);
-    try{return new Intl.NumberFormat(undefined,{style:"currency",currency:currency||"USD"}).format(value);}
-    catch(error){return (currency||"")+" "+value.toLocaleString();}
-  };
-  const transactionDate = value => {
-    const date=new Date(value);
-    return Number.isNaN(date.getTime())?"":new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(date);
-  };
-  const transactionStatus = status => ({
-    processing:["Processing","is-processing"],
-    paid:["Paid","is-paid"],
-    not_paid:["Not Paid","is-not-paid"]
-  }[String(status||"").toLowerCase()] || [String(status||"Pending"),"is-processing"]);
-  const loadMarketplaceTransactions = async userId => {
-    const host=document.getElementById("marketplace-transactions-list");
-    if(!host||!userId)return;
-    host.innerHTML="<div class='transactions-loading'>Loading your transactions…</div>";
-    const {data,error}=await client.rpc("nexa_get_my_marketplace_transactions");
-    if(error){
-      host.innerHTML="<div class='transactions-load-error'><b>Transaction records are not connected yet.</b><p>Run the Nexa SQL file <strong>nexa-marketplace-payment-transactions.sql</strong> in the Supabase SQL Editor, then refresh this page.</p><small>"+transactionEscape(error.message)+"</small></div>";
-      return;
-    }
-    const rows=Array.isArray(data)?data:[];
-    if(!rows.length){
-      host.innerHTML="<div class='marketplace-empty'><span>⇄</span><b>No transactions yet</b><p>When you submit or receive a marketplace payment, its transaction card will appear here.</p></div>";
-      return;
-    }
-    host.innerHTML=rows.map(row=>{
-      const role=String(row.participant_role||"Buyer");
-      const status=transactionStatus(row.status);
-      return "<article class='marketplace-transaction-card'>"+
-        "<div class='marketplace-transaction-header'>"+
-          "<div class='marketplace-transaction-heading-copy'>"+
-            "<span class='transaction-role-badge "+(role.toLowerCase()==="seller"?"is-seller":"is-buyer")+"'>"+transactionEscape(role)+"</span>"+
-            "<div class='marketplace-transaction-title'><b>"+transactionEscape(row.listing_title||"Marketplace payment")+"</b><small>Nexa Transaction No. <strong>"+transactionEscape(row.transaction_number||"—")+"</strong> · "+transactionEscape(transactionDate(row.created_at))+"</small></div>"+
-          "</div>"+
-          "<span class='transaction-status-pill "+status[1]+"'>"+transactionEscape(status[0])+"</span>"+
-        "</div>"+
-        "<div class='marketplace-transaction-fields'>"+
-          "<div class='transaction-data-item'><span>User ID</span><strong title='"+transactionEscape(row.user_id||"")+"'>"+transactionEscape(row.user_id||"—")+"</strong></div>"+
-          "<div class='transaction-data-item'><span>Email</span><strong title='"+transactionEscape(row.email||"")+"'>"+transactionEscape(row.email||"—")+"</strong></div>"+
-          "<div class='transaction-data-item'><span>Payment Transaction ID</span><strong title='"+transactionEscape(row.provider_transaction_id||"")+"'>"+transactionEscape(row.provider_transaction_id||"—")+"</strong></div>"+
-          "<div class='transaction-data-item'><span>Payment Method</span><strong>"+transactionEscape(row.payment_method||"—")+"</strong></div>"+
-          "<div class='transaction-data-item transaction-amount-item'><span>Amount</span><strong>"+transactionEscape(transactionMoney(row.amount,row.currency))+"</strong></div>"+
-        "</div>"+
-      "</article>";
-    }).join("");
-  };
-  const initTransactions = userId => {
-    transactionUserId=userId;
-    loadMarketplaceTransactions(userId);
-  };
-
   const initNotifications = userId => {
     loadNotifications(userId);
     if(notificationChannel)client.removeChannel(notificationChannel);
@@ -187,7 +129,6 @@
     setText("dash-dropdown-email",user.email || "");
     initNotifications(user.id);
     initWallet(user.id);
-    initTransactions(user.id);
     resolveWalletCountry(user.id);
   });
 
@@ -383,7 +324,6 @@
     document.querySelectorAll(".sidebar-navigation .nav-link").forEach(a=>a.classList.toggle("active",a.dataset.section===id));
     history.replaceState(null,"","#"+id);
     if(id==="my-listings-section") window.nexaRenderMyListings?.();
-    if(id==="transactions-section" && transactionUserId) loadMarketplaceTransactions(transactionUserId);
     if(id==="dashboard-section"||id==="browse-assets-section") window.nexaRenderApprovedListings?.();
     closeSidebar();
     window.scrollTo({top:0,behavior:"smooth"});
