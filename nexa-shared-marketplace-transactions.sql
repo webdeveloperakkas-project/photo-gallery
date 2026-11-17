@@ -29,7 +29,7 @@ create unique index wallet_transactions_reference_unique_idx
 drop policy if exists "Users can view their own wallet transactions" on public.wallet_transactions;
 create policy "Transaction participants can view shared wallet transactions"
   on public.wallet_transactions for select to authenticated
-  using (auth.uid() = user_id or auth.uid() = buyer_user_id);
+  using (auth.uid() = user_id or auth.uid() = buyer_user_id or public.has_role(auth.uid(), 'admin'::public.app_role));
 
 create or replace function public.nexa_submit_marketplace_payment(
   p_listing_id uuid,
