@@ -1,3 +1,20 @@
+-- Monetization status: null is retained for older listings until sellers update them.
+alter table public.asset_listings
+  add column if not exists monetization_status text;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conname='asset_listings_monetization_status_check'
+      and conrelid='public.asset_listings'::regclass
+  ) then
+    alter table public.asset_listings
+      add constraint asset_listings_monetization_status_check
+      check (monetization_status is null or monetization_status in ('monetized','not_monetized'));
+  end if;
+end $$;
+
 -- Nexa marketplace public asset detail + image storage
 -- Seller payout preferences are stored as a comma-separated text value in listing_data.details.
 -- Supported labels include Bank Transfer, Payoneer, Wise, PayPal, bKash, Nagad and Rocket.
@@ -126,7 +143,8 @@ select
     select count(*)
     from public.asset_listings all_seller_listings
     where all_seller_listings.user_id=l.user_id
-  ) as seller_all_listings
+  ) as seller_all_listings,
+  l.monetization_status
 from public.asset_listings l
 left join auth.users u on u.id=l.user_id
 left join lateral (
@@ -142,6 +160,6 @@ left join lateral (
 where l.status='approved'
 group by
   l.id,l.title,l.category,l.summary,l.asking_price,l.price_currency,
-  l.submitted_at,l.user_id,u.raw_user_meta_data,u.created_at,l.listing_data;
+  l.submitted_at,l.user_id,u.raw_user_meta_data,u.created_at,l.listing_data,l.monetization_status;
 
 grant select on public.marketplace_public_listings to anon,authenticated;
