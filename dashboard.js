@@ -42,20 +42,49 @@
   const walletMethodMarks = {bank_transfer:"▤",payoneer:"P",wise:"W",paypal:"P",bkash:"bK",nagad:"N",rocket:"R"};
   const walletMoney = (value,currency) => new Intl.NumberFormat(undefined,{style:"currency",currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(value)||0);
   const walletEscape = value => String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  let walletCountryCode = "US";
+  let walletCurrency = "USD";
+  const localMethods = ["bkash","nagad","rocket","bank_transfer"];
   const walletTotals = currency => walletRows.filter(row=>row.currency===currency).reduce((sum,row)=>({available:sum.available+Number(row.available_balance||0),pending:sum.pending+Number(row.pending_balance||0)}),{available:0,pending:0});
   const renderWalletTotals = () => {
-    ["USD","EUR","GBP","BDT"].forEach(currency=>{
-      const totals=walletTotals(currency),suffix=currency.toLowerCase();
-      const available=walletMoney(totals.available,currency),pending=walletMoney(totals.pending,currency);
-      ["wallet-total-available-","header-wallet-available-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=available;});
-      ["wallet-total-pending-","header-wallet-pending-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=pending;});
-    });
+    const currency=walletCurrency,suffix=currency.toLowerCase(),totals=walletTotals(currency);
+    const available=walletMoney(totals.available,currency),pending=walletMoney(totals.pending,currency);
+    ["wallet-total-available-","header-wallet-available-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=available;});
+    ["wallet-total-pending-","header-wallet-pending-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=pending;});
+    const label=document.getElementById("header-wallet-currency");if(label)label.textContent=currency;
+    const rows=document.getElementById("header-wallet-balance-rows");
+    if(rows)rows.innerHTML='<div class="wallet-dropdown-balance-row"><span>Available · '+currency+'</span><b>'+available+'</b></div><div class="wallet-dropdown-balance-row"><span>Pending · '+currency+'</span><b>'+pending+'</b></div>';
+    document.querySelectorAll(".wallet-summary-card[data-wallet-currency]").forEach(card=>{card.hidden=card.dataset.walletCurrency!==currency;});
+  };
+  const countryIsBangladesh = value => /bangladesh/i.test(String(value||"")) || /^BD$/i.test(String(value||"").trim());
+  const resolveWalletCountry = async userId => {
+    let selectedCountry="";
+    try {
+      const result=await client.from("user_verification_submissions").select("verification_type,status,country,address_country,submitted_at").eq("user_id",userId).order("submitted_at",{ascending:false});
+      const rows=result.data||[];
+      if(!result.error&&rows.length){
+        const identity=rows.find(row=>row.verification_type==="identity"&&row.status==="approved")||rows.find(row=>row.verification_type==="identity");
+        const address=rows.find(row=>row.verification_type==="address"&&row.status==="approved")||rows.find(row=>row.verification_type==="address");
+        selectedCountry=identity?.country||address?.address_country||"";
+      }
+    } catch(error) {}
+    if(!selectedCountry){
+      try {const result=await client.from("user_profiles").select("country").eq("user_id",userId).maybeSingle();if(!result.error)selectedCountry=result.data?.country||"";} catch(error) {}
+    }
+    if(selectedCountry){walletCountryCode=countryIsBangladesh(selectedCountry)?"BD":"US";}
+    else {
+      try {const response=await fetch("https://ipapi.co/json/",{signal:AbortSignal.timeout(4500)});if(response.ok){const geo=await response.json();walletCountryCode=String(geo.country_code||"").toUpperCase()==="BD"?"BD":"US";}}
+      catch(error){walletCountryCode="US";}
+    }
+    walletCurrency=walletCountryCode==="BD"?"BDT":"USD";
+    renderWalletCards();
   };
   const renderWalletCards = () => {
     const host=document.getElementById("wallet-cards-grid");
     if(!host)return;
     if(!walletRows.length){host.innerHTML="<div class='wallet-loading-state'>No wallet accounts were found. Please contact support to activate your wallet accounts.</div>";renderWalletTotals();return;}
-    host.innerHTML=walletRows.map(row=>{
+    const visibleRows=walletRows.filter(row=>row.currency===walletCurrency&&(walletCountryCode==="BD"?localMethods.includes(String(row.payment_method||"").toLowerCase()):!localMethods.includes(String(row.payment_method||"").toLowerCase())));
+    host.innerHTML=visibleRows.map(row=>{
       const method=String(row.payment_method||"").toLowerCase(),currency=String(row.currency||"USD").toUpperCase();
       const available=Number(row.available_balance||0),pending=Number(row.pending_balance||0),earned=Number(row.total_earned||0);
       const status=pending>0?"Pending":available>0?"Available":"No funds yet";
@@ -99,6 +128,7 @@
     setText("dash-dropdown-email",user.email || "");
     initNotifications(user.id);
     initWallet(user.id);
+    resolveWalletCountry(user.id);
   });
 
   const closeSidebar = () => { sidebar?.classList.remove("open"); overlay?.classList.remove("show"); menuToggle?.setAttribute("aria-expanded","false"); };
