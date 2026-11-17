@@ -229,3 +229,33 @@ body.image-lightbox-open{overflow:hidden}
 .checkout-payment-warning,.checkout-payment-status{padding:12px 14px;border-radius:9px;background:#fff8e5;color:#795e25!important}
 .checkout-payment-status{background:#eff8f3;color:#426b55!important}
 @media(max-width:700px){.checkout-payment-page{padding:18px 15px;margin:10px auto 30px}.checkout-payment-page h1{font-size:21px}}
+
+
+/* Payment information screen shown after the buyer selects a payment method */
+.payment-information-card{max-width:760px;margin:18px auto 45px;padding:28px;background:#fff;border:1px solid #dcebe3;border-radius:17px;box-shadow:0 12px 36px #1432230d}
+.payment-information-heading{padding-bottom:16px;border-bottom:1px solid #e8f0eb}
+.payment-information-heading h1{margin:6px 0;font:800 25px Manrope,sans-serif;color:#204a38}
+.payment-information-heading p{margin:0;color:#718178;font-size:12px;line-height:1.7}
+.payment-provider-heading{display:flex;align-items:center;gap:13px;margin-bottom:15px}
+.payment-provider-heading .payout-brand-logo{width:54px;height:44px;font-size:13px}
+.payment-provider-heading .logo-bank{font-size:23px}
+.payment-provider-heading>div{display:grid;gap:4px}
+.payment-provider-heading strong{font:800 15px Manrope,sans-serif;color:#204a38}
+.payment-provider-heading small{font-size:10px;color:#7b8a80}
+.payment-detail-row{display:grid;grid-template-columns:minmax(105px,1fr) minmax(0,1.5fr) auto;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #e5eee8}
+.payment-detail-row span{font-size:11px;color:#738278}
+.payment-detail-row strong{font-size:13px;color:#244b39;overflow-wrap:anywhere;text-align:right}
+.payment-copy-button{border:0;border-radius:7px;background:#e4f5ee;color:#17634f;padding:8px 11px;font-size:10px;font-weight:800;cursor:pointer}
+.payment-instruction{margin:12px 0 0;color:#68796e;font-size:11px;line-height:1.65}
+.payment-destination{margin:18px 0;padding:19px;border:1px solid #dcebe3;border-radius:13px;background:#f8fcf9}
+.payment-destination[hidden]{display:none!important}
+.checkout-payment-form{display:grid;gap:9px;margin:20px 0 12px;padding:18px;border:1px solid #e3ece6;border-radius:12px;background:#fff}
+.checkout-payment-form label{font-size:12px;font-weight:800;color:#315b47}
+.checkout-payment-form input{width:100%;min-height:45px;border:1px solid #d8e5dd;border-radius:9px;padding:11px 13px;font:12px "DM Sans",sans-serif;color:#244b39;outline:none}
+.checkout-payment-form input:focus{border-color:#13b0aa;box-shadow:0 0 0 3px #13b0aa1a}
+.checkout-payment-form button{width:100%;min-height:45px}
+.checkout-payment-form button:disabled{opacity:.65;cursor:not-allowed}
+.checkout-payment-status{padding:14px 16px;border:1px solid #cfe9d9;border-radius:10px;background:#eff9f2;color:#17634f;font-size:12px;line-height:1.7;font-weight:700}
+.checkout-payment-status[hidden]{display:none!important}
+.checkout-payment-warning{margin:14px 0 0;padding:12px 14px;border-radius:9px;background:#fff8e5;color:#795e25;font-size:11px;line-height:1.65}
+@media(max-width:600px){.payment-information-card{padding:18px 14px;margin:10px auto 28px}.payment-information-heading h1{font-size:21px}.payment-destination{padding:14px}.payment-detail-row{grid-template-columns:minmax(90px,1fr) minmax(0,1.3fr) auto;gap:7px}.payment-detail-row strong{font-size:11px}.payment-copy-button{padding:7px 8px;font-size:9px}}
