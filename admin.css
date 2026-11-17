@@ -41,3 +41,10 @@
 
 .verification-controls{display:flex;align-items:flex-end;gap:10px}.verification-admin-card{align-items:flex-start}.verification-admin-card .listing-copy{flex:1}.verification-file-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.verification-file-link{display:inline-flex;padding:8px 10px;border:1px solid #cfe6df;border-radius:7px;background:#f5fbf9;color:#147d6b;font-size:10px;font-weight:800;text-decoration:none}.verification-file-link:hover{background:#e8f7f3}.verification-modal-files{margin:16px 0}
 @media(max-width:760px){.verification-controls{width:100%;align-items:stretch;flex-direction:column}.verification-controls .filter-control select{width:100%}.verification-admin-card{flex-direction:column}.verification-admin-card>button{width:100%}}
+
+.finance-transaction-row{align-items:center}
+.finance-transaction-row .listing-copy{min-width:0}
+.finance-transaction-row .listing-copy small{display:block;margin-top:5px;overflow-wrap:anywhere}
+.finance-transaction-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.finance-transaction-actions button{white-space:nowrap}
+@media(max-width:700px){.finance-transaction-row{align-items:stretch;flex-direction:column}.finance-transaction-actions{width:100%}.finance-transaction-actions button{flex:1}}
