@@ -353,6 +353,7 @@
   document.addEventListener("click",event=>{
     if(profileWrap&&!profileWrap.contains(event.target)&&profileDropdown&&!profileDropdown.hidden){profileDropdown.hidden=true;profileToggle?.setAttribute("aria-expanded","false");}
     if(walletWrap&&!walletWrap.contains(event.target)&&walletDropdown&&!walletDropdown.hidden){walletDropdown.hidden=true;walletToggle?.setAttribute("aria-expanded","false");}
+    if(notificationWrap&&!notificationWrap.contains(event.target)&&notificationDropdown&&!notificationDropdown.hidden){notificationDropdown.hidden=true;notificationToggle?.setAttribute("aria-expanded","false");}
   });
   document.addEventListener("keydown",event=>{
     if(event.key==="Escape"){closeSidebar();if(notificationDropdown&&!notificationDropdown.hidden){notificationDropdown.hidden=true;notificationToggle?.setAttribute("aria-expanded","false");}if(profileDropdown&&!profileDropdown.hidden){profileDropdown.hidden=true;profileToggle?.setAttribute("aria-expanded","false");}if(walletDropdown&&!walletDropdown.hidden){walletDropdown.hidden=true;walletToggle?.setAttribute("aria-expanded","false");}}
