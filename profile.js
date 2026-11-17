@@ -1,3 +1,4 @@
+
 (() => {
 const SUPABASE_URL="https://hguwdcmwqcpswyxtskcb.supabase.co",KEY="sb_publishable_NLm2aSYg_j-zzRNSU-86gQ_Oj-xyHr2",HOME="https://webdeveloperakkas-project.github.io/photo-gallery/",BUCKET="nexa-private-verification",MAX=2*1024*1024;
 
