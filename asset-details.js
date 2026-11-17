@@ -102,9 +102,10 @@ $("checkout-continue")?.addEventListener("click",()=>{
  $("checkout-payment-placeholder").hidden=isBkash||isBank;
  $("checkout-placeholder-method").textContent=selectedCheckoutMethod+" receiving details";
  $("checkout-transaction-id").value="";
- $("checkout-transaction-id").disabled=false;
- $("checkout-submit-payment").disabled=false;
- $("checkout-submit-payment").textContent="Submit Payment";
+ const detailsAvailable=isBkash||isBank;
+ $("checkout-transaction-id").disabled=!detailsAvailable;
+ $("checkout-submit-payment").disabled=!detailsAvailable;
+ $("checkout-submit-payment").textContent=detailsAvailable?"Submit Payment":"Payment Details Not Available";
  $("checkout-payment-status").hidden=true;
  window.scrollTo({top:0,behavior:"smooth"});
 });
