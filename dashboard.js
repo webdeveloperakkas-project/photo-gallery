@@ -14,6 +14,37 @@
   const walletWrap = document.getElementById("dash-wallet-menu-wrap");
   const walletToggle = document.getElementById("dash-wallet-toggle");
   const walletDropdown = document.getElementById("dash-wallet-dropdown");
+  const notificationWrap = document.getElementById("dash-notification-menu-wrap");
+  const notificationToggle = document.getElementById("dash-notification-toggle");
+  const notificationDropdown = document.getElementById("dash-notification-dropdown");
+  const notificationCount = document.getElementById("dash-notification-count");
+  const notificationList = document.getElementById("dash-notification-list");
+  const notificationMarkAll = document.getElementById("dash-notification-mark-all");
+  let notificationRows = [];
+  let notificationChannel = null;
+  const notificationIcon = type => type==="verification"?"✓":type==="listing"?"◈":type==="order"?"▣":"✦";
+  const formatNotificationTime = value => {const date=new Date(value);return Number.isNaN(date.getTime())?"":new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(date);};
+  const renderNotifications = () => {
+    const unread=notificationRows.filter(row=>!row.is_read).length;
+    if(notificationCount){notificationCount.textContent=unread>99?"99+":String(unread);notificationCount.hidden=unread===0;}
+    if(!notificationList)return;
+    if(!notificationRows.length){notificationList.innerHTML="<div class='notification-empty'><span>♧</span><b>You're all caught up</b><p>New updates will appear here.</p></div>";return;}
+    notificationList.innerHTML=notificationRows.slice(0,30).map(row=>"<a class='notification-item "+(row.is_read?"is-read":"is-unread")+"' href='"+safeText(row.link||"dashboard.html")+"' data-notification-id='"+safeText(row.id)+"'><span class='notification-item-icon'>"+notificationIcon(row.type)+"</span><span class='notification-item-copy'><b>"+safeText(row.title)+"</b><span>"+safeText(row.message)+"</span><small>"+safeText(formatNotificationTime(row.created_at))+"</small></span>"+(!row.is_read?"<i class='notification-unread-dot' aria-label='Unread'></i>":"")+"</a>").join("");
+  };
+  const loadNotifications = async userId => {
+    const {data,error}=await client.from("user_notifications").select("id,type,title,message,link,is_read,created_at").eq("user_id",userId).order("created_at",{ascending:false}).limit(30);
+    if(error){if(notificationList)notificationList.innerHTML="<div class='notification-empty'><b>Notifications are temporarily unavailable</b><p>Please refresh the page in a moment.</p></div>";return;}
+    notificationRows=data||[];renderNotifications();
+  };
+  const initNotifications = userId => {
+    loadNotifications(userId);
+    if(notificationChannel)client.removeChannel(notificationChannel);
+    notificationChannel=client.channel("nexa-notifications-"+userId).on("postgres_changes",{event:"INSERT",schema:"public",table:"user_notifications",filter:"user_id=eq."+userId},payload=>{
+      if(!payload.new)return;
+      notificationRows=[payload.new,...notificationRows.filter(row=>row.id!==payload.new.id)].slice(0,30);
+      renderNotifications();
+    }).subscribe();
+  };
 
   if (!client) { window.location.replace(home + "#auth-login"); return; }
   client.auth.getSession().then(({data,error}) => {
@@ -27,6 +58,7 @@
     setText("dash-dropdown-avatar",initial);
     setText("dash-dropdown-name",displayName);
     setText("dash-dropdown-email",user.email || "");
+    initNotifications(user.id);
   });
 
   const closeSidebar = () => { sidebar?.classList.remove("open"); overlay?.classList.remove("show"); menuToggle?.setAttribute("aria-expanded","false"); };
@@ -234,12 +266,27 @@
 
   profileToggle?.addEventListener("click",()=>{const opening=profileDropdown?.hidden??true;if(profileDropdown)profileDropdown.hidden=!opening;profileToggle.setAttribute("aria-expanded",String(opening));});
   walletToggle?.addEventListener("click",()=>{const opening=walletDropdown?.hidden??true;if(walletDropdown)walletDropdown.hidden=!opening;walletToggle.setAttribute("aria-expanded",String(opening));});
+  notificationToggle?.addEventListener("click",()=>{const opening=notificationDropdown?.hidden??true;if(notificationDropdown)notificationDropdown.hidden=!opening;notificationToggle.setAttribute("aria-expanded",String(opening));});
+  notificationList?.addEventListener("click",async event=>{
+    const link=event.target.closest("[data-notification-id]");if(!link)return;
+    event.preventDefault();
+    const row=notificationRows.find(item=>item.id===link.dataset.notificationId);
+    if(row&&!row.is_read){const {error}=await client.from("user_notifications").update({is_read:true}).eq("id",row.id);if(error){alert("Could not update this notification. Please try again.");return;}row.is_read=true;renderNotifications();}
+    if(link.href)window.location.href=link.href;
+  });
+  notificationMarkAll?.addEventListener("click",async()=>{
+    const {data,error}=await client.auth.getUser();if(error||!data?.user)return;
+    const {error:updateError}=await client.from("user_notifications").update({is_read:true}).eq("user_id",data.user.id).eq("is_read",false);
+    if(updateError){alert("Could not mark notifications as read. Please try again.");return;}
+    notificationRows=notificationRows.map(row=>({...row,is_read:true}));renderNotifications();
+  });
   document.addEventListener("click",event=>{
     if(profileWrap&&!profileWrap.contains(event.target)&&profileDropdown&&!profileDropdown.hidden){profileDropdown.hidden=true;profileToggle?.setAttribute("aria-expanded","false");}
     if(walletWrap&&!walletWrap.contains(event.target)&&walletDropdown&&!walletDropdown.hidden){walletDropdown.hidden=true;walletToggle?.setAttribute("aria-expanded","false");}
+    if(notificationWrap&&!notificationWrap.contains(event.target)&&notificationDropdown&&!notificationDropdown.hidden){notificationDropdown.hidden=true;notificationToggle?.setAttribute("aria-expanded","false");}
   });
   document.addEventListener("keydown",event=>{
-    if(event.key==="Escape"){closeSidebar();if(profileDropdown&&!profileDropdown.hidden){profileDropdown.hidden=true;profileToggle?.setAttribute("aria-expanded","false");}if(walletDropdown&&!walletDropdown.hidden){walletDropdown.hidden=true;walletToggle?.setAttribute("aria-expanded","false");}}
+    if(event.key==="Escape"){closeSidebar();if(notificationDropdown&&!notificationDropdown.hidden){notificationDropdown.hidden=true;notificationToggle?.setAttribute("aria-expanded","false");}if(profileDropdown&&!profileDropdown.hidden){profileDropdown.hidden=true;profileToggle?.setAttribute("aria-expanded","false");}if(walletDropdown&&!walletDropdown.hidden){walletDropdown.hidden=true;walletToggle?.setAttribute("aria-expanded","false");}}
   });
   logout?.addEventListener("click",async()=>{logout.disabled=true;const {error}=await client.auth.signOut();if(error){logout.disabled=false;alert("Could not log out. Please try again.");return;}window.location.replace(home);});
   // Nexa listing wizard: four data steps, a complete preview, and a separate verification submission.
