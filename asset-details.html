@@ -50,11 +50,34 @@
           <section class="checkout-card"><h2>Available Payment Methods</h2><p class="checkout-method-intro">Select a payment method to continue. Nexa controls the company receiving account; sellers cannot add or change payment numbers.</p><div id="checkout-methods" class="checkout-methods" aria-label="Available payment methods"></div><div id="checkout-no-methods" class="checkout-empty" hidden>The seller has not added any preferred payment methods to this listing yet.</div><button type="button" id="checkout-continue" class="buy-button checkout-continue">Next</button></section>
         </div>
         <section id="checkout-payment-page" class="checkout-payment-page" hidden>
-          <button type="button" id="checkout-payment-back" class="checkout-back">← Back to Checkout</button><span class="eyebrow">NEXA PAYMENT</span><h1 id="checkout-payment-title">Complete Your Payment</h1><p id="checkout-payment-intro"></p>
-          <div class="checkout-payment-order"><span>Order amount</span><strong id="checkout-payment-amount"></strong><small id="checkout-payment-method"></small></div>
-          <div id="checkout-bkash-destination" class="checkout-destination" hidden><span>Nexa company bKash number</span><strong id="checkout-bkash-number">01840398000</strong><button type="button" id="checkout-copy-bkash">Copy number</button></div>
-          <div id="checkout-payment-placeholder" class="checkout-payment-placeholder" hidden><strong>Company receiving details</strong><span>Add number here</span><small>Nexa will display its verified company receiving details for this payment method here.</small></div>
-          <p class="checkout-payment-warning">Only pay to the company account displayed on this page. The seller cannot choose or change this receiving number.</p><p class="checkout-payment-status">After payment, your transaction will require verification. Seller funds will not be released automatically.</p>
+          <button type="button" id="checkout-payment-back" class="checkout-back">← Back to Checkout</button>
+          <div class="payment-information-card">
+            <div class="payment-information-heading"><span class="eyebrow">NEXA SECURE CHECKOUT</span><h1>Payment Information</h1><p>Send the exact order amount to the Nexa company account below, then enter your transaction ID.</p></div>
+            <div class="checkout-payment-order"><span>Order amount</span><strong id="checkout-payment-amount"></strong><small id="checkout-payment-method"></small></div>
+            <div id="checkout-bkash-destination" class="payment-destination" hidden>
+              <div class="payment-provider-heading"><span class="payout-brand-logo logo-bkash">bKash</span><div><strong>bKash</strong><small>Company receiving account</small></div></div>
+              <div class="payment-detail-row"><span>bKash number</span><strong id="checkout-bkash-number">01840398000</strong><button type="button" id="checkout-copy-bkash" class="payment-copy-button">Copy</button></div>
+              <div class="payment-detail-row"><span>Account type</span><strong>Personal Account</strong></div>
+              <p class="payment-instruction">Send money to this number using bKash. Make sure the amount matches the order total.</p>
+            </div>
+            <div id="checkout-bank-destination" class="payment-destination" hidden>
+              <div class="payment-provider-heading"><span class="payout-brand-logo logo-bank">▤</span><div><strong>Bank Transfer</strong><small>Nexa company bank account</small></div></div>
+              <div class="payment-detail-row"><span>Bank name</span><strong>0000</strong></div>
+              <div class="payment-detail-row"><span>Account name</span><strong>Nexa</strong></div>
+              <div class="payment-detail-row"><span>Account number</span><strong>0000</strong><button type="button" id="checkout-copy-bank" class="payment-copy-button">Copy</button></div>
+              <div class="payment-detail-row"><span>Routing number</span><strong>0000</strong></div>
+              <div class="payment-detail-row"><span>Branch name</span><strong>0000</strong></div>
+              <p class="payment-instruction">Transfer the exact order amount to the bank account shown above.</p>
+            </div>
+            <div id="checkout-payment-placeholder" class="checkout-payment-placeholder" hidden><strong id="checkout-placeholder-method">Company receiving details</strong><span>Add number here</span><small>Nexa's verified company receiving details for this method will be added here. Do not send payment until the details are available.</small></div>
+            <form id="checkout-payment-form" class="checkout-payment-form">
+              <label for="checkout-transaction-id">Transaction ID</label>
+              <input id="checkout-transaction-id" name="transaction_id" type="text" maxlength="120" autocomplete="off" placeholder="Enter your payment transaction ID" required>
+              <button type="submit" id="checkout-submit-payment" class="buy-button">Submit Payment</button>
+            </form>
+            <div id="checkout-payment-status" class="checkout-payment-status" role="status" aria-live="polite" hidden></div>
+            <p class="checkout-payment-warning">Only pay to the Nexa company account shown here. Sellers cannot add or change payment destinations.</p>
+          </div>
         </section>
       </section>
         <section class="detail-hero"><div class="detail-price-panel"><span class="available-label">● Available</span><span class="detail-category-pill" id="detail-category-pill"></span><span class="detail-monetization-status" id="detail-monetization-status" hidden></span><div class="detail-price-media-row"><div class="detail-price-copy"><div class="detail-price" id="detail-price"></div><div class="detail-list-date" id="detail-date"></div></div><div class="detail-cover-frame" id="detail-cover-frame"><img id="detail-cover" alt="Asset preview"></div></div><div class="detail-actions"><button type="button" class="contact-button" id="contact-seller">Contact Seller</button><button type="button" class="buy-button" id="buy-now">Buy Now</button></div><p class="detail-action-note">Contact the seller or review checkout details. Secure payment processing will be enabled after Nexa connects its payment provider.</p></div></section>
