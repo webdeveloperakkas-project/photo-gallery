@@ -44,7 +44,7 @@
   const walletEscape = value => String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   const walletTotals = currency => walletRows.filter(row=>row.currency===currency).reduce((sum,row)=>({available:sum.available+Number(row.available_balance||0),pending:sum.pending+Number(row.pending_balance||0)}),{available:0,pending:0});
   const renderWalletTotals = () => {
-    ["USD","BDT"].forEach(currency=>{
+    ["USD","EUR","GBP","BDT"].forEach(currency=>{
       const totals=walletTotals(currency),suffix=currency.toLowerCase();
       const available=walletMoney(totals.available,currency),pending=walletMoney(totals.pending,currency);
       ["wallet-total-available-","header-wallet-available-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=available;});
