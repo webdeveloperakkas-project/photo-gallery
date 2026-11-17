@@ -109,13 +109,6 @@ $("checkout-continue")?.addEventListener("click",()=>{
  $("checkout-payment-status").hidden=true;
  window.scrollTo({top:0,behavior:"smooth"});
 });
-$("checkout-payment-back")?.addEventListener("click",()=>{
- $("checkout-payment-page").hidden=true;
- const heading=document.querySelector(".checkout-heading"),layout=document.querySelector(".checkout-layout");
- if(heading)heading.hidden=false;
- if(layout)layout.hidden=false;
- window.scrollTo({top:0,behavior:"smooth"});
-});
 $("checkout-payment-form")?.addEventListener("submit",event=>{
  event.preventDefault();
  const transactionId=$("checkout-transaction-id").value.trim();
