@@ -57,10 +57,11 @@
       const audience=social&&audienceValue!==null&&audienceValue!==undefined?"<span>"+audienceLabel+": "+safeText(Number(audienceValue).toLocaleString())+"</span>":"";
       const visitors=["Website","E-commerce"].includes(item.category)&&item.monthly_visitors!==null&&item.monthly_visitors!==undefined?"<span>Total Monthly Visitors: "+safeText(Number(item.monthly_visitors).toLocaleString())+"</span>":"";
       const cover=item.cover_image_path?client.storage.from("asset-listing-media").getPublicUrl(item.cover_image_path).data.publicUrl:"";
-      const listingCategory=item.subcategory||item.category||"Digital Asset";
+      const listingCategory=item.category||"Digital Asset";
       const seller=item.seller_name||"Nexa Seller";
       const revenue=item.monthly_revenue!==null&&item.monthly_revenue!==undefined?"<span>Monthly Revenue: "+safeText(item.financial_currency||item.price_currency)+" "+safeText(Number(item.monthly_revenue).toLocaleString())+"</span>":"";
-      return "<a class='approved-listing-card approved-listing-link' href='asset-details.html?id="+encodeURIComponent(item.id)+"' aria-label='View "+safeText(item.title)+" details'>"+(cover?"<img class='approved-listing-cover' src='"+safeText(cover)+"' alt='"+safeText(listingCategory)+" preview' loading='lazy'>":"<div class='approved-listing-cover approved-listing-cover-placeholder'><span>"+safeText(listingCategory)+"</span></div>")+"<div class='approved-listing-top'><span class='approved-listing-subcategory'>"+safeText(listingCategory)+"</span><span class='approved-listing-status'>Available</span></div><h3>"+safeText(item.title)+"</h3><div class='approved-listing-seller'><span>Seller: <b>"+safeText(seller)+"</b></span><span class='seller-card-rating'>★ Not rated yet</span></div><div class='approved-listing-facts'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(social?audience:visitors)+revenue+"</div><div class='approved-listing-footer'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><span class='approved-details-link'>Details</span></div></a>";
+      const monetization=item.monetization_status==="monetized"?"<span class=\'approved-monetization-status is-monetized\'>Monetized</span>":item.monetization_status==="not_monetized"?"<span class=\'approved-monetization-status is-not-monetized\'>Not Monetized</span>":"";
+       return "<a class=\'approved-listing-card approved-listing-link\' href=\'asset-details.html?id="+encodeURIComponent(item.id)+"\' aria-label=\'View "+safeText(item.title)+" details\'>"+(cover?"<img class=\'approved-listing-cover\' src=\'"+safeText(cover)+"\' alt=\'"+safeText(listingCategory)+" preview\' loading=\'lazy\'>":"<div class=\'approved-listing-cover approved-listing-cover-placeholder\'><span>"+safeText(listingCategory)+"</span></div>")+"<div class=\'approved-listing-top\'><span class=\'approved-listing-status\'>Available</span>"+monetization+"</div><h3>"+safeText(item.title)+"</h3><div class=\'approved-listing-seller\'><span>Seller: <b>"+safeText(seller)+"</b></span><span class=\'seller-card-rating\'>★ Not rated yet</span></div><div class=\'approved-listing-facts\'>"+(item.country?"<span>🌍 "+safeText(item.country)+"</span>":"")+(social?audience:visitors)+revenue+"</div><div class=\'approved-listing-footer\'><strong>"+safeText(item.price_currency)+" "+safeText(Number(item.asking_price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+"</strong><span class=\'approved-details-link\'>Details</span></div></a>";
     }).join("")+"</div></section>").join("");
   };
   const updateCountryOptions=items=>{
@@ -72,7 +73,7 @@
   };
   const loadApprovedListings=async()=>{
     renderMarketplaceEmpty(browseListingsHost,"Loading approved listings…","Please wait while the latest approved digital assets are loaded.");
-    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,subcategory,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency,cover_image_path,seller_name").order("submitted_at",{ascending:false});
+    const {data,error}=await client.from("marketplace_public_listings").select("id,title,category,subcategory,summary,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,monthly_revenue,financial_currency,cover_image_path,seller_name,monetization_status").order("submitted_at",{ascending:false});
     if(error){renderMarketplaceEmpty(browseListingsHost,"Marketplace listings could not be loaded",error.message+" — check the Nexa public marketplace view and access setup.");return;}
     approvedMarketplaceItems=data||[];
     marketplaceLoaded=true;
@@ -315,7 +316,7 @@
       const details=[],seen=new Set();
       [...listingForm.querySelectorAll("input,select,textarea")].forEach(el=>{
         if(el.disabled||el.type==="button"||el.type==="submit"||el.type==="radio"&&!el.checked)return;
-        const key=el.name||el.id||"field"; if(el.type!=="checkbox"&&seen.has(key))return; seen.add(key);
+        const key=el.name||el.id||"field"; if(key==="monetization_status")return; if(el.type!=="checkbox"&&seen.has(key))return; seen.add(key);
         let value=el.type==="file"?[...(el.files||[])].map(file=>file.name).join(", "):String(el.value||"").trim();
         if(el.type==="checkbox"){if(!el.checked)return;const existing=details.find(row=>row.key===key);if(existing){existing.value+=", "+value;return;}}
         if(value){const label=el.closest("label")?.childNodes[0]?.textContent?.replace("*","").trim()||key.replace(/_/g," ");details.push({key,label,value});}
@@ -338,7 +339,7 @@
         const logoPath=await uploadImage(logo.files[0],"logo");
         const galleryPaths=[];
         for(let i=0;i<(extras.files?.length||0);i++)galleryPaths.push(await uploadImage(extras.files[i],"gallery",i+1));
-        const payload={id:listingId,user_id:authData.user.id,title:[listingForm.elements.platform.value,listingForm.elements.asset_type.value,listingForm.elements.country.value].filter(Boolean).join(" - ").slice(0,100),category:listingForm.elements.platform.value,summary:String(listingForm.elements.description.value||"").trim().replace(/\s+/g," ").slice(0,180)||"Digital asset listing",asking_price:Number(listingForm.elements.asking_price.value),price_currency:listingForm.elements.price_currency.value,status:"pending",listing_data:{details,cover_image_path:coverPath,logo_image_path:logoPath,gallery_image_paths:galleryPaths,submitted_file_names:[...(cover.files||[]),...(logo?.files||[]),...(extras.files||[]),...(document.getElementById("listing-proof-files")?.files||[])].map(file=>file.name)}};
+        const payload={id:listingId,user_id:authData.user.id,title:listingForm.elements.platform.value,category:listingForm.elements.platform.value,monetization_status:listingForm.elements.monetization_status.value,summary:String(listingForm.elements.description.value||"").trim().replace(/\s+/g," ").slice(0,180)||"Digital asset listing",asking_price:Number(listingForm.elements.asking_price.value),price_currency:listingForm.elements.price_currency.value,status:"pending",listing_data:{details,cover_image_path:coverPath,logo_image_path:logoPath,gallery_image_paths:galleryPaths,submitted_file_names:[...(cover.files||[]),...(logo?.files||[]),...(extras.files||[]),...(document.getElementById("listing-proof-files")?.files||[])].map(file=>file.name)}};
         const {error}=await client.from("asset_listings").insert(payload);if(error)throw error;
         confirmModal.hidden=true;hideScreens();view="status";statusScreen.hidden=false;const note=statusScreen.querySelector(".listing-status-note");if(note)note.hidden=true;await window.nexaRenderMyListings?.();listingForm.reset();renderDynamic();renderImages();
       } catch(error) {feedback.hidden=false;feedback.textContent="Could not submit listing: "+(error.message||"Please try again.");}
