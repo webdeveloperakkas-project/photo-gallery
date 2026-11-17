@@ -90,23 +90,45 @@ const syncCheckoutSelection=()=>{
 $("checkout-methods")?.addEventListener("change",syncCheckoutSelection);
 $("checkout-continue")?.addEventListener("click",()=>{
  if(!selectedCheckoutMethod){notice("Please select a payment method first.");return;}
- document.querySelector(".checkout-heading").hidden=true;
- document.querySelector(".checkout-layout").hidden=true;
+ const heading=document.querySelector(".checkout-heading"),layout=document.querySelector(".checkout-layout");
+ if(heading)heading.hidden=true;
+ if(layout)layout.hidden=true;
  $("checkout-payment-page").hidden=false;
- $("checkout-payment-title").textContent="Complete Your "+selectedCheckoutMethod+" Payment";
- $("checkout-payment-intro").textContent="Use the Nexa company receiving details below to pay for this listing.";
  $("checkout-payment-amount").textContent=money(currentItem.price_currency,currentItem.asking_price);
- $("checkout-payment-method").textContent="Payment method: "+selectedCheckoutMethod;
- const isBkash=selectedCheckoutMethod.toLowerCase()==="bkash";
+ $("checkout-payment-method").textContent="Selected payment method: "+selectedCheckoutMethod;
+ const method=selectedCheckoutMethod.toLowerCase(),isBkash=method==="bkash",isBank=method==="bank transfer";
  $("checkout-bkash-destination").hidden=!isBkash;
- $("checkout-payment-placeholder").hidden=isBkash;
+ $("checkout-bank-destination").hidden=!isBank;
+ $("checkout-payment-placeholder").hidden=isBkash||isBank;
+ $("checkout-placeholder-method").textContent=selectedCheckoutMethod+" receiving details";
+ $("checkout-transaction-id").value="";
+ $("checkout-transaction-id").disabled=false;
+ $("checkout-submit-payment").disabled=false;
+ $("checkout-submit-payment").textContent="Submit Payment";
+ $("checkout-payment-status").hidden=true;
  window.scrollTo({top:0,behavior:"smooth"});
 });
 $("checkout-payment-back")?.addEventListener("click",()=>{
  $("checkout-payment-page").hidden=true;
- document.querySelector(".checkout-heading").hidden=false;
- document.querySelector(".checkout-layout").hidden=false;
+ const heading=document.querySelector(".checkout-heading"),layout=document.querySelector(".checkout-layout");
+ if(heading)heading.hidden=false;
+ if(layout)layout.hidden=false;
  window.scrollTo({top:0,behavior:"smooth"});
+});
+$("checkout-payment-form")?.addEventListener("submit",event=>{
+ event.preventDefault();
+ const transactionId=$("checkout-transaction-id").value.trim();
+ if(!transactionId){$("checkout-transaction-id").focus();return;}
+ const status=$("checkout-payment-status");
+ status.textContent="Your payment is being processed. Nexa will verify the transaction before the seller's wallet is credited.";
+ status.hidden=false;
+ $("checkout-transaction-id").disabled=true;
+ $("checkout-submit-payment").disabled=true;
+ $("checkout-submit-payment").textContent="Payment Submitted";
+});
+$("checkout-copy-bank")?.addEventListener("click",async()=>{
+ try{await navigator.clipboard.writeText("0000");$("checkout-copy-bank").textContent="Copied";}
+ catch(_){notice("Please copy the bank account number manually: 0000");}
 });
 $("checkout-copy-bkash")?.addEventListener("click",async()=>{
  try{await navigator.clipboard.writeText("01840398000");$("checkout-copy-bkash").textContent="Copied";}catch(_){notice("Please copy the bKash number manually: 01840398000");}
