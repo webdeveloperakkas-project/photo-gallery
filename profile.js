@@ -11,7 +11,7 @@ function setText(id,value){const e=$(id);if(e)e.textContent=value}
 function busy(id,on,label){const e=$(id);if(!e)return;e.disabled=on;e.textContent=on?"Please wait…":label}
 function fillCountries(id){const s=$(id);countries.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;s.append(o)})}
 ["personalCountry","idCountry","addressCountry"].forEach(fillCountries);
-function updateOverallStatus(tab){const row=tab==="address"?addressRow:identityRow||addressRow;const value=row?.status==="approved"?"Verified":row?.status==="rejected"?"Rejected":row?.status==="pending_review"?"Under Review":"Not Verified";setText("overallStatus",value)}
+function updateOverallStatus(tab){if(tab==="personal"){setText("overallStatus","");return}const row=tab==="address"?addressRow:identityRow;const value=row?.status==="approved"?"Verified":row?.status==="rejected"?"Rejected":row?.status==="pending_review"?"Under Review":"Not Verified";setText("overallStatus",value)}
 function showTab(tab){if(!["personal","identity","address"].includes(tab))tab="personal";document.querySelectorAll(".step-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));["personal","identity","address"].forEach(t=>$(t+"Panel").hidden=t!==tab);updateOverallStatus(tab);try{sessionStorage.setItem("nexa-profile-active-tab",tab)}catch(e){}}
 document.querySelectorAll(".step-tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 function status(row){return row?.status==="approved"?"Verified":row?.status==="pending_review"?"Pending Review":row?.status==="rejected"?"Rejected":"Not submitted"}
