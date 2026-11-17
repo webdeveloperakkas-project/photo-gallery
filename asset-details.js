@@ -88,6 +88,13 @@ const syncCheckoutSelection=()=>{
  if(continueButton){continueButton.hidden=false;continueButton.disabled=!selectedCheckoutMethod;}
 };
 $("checkout-methods")?.addEventListener("change",syncCheckoutSelection);
+$("checkout-payment-back")?.addEventListener("click",()=>{
+ $("checkout-payment-page").hidden=true;
+ const heading=document.querySelector(".checkout-heading"),layout=document.querySelector(".checkout-layout");
+ if(heading)heading.hidden=false;
+ if(layout)layout.hidden=false;
+ window.scrollTo({top:0,behavior:"smooth"});
+});
 $("checkout-continue")?.addEventListener("click",()=>{
  if(!selectedCheckoutMethod){notice("Please select a payment method first.");return;}
  const heading=document.querySelector(".checkout-heading"),layout=document.querySelector(".checkout-layout");
