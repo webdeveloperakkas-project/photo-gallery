@@ -194,6 +194,10 @@ $("contact-seller").addEventListener("click",async()=>{
  catch(error){notice("Could not open messages: "+(error.message||"Please try again."));}
 });
 $("buy-now").addEventListener("click",()=>{
+ if(currentUser?.id&&currentItem?.seller_id&&currentUser.id===currentItem.seller_id){
+  notice("You cannot buy your own listing. Please sign in with a separate buyer account to purchase this asset.");
+  return;
+ }
  const methods=String(currentItem.preferred_payment_methods||"").split(",").map(x=>x.trim()).filter(Boolean);
  $("checkout-title").textContent=currentItem.title||"Digital asset";
  $("checkout-category").textContent=currentItem.subcategory||currentItem.category||"Digital Asset";
