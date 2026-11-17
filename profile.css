@@ -88,3 +88,6 @@
 .verification-result-badge.pending{background:#fff1d0;color:#95650c}.verification-result-badge.verified{background:#e3f6e9;color:#167a48}.verification-result-badge.rejected{background:#ffebe8;color:#b84545}
 .verification-admin-note{padding:10px 12px;border-left:3px solid #d99b38;background:#fff8e9;border-radius:0 8px 8px 0}.verification-edit-button{align-self:center;flex:0 0 auto;padding:10px 14px;border:1px solid #cce6d8;border-radius:9px;background:#fff;color:#128052;font-size:11px;font-weight:800}.verification-edit-button:hover{background:#eff9f3}
 @media(max-width:600px){.verification-result{flex-wrap:wrap;padding:18px;gap:12px}.verification-result-copy{flex-basis:calc(100% - 62px)}.verification-edit-button{margin-left:60px}}
+
+/* Keep verification forms and result panels mutually exclusive even when shared styles are loaded. */
+.form-card[hidden],.submission-status[hidden]{display:none!important}
