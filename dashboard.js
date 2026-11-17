@@ -38,6 +38,7 @@
     notificationRows=data||[];renderNotifications();
   };
   let transactionChannel = null;
+  let walletProcessingRows = [];
   const transactionStatusLabel = status => ({processing:"Processing",paid:"Paid",not_paid:"Not Paid"}[status]||status||"Processing");
   const renderTransactions = rows => {
     const host=document.getElementById("wallet-transactions-list");if(!host)return;
@@ -57,7 +58,8 @@
     const host=document.getElementById("wallet-transactions-list");if(!host)return;
     const {data,error}=await client.from("wallet_transactions").select("id,user_id,email,buyer_user_id,buyer_email,transaction_number,payment_method,buyer_payment_status,amount,currency,created_at,reference_type").or("user_id.eq."+userId+",buyer_user_id.eq."+userId).eq("reference_type","order").order("created_at",{ascending:false}).limit(100);
     if(error){host.innerHTML="<div class='wallet-loading-state wallet-load-error'>Transactions could not be loaded. Apply the shared transaction SQL migration, then refresh.</div>";return;}
-    renderTransactions(data||[]);
+    walletProcessingRows=(data||[]).filter(row=>row.user_id===userId&&row.buyer_payment_status==="processing");
+    renderTransactions(data||[]);renderWalletCards();renderWalletTotals();
   };
   const initTransactions = userId => {
     window.nexaCurrentUserId=userId;loadTransactions(userId);
@@ -81,7 +83,8 @@
     ["wallet-total-pending-","header-wallet-pending-"].forEach(prefix=>{const el=document.getElementById(prefix+suffix);if(el)el.textContent=pending;});
     const label=document.getElementById("header-wallet-currency");if(label)label.textContent=currency;
     const rows=document.getElementById("header-wallet-balance-rows");
-    if(rows)rows.innerHTML='<div class="wallet-dropdown-balance-row"><span>Available · '+currency+'</span><b>'+available+'</b></div><div class="wallet-dropdown-balance-row"><span>Pending · '+currency+'</span><b>'+pending+'</b></div>';
+    const processingCount=walletProcessingRows.filter(row=>row.currency===currency).length;
+    if(rows)rows.innerHTML='<div class="wallet-dropdown-balance-row"><span>Available · '+currency+'</span><b>'+available+'</b></div><div class="wallet-dropdown-balance-row"><span>Pending · '+currency+'</span><b>'+pending+'</b></div><div class="wallet-dropdown-balance-row"><span>Processing payments</span><b>'+processingCount+'</b></div>';
     document.querySelectorAll(".wallet-summary-card[data-wallet-currency]").forEach(card=>{card.hidden=card.dataset.walletCurrency!==currency;});
   };
   const countryIsBangladesh = value => /bangladesh/i.test(String(value||"")) || /^BD$/i.test(String(value||"").trim());
@@ -115,8 +118,9 @@
     host.innerHTML=visibleRows.map(row=>{
       const method=String(row.payment_method||"").toLowerCase(),currency=String(row.currency||"USD").toUpperCase();
       const available=Number(row.available_balance||0),pending=Number(row.pending_balance||0),earned=Number(row.total_earned||0);
-      const status=pending>0?"Pending":available>0?"Available":"No funds yet";
-      const statusClass=pending>0?"is-pending":available>0?"is-available":"is-empty";
+      const processing=walletProcessingRows.some(tx=>tx.payment_method===method&&tx.currency===currency);
+      const status=processing?"Processing":pending>0?"Pending":available>0?"Available":"No funds yet";
+      const statusClass=processing?"is-pending":pending>0?"is-pending":available>0?"is-available":"is-empty";
       return "<article class='wallet-method-card'><div class='wallet-method-card-top'><span class='wallet-method-mark wallet-mark-"+walletEscape(method)+"'>"+walletEscape(walletMethodMarks[method]||"¤")+"</span><span class='wallet-method-title'><b>"+walletEscape(walletMethodNames[method]||row.payment_method)+"</b><small>"+walletEscape(currency)+" wallet</small></span><span class='wallet-status "+statusClass+"'>"+status+"</span></div><div class='wallet-method-balance'><small>Available Balance</small><strong>"+walletMoney(available,currency)+"</strong></div><div class='wallet-method-details'><div><span>Pending</span><b>"+walletMoney(pending,currency)+"</b></div><div><span>Total Earned</span><b>"+walletMoney(earned,currency)+"</b></div></div><div class='wallet-method-card-footer'><span>Funds are released after buyer confirmation</span><button type='button' disabled title='Withdrawal processing will be enabled in the next wallet stage'>Withdraw</button></div></article>";
     }).join("");
     renderWalletTotals();
