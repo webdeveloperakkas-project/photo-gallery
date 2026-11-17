@@ -144,3 +144,21 @@ revoke all on function public.nexa_submit_marketplace_payment(uuid,text,text) fr
 grant execute on function public.nexa_submit_marketplace_payment(uuid,text,text) to authenticated;
 revoke all on function public.admin_set_marketplace_payment_status(uuid,text) from public, anon;
 grant execute on function public.admin_set_marketplace_payment_status(uuid,text) to authenticated;
+
+-- Keep both participants' email snapshots in sync with Auth email changes.
+create or replace function public.nexa_sync_wallet_user_email()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.email is distinct from old.email then
+    update public.wallet_accounts set email=new.email, updated_at=now() where user_id=new.id;
+    update public.wallet_transactions set email=new.email where user_id=new.id;
+    update public.wallet_transactions set buyer_email=new.email where buyer_user_id=new.id;
+  end if;
+  return new;
+end;
+$$;
+revoke all on function public.nexa_sync_wallet_user_email() from public, anon, authenticated;
