@@ -20,6 +20,12 @@ create unique index if not exists wallet_transactions_transaction_number_uidx
 create index if not exists wallet_transactions_buyer_user_created_idx
   on public.wallet_transactions(buyer_user_id, created_at desc);
 
+-- Replace the foundation's listing-wide unique key: each buyer may order the same listing.
+drop index if exists public.wallet_transactions_reference_unique_idx;
+create unique index wallet_transactions_reference_unique_idx
+  on public.wallet_transactions(wallet_account_id, reference_type, reference_id, transaction_type, buyer_user_id)
+  where reference_id is not null;
+
 drop policy if exists "Users can view their own wallet transactions" on public.wallet_transactions;
 create policy "Transaction participants can view shared wallet transactions"
   on public.wallet_transactions for select to authenticated
