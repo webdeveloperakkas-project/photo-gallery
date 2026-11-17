@@ -213,3 +213,19 @@ body.image-lightbox-open{overflow:hidden}
 .checkout-destination span{width:100%;font-size:10px;color:#78877e}
 .checkout-destination strong{font:800 21px Manrope,sans-serif;color:#b31368;letter-spacing:.04em}
 .checkout-destination button{border:0;border-radius:8px;padding:9px 12px;background:#13b0aa;color:#fff;font-size:10px;font-weight:800;cursor:pointer}
+
+.checkout-payment-page{max-width:720px;margin:18px auto 45px;padding:28px;background:#fff;border:1px solid #e1ece5;border-radius:16px;box-shadow:0 10px 34px #1432230b}
+.checkout-payment-page[hidden]{display:none!important}
+.checkout-payment-page h1{font:800 25px Manrope,sans-serif;color:#204a38;margin:8px 0}
+.checkout-payment-page>p{font-size:12px;line-height:1.65;color:#718178}
+.checkout-payment-order{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:16px;margin:18px 0;background:#f3faf6;border-radius:11px}
+.checkout-payment-order span{font-size:11px;color:#738278;width:100%}
+.checkout-payment-order strong{font:800 23px Manrope,sans-serif;color:#17634f}
+.checkout-payment-order small{font-size:11px;color:#64766a}
+.checkout-payment-placeholder{display:grid;gap:8px;padding:18px;margin:16px 0;border:1px dashed #d9c58a;border-radius:11px;background:#fffaf0}
+.checkout-payment-placeholder strong{font-size:12px;color:#785713}
+.checkout-payment-placeholder span{font-size:19px;font-weight:800;color:#9b7a32}
+.checkout-payment-placeholder small{font-size:10px;color:#86734c;line-height:1.5}
+.checkout-payment-warning,.checkout-payment-status{padding:12px 14px;border-radius:9px;background:#fff8e5;color:#795e25!important}
+.checkout-payment-status{background:#eff8f3;color:#426b55!important}
+@media(max-width:700px){.checkout-payment-page{padding:18px 15px;margin:10px auto 30px}.checkout-payment-page h1{font-size:21px}}
