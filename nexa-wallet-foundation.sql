@@ -65,6 +65,7 @@ as $$
     (p_user_id, 'bkash', 'BDT'),
     (p_user_id, 'nagad', 'BDT'),
     (p_user_id, 'rocket', 'BDT'),
+    (p_user_id, 'bank_transfer', 'BDT'),
     (p_user_id, 'wise', 'USD'), (p_user_id, 'wise', 'EUR'), (p_user_id, 'wise', 'GBP'),
     (p_user_id, 'payoneer', 'USD'), (p_user_id, 'payoneer', 'EUR'), (p_user_id, 'payoneer', 'GBP'),
     (p_user_id, 'paypal', 'USD'), (p_user_id, 'paypal', 'EUR'), (p_user_id, 'paypal', 'GBP'),
@@ -96,7 +97,7 @@ insert into public.wallet_accounts (user_id, payment_method, currency)
 select u.id, v.payment_method, v.currency
 from auth.users u
 cross join (values
-  ('bkash','BDT'),('nagad','BDT'),('rocket','BDT'),
+  ('bkash','BDT'),('nagad','BDT'),('rocket','BDT'),('bank_transfer','BDT'),
   ('wise','USD'),('wise','EUR'),('wise','GBP'),
   ('payoneer','USD'),('payoneer','EUR'),('payoneer','GBP'),
   ('paypal','USD'),('paypal','EUR'),('paypal','GBP'),
