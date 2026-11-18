@@ -526,3 +526,30 @@ body{margin:0;background:var(--tb-bg);color:var(--tb-ink);font-family:Arial,Helv
 .wallet-transaction-grid small{margin-bottom:6px;color:#829188;font-size:10px}
 .wallet-transaction-grid b{color:#294638;font-size:11px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 @media(max-width:700px){.wallet-transaction-card{padding:15px}.wallet-transaction-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.wallet-transaction-grid>div{padding:9px}.wallet-transaction-grid b{font-size:10px}}
+
+
+/* Dashboard payment gateway showcase */
+.nexa-payment-showcase{position:relative;isolation:isolate;overflow:hidden;margin:34px 0 12px;padding:30px 28px 22px;border:1px solid #dcece5;border-radius:18px;background:linear-gradient(145deg,#ffffff 0%,#f4fbf8 55%,#fffaf0 100%);box-shadow:0 12px 34px rgba(18,75,55,.055)}
+.nexa-payment-showcase:before{position:absolute;z-index:-1;content:"";width:300px;height:300px;right:-120px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(19,176,170,.13),transparent 68%)}
+.payment-showcase-heading{text-align:center;margin:0 auto 23px}
+.payment-showcase-kicker{display:inline-block;margin-bottom:10px;color:#128a75;font-size:9px;font-weight:900;letter-spacing:2px}
+.payment-showcase-heading h2{display:table;position:relative;overflow:hidden;margin:0 auto 9px;padding:12px 28px;border-radius:12px;background:linear-gradient(105deg,#07543f,#0b8878,#13b0aa,#07543f);background-size:220% 100%;color:#fff;font:800 clamp(18px,2.3vw,25px) Manrope,Arial,sans-serif;letter-spacing:.2px;box-shadow:0 8px 20px rgba(7,115,91,.2);animation:paymentHeadingFlow 7s ease-in-out infinite}
+.payment-showcase-heading h2:after{position:absolute;content:"";top:-60%;left:-35%;width:24%;height:220%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.34),transparent);animation:paymentHeadingShine 5s ease-in-out infinite}
+.payment-showcase-heading p{margin:0;color:#71847a;font-size:11px;line-height:1.6}
+.payment-logo-grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:10px}
+.payment-logo-card{display:flex;min-width:0;min-height:82px;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:12px 7px;border:1px solid #e5eee9;border-radius:12px;background:rgba(255,255,255,.92);box-shadow:0 3px 12px rgba(24,65,48,.035);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.payment-logo-card:hover{transform:translateY(-4px);border-color:#a9d9c7;box-shadow:0 9px 20px rgba(24,95,69,.1)}
+.payment-brand{display:flex;min-height:28px;align-items:center;justify-content:center;white-space:nowrap;font-weight:900;line-height:1}
+.payment-logo-card small{color:#718078;font-size:9px;font-weight:700;text-align:center}
+.payment-bkash{color:#d51c72;font-size:20px;letter-spacing:-1px}.payment-nagad{color:#e66b21;font-size:19px}.payment-rocket{color:#7138a5;font-size:13px;letter-spacing:1px}.payment-bank{width:37px;height:29px;border-radius:6px;background:#e8f5ed;color:#176b4c;font-size:12px;letter-spacing:.4px}.payment-payoneer{color:#e34f32;font-size:15px;letter-spacing:-.7px}.payment-wise{color:#176f59;font-size:22px;letter-spacing:-1px}.payment-paypal{color:#145da0;font-size:17px;font-style:italic;letter-spacing:-.8px}.payment-visa{color:#173b8f;font-size:23px;font-style:italic;letter-spacing:-1.5px}
+.payment-mastercard{position:relative;width:43px;height:28px}.payment-mastercard i{position:absolute;top:3px;width:23px;height:23px;border-radius:50%;background:#eb001b}.payment-mastercard i:first-child{left:4px}.payment-mastercard i:last-child{right:4px;background:#f79e1b;mix-blend-mode:multiply}
+.payment-trust-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px;padding-top:17px;border-top:1px solid #e6efea}
+.payment-trust-item{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0}
+.payment-trust-icon{display:grid;place-items:center;flex:0 0 31px;width:31px;height:31px;border-radius:9px;background:#e6f7ef;color:#11865e;font-size:17px;font-weight:900}
+.payment-trust-item>span:last-child{display:flex;min-width:0;flex-direction:column;gap:3px}.payment-trust-item b{color:#294b3c;font-size:10px}.payment-trust-item small{color:#829188;font-size:9px;line-height:1.4}
+.payment-availability-note{margin:14px 0 0;color:#91a097;font-size:9px;line-height:1.5;text-align:center}
+@keyframes paymentHeadingFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes paymentHeadingShine{0%,55%{left:-35%}80%,100%{left:125%}}
+@media(max-width:1050px){.payment-logo-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:650px){.nexa-payment-showcase{margin-top:25px;padding:23px 14px 18px}.payment-logo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.payment-logo-card{min-height:75px}.payment-trust-row{grid-template-columns:1fr;gap:12px}.payment-trust-item{justify-content:flex-start;padding:0 10px}.payment-showcase-heading h2{padding:11px 18px}}
+@media(prefers-reduced-motion:reduce){.payment-showcase-heading h2,.payment-showcase-heading h2:after{animation:none}.payment-logo-card{transition:none}}
