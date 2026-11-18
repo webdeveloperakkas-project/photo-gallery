@@ -508,3 +508,7 @@ body{color:var(--ink);font-size:15px}
 .site-notification-item>strong{flex:0 0 7px;width:7px;height:7px;margin-top:5px;border-radius:50%;background:#e8b82e}
 .site-notification-empty{display:flex;flex-direction:column;gap:5px;padding:25px 16px;text-align:center}.site-notification-empty b{color:#315446;font-size:11px}.site-notification-empty span{color:#829188;font-size:10px}
 @media(max-width:700px){.site-notification-toggle{width:36px;height:36px}.site-notification-dropdown{right:-47px;width:min(350px,calc(100vw - 20px))}.site-header .nav-actions{gap:8px}}
+
+
+/* Keep signed-in navigation links hidden even when button display styles apply. */
+#nav-login-link[hidden],#nav-signup-link[hidden]{display:none!important}
