@@ -139,6 +139,14 @@
   const profileMenuToggle = document.getElementById('profile-menu-toggle');
   const profileDropdown = document.getElementById('profile-dropdown');
   const menuLogoutButton = document.getElementById('menu-logout-button');
+  const siteNotificationWrap = document.getElementById('site-notification-wrap');
+  const siteNotificationToggle = document.getElementById('site-notification-toggle');
+  const siteNotificationDropdown = document.getElementById('site-notification-dropdown');
+  const siteNotificationCount = document.getElementById('site-notification-count');
+  const siteNotificationList = document.getElementById('site-notification-list');
+  const siteNotificationMarkAll = document.getElementById('site-notification-mark-all');
+  let siteNotificationRows = [];
+  let siteNotificationChannel = null;
   const authViews = {
     signup: signupForm,
     login: loginForm,
@@ -181,6 +189,73 @@
     if (/rate limit|too many requests/i.test(message)) return 'Too many attempts. Please wait a little and try again.';
     return message;
   }
+  const escapeNotificationText = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const renderSiteNotifications = () => {
+    const unread = siteNotificationRows.filter(row => !row.is_read).length;
+    if (siteNotificationCount) {
+      siteNotificationCount.textContent = unread > 99 ? '99+' : String(unread);
+      siteNotificationCount.hidden = unread === 0;
+    }
+    if (!siteNotificationList) return;
+    if (!siteNotificationRows.length) {
+      siteNotificationList.innerHTML = "<div class='site-notification-empty'><b>You're all caught up</b><span>New account updates will appear here.</span></div>";
+      return;
+    }
+    siteNotificationList.innerHTML = siteNotificationRows.slice(0, 20).map(row => {
+      const title = escapeNotificationText(row.title || 'Nexa update');
+      const message = escapeNotificationText(row.message || '');
+      const date = row.created_at ? escapeNotificationText(new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(row.created_at))) : '';
+      const icon = row.type === 'verification' ? '✓' : row.type === 'listing' ? '◈' : row.type === 'order' ? '▣' : '✦';
+      return "<a class='site-notification-item "+(row.is_read?'':'is-unread')+"' href='"+escapeNotificationText(row.link || 'dashboard.html')+"' data-site-notification-id='"+escapeNotificationText(row.id)+"'><i>"+icon+"</i><span><b>"+title+"</b><small>"+message+"</small><em>"+date+"</em></span>"+(row.is_read?'':"<strong aria-label='Unread'></strong>")+"</a>";
+    }).join('');
+  };
+  const loadSiteNotifications = async userId => {
+    if (!supabaseClient || !siteNotificationList) return;
+    const {data,error} = await supabaseClient.from('user_notifications').select('id,type,title,message,link,is_read,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(20);
+    if (error) {
+      siteNotificationList.innerHTML = "<div class='site-notification-empty'><b>Notifications are temporarily unavailable</b><span>Please try again shortly.</span></div>";
+      return;
+    }
+    siteNotificationRows = data || [];
+    renderSiteNotifications();
+    if (siteNotificationChannel) supabaseClient.removeChannel(siteNotificationChannel);
+    siteNotificationChannel = supabaseClient.channel('nexa-home-notifications-'+userId).on('postgres_changes',{event:'*',schema:'public',table:'user_notifications',filter:'user_id=eq.'+userId},()=>loadSiteNotifications(userId)).subscribe();
+  };
+  const closeSiteNotifications = () => {
+    if (siteNotificationDropdown) siteNotificationDropdown.hidden = true;
+    siteNotificationToggle?.setAttribute('aria-expanded','false');
+  };
+  siteNotificationToggle?.addEventListener('click', () => {
+    const opening = siteNotificationDropdown?.hidden ?? true;
+    if (siteNotificationDropdown) siteNotificationDropdown.hidden = !opening;
+    siteNotificationToggle.setAttribute('aria-expanded',String(opening));
+  });
+  siteNotificationList?.addEventListener('click', async event => {
+    const item = event.target.closest('[data-site-notification-id]');
+    if (!item) return;
+    const id = item.dataset.siteNotificationId;
+    const row = siteNotificationRows.find(entry => String(entry.id) === String(id));
+    if (row && !row.is_read) {
+      row.is_read = true;
+      renderSiteNotifications();
+      const {error} = await supabaseClient.from('user_notifications').update({is_read:true}).eq('id',id);
+      if (error) console.warn('Could not mark notification as read:',error.message);
+    }
+  });
+  siteNotificationMarkAll?.addEventListener('click', async () => {
+    if (!window.nexaHomeUserId) return;
+    const {error} = await supabaseClient.from('user_notifications').update({is_read:true}).eq('user_id',window.nexaHomeUserId).eq('is_read',false);
+    if (error) { console.warn('Could not mark notifications as read:',error.message); return; }
+    siteNotificationRows.forEach(row => { row.is_read = true; });
+    renderSiteNotifications();
+  });
+  document.addEventListener('click', event => {
+    if (siteNotificationWrap && !siteNotificationWrap.contains(event.target)) closeSiteNotifications();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeSiteNotifications();
+  });
+
   function updateAuthNavigation(session) {
     const signedIn = Boolean(session?.user);
     document.body.classList.toggle('nexa-signed-in', signedIn);
@@ -188,6 +263,18 @@
     if (navSignup) navSignup.hidden = signedIn;
     if (navDashboardMenuLink) navDashboardMenuLink.hidden = !signedIn;
     if (profileMenuWrap) profileMenuWrap.hidden = !signedIn;
+    if (siteNotificationWrap) siteNotificationWrap.hidden = !signedIn;
+    if (signedIn && session.user) {
+      window.nexaHomeUserId = session.user.id;
+      loadSiteNotifications(session.user.id);
+    } else {
+      window.nexaHomeUserId = null;
+      siteNotificationRows = [];
+      renderSiteNotifications();
+      closeSiteNotifications();
+      if (siteNotificationChannel && supabaseClient) supabaseClient.removeChannel(siteNotificationChannel);
+      siteNotificationChannel = null;
+    }
     if (signedIn && session.user) {
       const meta = session.user.user_metadata || {};
       const name = meta.display_name || [meta.first_name, meta.last_name].filter(Boolean).join(' ') || 'Nexa member';
@@ -410,19 +497,7 @@
     } finally { setFormBusy(form,false); }
   });
 
-  navLogout?.addEventListener('click', async () => {
-    if (!supabaseClient) return;
-    navLogout.disabled = true;
-    try {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) throw error;
-      updateAuthNavigation(null);
-    } catch (error) {
-      console.error('Nexa sign-out failed:', error);
-      alert(friendlyAuthError(error));
-    } finally { navLogout.disabled = false; }
-  });
-  
+
   // Site-wide English/Bangla language selector.
   const languageSelect = document.getElementById('language-select');
   const translations = {
