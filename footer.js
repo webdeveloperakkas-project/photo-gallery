@@ -2,7 +2,7 @@
   "use strict";
   async function mountNexaFooter(){
     if(document.querySelector(".nexa-footer"))return;
-    const host=document.querySelector(".nexa-main-area");
+    const host=document.querySelector(".nexa-main-area")||document.body;
     if(!host)return;
     try{
       const response=await fetch("footer.html",{cache:"no-cache"});
