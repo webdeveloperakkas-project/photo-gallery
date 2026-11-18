@@ -32,6 +32,16 @@
             <option value="bn">বাংলা</option>
           </select>
         </label>
+        <div class="site-notification-wrap" id="site-notification-wrap" hidden>
+          <button class="site-notification-toggle" id="site-notification-toggle" type="button" aria-label="Notifications" aria-expanded="false" aria-controls="site-notification-dropdown">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+            <span id="site-notification-count" hidden>0</span>
+          </button>
+          <section class="site-notification-dropdown" id="site-notification-dropdown" aria-label="Notifications" hidden>
+            <div class="site-notification-heading"><b>Notifications</b><button type="button" id="site-notification-mark-all">Mark all read</button></div>
+            <div id="site-notification-list" class="site-notification-list"><div class="site-notification-empty"><b>Loading notifications…</b></div></div>
+          </section>
+        </div>
         <a class="login-link" href="#auth-login" data-auth-open="login" id="nav-login-link">Log in</a><a class="button button-small button-dark" href="#auth-signup" data-auth-open="signup" id="nav-signup-link">Sign up <span>↗</span></a>
         <div class="profile-menu-wrap" id="profile-menu-wrap" hidden>
           <button class="profile-nav-button" type="button" id="profile-menu-toggle" aria-label="Open profile menu" aria-expanded="false" aria-controls="profile-dropdown"><span class="profile-avatar-small" id="nav-avatar-initial">N</span><span class="profile-chevron" aria-hidden="true">⌄</span></button>
