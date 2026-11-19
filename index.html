@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261119-2">
+  <link rel="stylesheet" href="style.css?v=20261119-3">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=20261119-2" defer></script>
+  <script src="script.js?v=20261119-3" defer></script>
 <link rel="stylesheet" href="public-marketplace.css?v=20261119-1"><link rel="stylesheet" href="footer.css"><script src="footer.js?v=20261119-1" defer></script></head>
 <body>
   <div class="announcement"><span class="announcement-dot"></span> A smarter way to move digital ownership <a href="#how-it-works">See how it works <span aria-hidden="true">→</span></a></div>
@@ -63,7 +63,11 @@
     <section class="hero hero-reordered">
       <div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div>
       <div class="container hero-free-listing">
-        <div class="free-listing-banner"><span class="free-listing-spark">✦</span><span class="free-listing-label">FREE LISTING</span><span class="free-listing-copy">List your asset here</span><span class="free-listing-check">✓</span></div>
+        <div class="free-benefit-slides" id="free-benefit-slides" aria-label="Nexa marketplace benefits">
+          <article class="free-benefit-card benefit-seller is-active" data-benefit-slide><span class="benefit-icon">✦</span><span class="benefit-kicker">FOR SELLERS</span><b>Free Seller Listing</b><small>List your digital asset at no listing cost.</small></article>
+          <article class="free-benefit-card benefit-buyer" data-benefit-slide><span class="benefit-icon">◎</span><span class="benefit-kicker">FOR BUYERS</span><b>0% Buyer Fee</b><small>No extra Nexa buyer fee at checkout.</small></article>
+          <article class="free-benefit-card benefit-nosale" data-benefit-slide><span class="benefit-icon">✓</span><span class="benefit-kicker">NO COMPLETED SALE</span><b>No Sale, No Charge</b><small>No sale means no Nexa transaction fee.</small></article>
+        </div>
       </div>
       <div class="container hero-stack-row">
         <div class="hero-visual hero-card-stack" aria-label="A rotating showcase of digital asset categories">
@@ -88,8 +92,8 @@
           <h1>Buy &amp; Sell Digital Assets</h1>
           <div class="hero-trust-points" aria-label="Nexa marketplace principles">
             <div class="hero-trust-point"><span class="hero-trust-icon trust-identity">✓</span><b>Identity Checks</b><small>Verified account process</small></div>
-            <div class="hero-trust-point"><span class="hero-trust-icon trust-fees">◎</span><b>Transparent Fees</b><small>Clear 12% seller fee</small></div>
-            <div class="hero-trust-point"><span class="hero-trust-icon trust-records">▤</span><b>Clear Records</b><small>Transaction details</small></div>
+            <div class="hero-trust-point"><span class="hero-trust-icon trust-license">▣</span><b>Licensed Company</b><small>Company licence</small></div>
+            <div class="hero-trust-point"><span class="hero-trust-icon trust-records">▤</span><b>Secure Transactions</b><small>Transaction protection process</small></div>
             <div class="hero-trust-point"><span class="hero-trust-icon trust-support">◇</span><b>Buyer &amp; Seller Care</b><small>Guided transaction steps</small></div>
           </div>
         </div>
