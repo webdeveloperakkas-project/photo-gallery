@@ -18,7 +18,7 @@
       if(progress)progress.style.width=((active+1)/cards.length*100)+'%';
     };
     renderStack();
-    if(!reducedMotion)window.setInterval(()=>{active=(active+1)%cards.length;renderStack();},1000);
+    if(!reducedMotion)window.setInterval(()=>{active=(active+1)%cards.length;renderStack();},3000);
   }
 
   const menuButton = document.querySelector('.menu-toggle');
