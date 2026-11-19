@@ -1,23 +1,23 @@
 (() => {
-  // Rotate the three seller/buyer benefit cards on small screens only.
+  // Use the same timed slide transition as the transaction journey for all three benefit cards.
   const benefitSlides = document.getElementById('free-benefit-slides');
   if (benefitSlides) {
     const slides = [...benefitSlides.querySelectorAll('[data-benefit-slide]')];
-    const mobileBenefits = window.matchMedia('(max-width: 700px)');
     const reducedBenefitsMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let benefitIndex = 0;
     const renderBenefit = () => slides.forEach((slide, index) => {
-      slide.classList.toggle('is-active', index === benefitIndex);
-      slide.setAttribute('aria-hidden', String(mobileBenefits.matches && index !== benefitIndex));
+      const active = index === benefitIndex;
+      slide.classList.toggle('is-active', active);
+      slide.setAttribute('aria-hidden', String(!active));
     });
     renderBenefit();
-    if (!reducedBenefitsMotion) window.setInterval(() => {
-      if (mobileBenefits.matches) { benefitIndex = (benefitIndex + 1) % slides.length; renderBenefit(); }
-    }, 3000);
-    mobileBenefits.addEventListener?.('change', renderBenefit);
+    if (!reducedBenefitsMotion && slides.length > 1) window.setInterval(() => {
+      benefitIndex = (benefitIndex + 1) % slides.length;
+      renderBenefit();
+    }, 6000);
   }
 
-  // Rotate the eight informational asset-category cards while keeping the hero headline static.
+  // Show all eight category cards with the same journey-style slide transition.
   const heroStack = document.getElementById('hero-card-stack');
   if (heroStack) {
     const cards = [...heroStack.querySelectorAll('[data-stack-card]')];
@@ -27,16 +27,16 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const renderStack = () => {
       cards.forEach((card,index) => {
-        const depth=(index-active+cards.length)%cards.length;
-        card.style.setProperty('--stack-depth',depth);
-        card.style.pointerEvents=depth===0?'auto':'none';
-        card.setAttribute('aria-hidden',String(depth!==0));
+        const isActive = index === active;
+        card.classList.toggle('is-active', isActive);
+        card.style.pointerEvents = isActive ? 'auto' : 'none';
+        card.setAttribute('aria-hidden',String(!isActive));
       });
       if(current)current.textContent=String(active+1).padStart(2,'0');
       if(progress)progress.style.width=((active+1)/cards.length*100)+'%';
     };
     renderStack();
-    if(!reducedMotion)window.setInterval(()=>{active=(active+1)%cards.length;renderStack();},3000);
+    if(!reducedMotion && cards.length > 1)window.setInterval(()=>{active=(active+1)%cards.length;renderStack();},6000);
   }
 
   const menuButton = document.querySelector('.menu-toggle');
