@@ -7,8 +7,9 @@ async function loadPolicies(){
  if(!response.ok)throw new Error("Policies could not be loaded");
  const html=await response.text();
  const doc=new DOMParser().parseFromString(html,"text/html");
- policyCache=doc.querySelector("main.policy-page");
- if(!policyCache)throw new Error("Policy content was not found");
+ const main=doc.querySelector("main.policy-page");
+ if(!main)throw new Error("Policy content was not found");
+ policyCache={main,styles:doc.querySelector("head style")?.textContent||""};
  return policyCache;
 }
 function closePolicyModal(){
@@ -28,7 +29,9 @@ async function openPolicyModal(sectionId,trigger){
   const close=document.createElement("button");close.type="button";close.className="nexa-policy-close";close.setAttribute("aria-label","Close policies");close.innerHTML="&times;";
   top.append(heading,close);
   const body=document.createElement("div");body.className="nexa-policy-modal-body";
-  const content=source.cloneNode(true);content.classList.add("nexa-policy-modal-content");body.appendChild(content);
+  const content=source.main.cloneNode(true);content.classList.add("nexa-policy-modal-content");
+  if(source.styles){const policyStyle=document.createElement("style");policyStyle.textContent=source.styles;dialog.appendChild(policyStyle);}
+  body.appendChild(content);
   dialog.append(top,body);modal.appendChild(dialog);document.body.appendChild(modal);document.body.classList.add("nexa-policy-open");
   close.addEventListener("click",closePolicyModal);
   modal.addEventListener("click",e=>{if(e.target===modal)closePolicyModal();});
