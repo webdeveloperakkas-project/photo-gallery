@@ -10,7 +10,7 @@
     const renderStack = () => {
       cards.forEach((card,index) => {
         const depth=(index-active+cards.length)%cards.length;
-        card.style.setProperty('--stack-depth',Math.min(depth,5));
+        card.style.setProperty('--stack-depth',depth);
         card.style.pointerEvents=depth===0?'auto':'none';
         card.setAttribute('aria-hidden',String(depth!==0));
       });
