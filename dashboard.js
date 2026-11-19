@@ -115,7 +115,7 @@
     const host=document.getElementById("wallet-cards-grid");
     if(!host)return;
     if(!walletRows.length){host.innerHTML="<div class='wallet-loading-state'>No wallet accounts were found. Please contact support to activate your wallet accounts.</div>";renderWalletTotals();return;}
-    const visibleRows=walletRows.filter(row=>row.currency===walletCurrency&&(walletCountryCode==="BD"?localMethods.includes(String(row.payment_method||"").toLowerCase()):!localMethods.includes(String(row.payment_method||"").toLowerCase())));
+    const visibleRows=walletRows.filter(row=>{const method=String(row.payment_method||"").toLowerCase();if(walletCountryCode==="BD")return (localMethods.includes(method)&&row.currency==="BDT")||(method==="payoneer"&&row.currency==="USD");return row.currency===walletCurrency&&!localMethods.includes(method);});
     host.innerHTML=visibleRows.map(row=>{
       const method=String(row.payment_method||"").toLowerCase(),currency=String(row.currency||"USD").toUpperCase();
       const available=Number(row.available_balance||0),pending=Number(row.pending_balance||0),earned=Number(row.total_earned||0);
