@@ -284,7 +284,7 @@
   };
   const selectAllCategories=()=>{categoryOptions.forEach(input=>input.checked=false);if(allCategories){allCategories.checked=true;allCategories.indeterminate=false;}syncCategoryFilters();updatePlatformMetricFilters();};
   allCategories?.addEventListener("change",selectAllCategories);
-  document.querySelector("#marketplace-platform-picker [data-all-platforms]")?.addEventListener("click",()=>{selectAllCategories();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="All categories selected. Click Search Digital Assets to see all approved listings.";});
+  document.querySelector("#marketplace-platform-picker [data-all-platforms]")?.addEventListener("click",()=>{selectAllCategories();applyMarketplaceSearch();});
   categoryOptions.forEach(input=>input.addEventListener("change",()=>{syncCategoryFilters();updatePlatformMetricFilters();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="Filters updated. Enter the relevant audience or visitor range, then click Search Digital Assets."; }));
   document.querySelectorAll("[data-category-filter]").forEach(link=>link.addEventListener("click",()=>{
     const category=link.getAttribute("data-category-filter");
@@ -305,10 +305,8 @@
     checkbox.checked=!wasSelected;
     syncCategoryFilters();
     updatePlatformMetricFilters();
-    const count=document.getElementById("marketplace-results-count");
-    if(count)count.textContent=checkbox.checked
-      ?"Platform selected. Enter the relevant audience or visitor range, then click Search Digital Assets."
-      :"All categories selected. Click Search Digital Assets to see all approved listings.";
+    // Category chips are quick filters: refresh approved listings immediately.
+    applyMarketplaceSearch();
   }));
   searchButton?.addEventListener("click",applyMarketplaceSearch);
   document.getElementById("marketplace-keyword")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();applyMarketplaceSearch();}});
