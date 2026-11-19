@@ -1,4 +1,22 @@
 (() => {
+  // Rotate the three seller/buyer benefit cards on small screens only.
+  const benefitSlides = document.getElementById('free-benefit-slides');
+  if (benefitSlides) {
+    const slides = [...benefitSlides.querySelectorAll('[data-benefit-slide]')];
+    const mobileBenefits = window.matchMedia('(max-width: 700px)');
+    const reducedBenefitsMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let benefitIndex = 0;
+    const renderBenefit = () => slides.forEach((slide, index) => {
+      slide.classList.toggle('is-active', index === benefitIndex);
+      slide.setAttribute('aria-hidden', String(mobileBenefits.matches && index !== benefitIndex));
+    });
+    renderBenefit();
+    if (!reducedBenefitsMotion) window.setInterval(() => {
+      if (mobileBenefits.matches) { benefitIndex = (benefitIndex + 1) % slides.length; renderBenefit(); }
+    }, 3000);
+    mobileBenefits.addEventListener?.('change', renderBenefit);
+  }
+
   // Rotate the eight informational asset-category cards while keeping the hero headline static.
   const heroStack = document.getElementById('hero-card-stack');
   if (heroStack) {
@@ -669,6 +687,19 @@
     "List your digital asset.": "আপনার ডিজিটাল অ্যাসেট লিস্ট করুন।",
     "Show its value.": "এর মূল্য তুলে ধরুন।",
     "Prepare your website, domain, SaaS product or other eligible digital asset listing with clear details for potential buyers.": "সম্ভাব্য ক্রেতাদের জন্য আপনার ওয়েবসাইট, ডোমেইন, SaaS পণ্য বা উপযুক্ত ডিজিটাল অ্যাসেটের বিস্তারিত তথ্য দিয়ে লিস্টিং তৈরি করুন।",
+    "Free Seller Listing": "বিক্রেতার বিনামূল্যে লিস্টিং",
+    "List your digital asset at no listing cost.": "কোনো লিস্টিং ফি ছাড়াই আপনার ডিজিটাল অ্যাসেট তালিকাভুক্ত করুন।",
+    "FOR SELLERS": "বিক্রেতাদের জন্য",
+    "FOR BUYERS": "ক্রেতাদের জন্য",
+    "0% Buyer Fee": "০% ক্রেতা ফি",
+    "No extra Nexa buyer fee at checkout.": "চেকআউটে Nexa-এর কোনো অতিরিক্ত ক্রেতা ফি নেই।",
+    "NO COMPLETED SALE": "বিক্রি সম্পন্ন হয়নি",
+    "No Sale, No Charge": "বিক্রি না হলে কোনো চার্জ নেই",
+    "No sale means no Nexa transaction fee.": "বিক্রি সম্পন্ন না হলে Nexa-এর কোনো লেনদেন ফি নেই।",
+    "Licensed Company": "লাইসেন্সপ্রাপ্ত কোম্পানি",
+    "Company licence": "কোম্পানির লাইসেন্স",
+    "Secure Transactions": "নিরাপদ লেনদেন",
+    "Transaction protection process": "লেনদেন সুরক্ষা প্রক্রিয়া",
     "Free listing model": "বিনামূল্যে লিস্টিং",
     "Asset details": "অ্যাসেটের বিস্তারিত",
     "NEW LISTING": "নতুন লিস্টিং",
