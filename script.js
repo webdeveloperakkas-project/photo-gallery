@@ -47,6 +47,9 @@
         front.classList.remove('flip-out');
         active=(active+1)%cards.length;
         renderStack();
+        const arriving=cards[active];
+        arriving.classList.add('float-in');
+        window.setTimeout(()=>arriving.classList.remove('float-in'),1450);
         flipping=false;
       },720);
     },5000);
