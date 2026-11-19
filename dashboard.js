@@ -285,7 +285,7 @@
   const selectAllCategories=()=>{categoryOptions.forEach(input=>input.checked=false);if(allCategories){allCategories.checked=true;allCategories.indeterminate=false;}syncCategoryFilters();updatePlatformMetricFilters();};
   allCategories?.addEventListener("change",selectAllCategories);
   document.querySelector("#marketplace-platform-picker [data-all-platforms]")?.addEventListener("click",()=>{selectAllCategories();applyMarketplaceSearch();});
-  categoryOptions.forEach(input=>input.addEventListener("change",()=>{syncCategoryFilters();updatePlatformMetricFilters();const count=document.getElementById("marketplace-results-count");if(count)count.textContent="Filters updated. Enter the relevant audience or visitor range, then click Search Digital Assets."; }));
+  categoryOptions.forEach(input=>input.addEventListener("change",()=>{if(input.checked)categoryOptions.forEach(other=>{if(other!==input)other.checked=false;});syncCategoryFilters();updatePlatformMetricFilters();applyMarketplaceSearch();}));
   document.querySelectorAll("[data-category-filter]").forEach(link=>link.addEventListener("click",()=>{
     const category=link.getAttribute("data-category-filter");
     categoryOptions.forEach(input=>input.checked=input.value===category);
