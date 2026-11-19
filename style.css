@@ -679,3 +679,11 @@ html[lang="bn"] .hero-bottom > span {
 @media(prefers-reduced-motion:reduce){
  .free-benefit-card{transition:none!important;transform:none!important}
 }
+
+
+/* Centered visual header for the Nexa digital asset journey */
+.journey-heading{display:block;text-align:center;position:relative;isolation:isolate;overflow:hidden;margin:0 0 28px;padding:42px 28px;border:1px solid rgba(19,176,170,.18);border-radius:24px;background:radial-gradient(ellipse at 12% 0%,rgba(19,176,170,.28),transparent 48%),radial-gradient(ellipse at 88% 100%,rgba(245,201,75,.18),transparent 42%),linear-gradient(120deg,#103f3d 0%,#126d68 55%,#0d514e 100%);box-shadow:0 18px 48px rgba(16,63,61,.13)}
+.journey-heading>div{position:relative;z-index:1}
+.journey-heading .eyebrow{color:#f5d66f;letter-spacing:2.3px}
+.journey-heading h2{max-width:900px;margin:12px auto 0;color:#fff;font-size:clamp(25px,3.3vw,40px);line-height:1.2;letter-spacing:-1.1px}
+@media(max-width:760px){.journey-heading{padding:30px 20px;margin-bottom:22px}.journey-heading h2{font-size:clamp(23px,6vw,30px);line-height:1.28;letter-spacing:-.6px}}
