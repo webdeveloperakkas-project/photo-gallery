@@ -148,10 +148,10 @@ async function load(){
  if(!id){loading.hidden=true;errorBox.hidden=false;errorBox.textContent="No asset was selected. Return to the Marketplace and choose a listing.";return;}
  const {data:item,error}=await client.from("marketplace_public_listings").select("*").eq("id",id).maybeSingle();
  if(error||!item){loading.hidden=true;errorBox.hidden=false;errorBox.textContent="This listing could not be found or is no longer available.";return;}
- currentItem=item;const {data:auth}=await client.auth.getUser();currentUser=auth?.user;if(!currentUser){location.replace("index.html#auth-login");return;}$("contact-seller").textContent=currentUser.id===item.seller_id?"View Buyer Messages":"Contact Seller";
+ currentItem=item;const {data:auth}=await client.auth.getUser();currentUser=auth?.user||null;document.body.classList.toggle("public-guest",!currentUser);$("contact-seller").textContent=currentUser?(currentUser.id===item.seller_id?"View Buyer Messages":"Contact Seller"):"Sign in to Message Seller";$("buy-now").textContent=currentUser?"Buy Now":"Sign in to Buy";
 $("detail-category-pill").textContent=item.subcategory||item.category||"Digital Asset";
   const monetization=$("detail-monetization-status");if(item.monetization_status==="monetized"||item.monetization_status==="not_monetized"){monetization.hidden=false;monetization.textContent=item.monetization_status==="monetized"?"Monetized":"Not Monetized";monetization.className="detail-monetization-status "+(item.monetization_status==="monetized"?"is-monetized":"is-not-monetized");}else{monetization.hidden=true;}
- $("detail-price").textContent=money(item.price_currency,item.asking_price);$("detail-date").textContent="Listed "+new Date(item.submitted_at).toLocaleDateString();
+ $("detail-price").textContent=money(item.price_currency,item.asking_price);$("detail-price").classList.toggle("public-price-blur",!currentUser);$("detail-price").setAttribute("aria-label",currentUser?money(item.price_currency,item.asking_price):"Sign in to view asking price");$("detail-date").textContent="Listed "+new Date(item.submitted_at).toLocaleDateString();
  const cover=imageUrl(item.cover_image_path),coverEl=$("detail-cover"),coverFrame=$("detail-cover-frame");if(cover){coverEl.src=cover;coverEl.alt=(item.title||"Digital asset")+" preview";coverFrame.hidden=false;}else{coverFrame.hidden=true;}coverEl.onerror=()=>{coverFrame.hidden=true;};
  $("detail-overview").innerHTML=detailRows(item.public_details)||"<div><small>Listing information</small><strong>Additional details were not provided.</strong></div>";
  const description=item.full_description||"The seller has not provided a full description.";$("detail-description").textContent=description;
@@ -190,10 +190,12 @@ $("detail-category-pill").textContent=item.subcategory||item.category||"Digital 
 }
 
 $("contact-seller").addEventListener("click",async()=>{
+ if(!currentUser){location.href="index.html#auth-signup";return;}
  try{if(currentUser.id===currentItem.seller_id)await openSellerInbox();else await openBuyerConversation();}
  catch(error){notice("Could not open messages: "+(error.message||"Please try again."));}
 });
 $("buy-now").addEventListener("click",()=>{
+ if(!currentUser){location.href="index.html#auth-signup";return;}
  if(currentUser?.id&&currentItem?.seller_id&&currentUser.id===currentItem.seller_id){
   notice("You cannot buy your own listing. Please sign in with a separate buyer account to purchase this asset.");
   return;
