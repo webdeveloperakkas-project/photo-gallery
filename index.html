@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20261118-2">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=20261118-3" defer></script>
-<link rel="stylesheet" href="footer.css"><script src="footer.js?v=20261119-1" defer></script></head>
+  <script src="script.js?v=20261119-2" defer></script>
+<link rel="stylesheet" href="public-marketplace.css?v=20261119-1"><link rel="stylesheet" href="footer.css"><script src="footer.js?v=20261119-1" defer></script></head>
 <body>
   <div class="announcement"><span class="announcement-dot"></span> A smarter way to move digital ownership <a href="#how-it-works">See how it works <span aria-hidden="true">→</span></a></div>
   <header class="site-header">
@@ -146,18 +146,18 @@
       </div>
     </section>
 
-    <section class="section listings-section" id="marketplace">
+    <section class="section listings-section real-marketplace-section" id="marketplace">
       <div class="container">
-        <div class="section-heading listing-heading"><div><span class="eyebrow">A WORLD OF OPPORTUNITY</span><h2>Discover what's <span class="gradient-text">possible.</span></h2></div><div class="slider-controls"><button class="slider-btn" id="slide-prev" aria-label="Previous listings">←</button><button class="slider-btn" id="slide-next" aria-label="Next listings">→</button></div></div>
-        <div class="listing-toolbar"><span>Explore asset types and example opportunities</span><div class="listing-filters"><button class="filter-chip active" data-filter="All">All assets</button><button class="filter-chip" data-filter="Websites">Websites</button><button class="filter-chip" data-filter="SaaS">SaaS</button><button class="filter-chip" data-filter="E-commerce">E-commerce</button></div></div>
-        <div class="listing-track-wrap"><div class="listing-track" id="listing-track">
-          <article class="listing-card" data-category="Websites"><div class="listing-image"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=850&q=85" alt="Laptop on a clean workspace"><span class="sample-tag">Concept preview</span><button class="save-button" aria-label="Save website concept">♡</button></div><div class="listing-body"><div class="listing-meta"><span>WEBSITE</span><span class="status-dot">● Example</span></div><h3>Editorial & content website</h3><p>A content-led web property concept with room to develop.</p><div class="listing-footer"><span>Explore category</span><b>View details ↗</b></div></div></article>
-          <article class="listing-card" data-category="SaaS"><div class="listing-image"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=850&q=85" alt="Analytics dashboard on a screen"><span class="sample-tag">Concept preview</span><button class="save-button" aria-label="Save SaaS concept">♡</button></div><div class="listing-body"><div class="listing-meta"><span>SAAS & SOFTWARE</span><span class="status-dot">● Example</span></div><h3>Analytics software concept</h3><p>A software product concept for teams that value insight.</p><div class="listing-footer"><span>Explore category</span><b>View details ↗</b></div></div></article>
-          <article class="listing-card" data-category="E-commerce"><div class="listing-image"><img src="https://images.unsplash.com/photo-1556742111-a301076d9d18?auto=format&fit=crop&w=850&q=85" alt="Small business owner packaging an online order"><span class="sample-tag">Concept preview</span><button class="save-button" aria-label="Save commerce concept">♡</button></div><div class="listing-body"><div class="listing-meta"><span>E-COMMERCE</span><span class="status-dot">● Example</span></div><h3>Independent online store</h3><p>A commerce concept ready for a fresh brand direction.</p><div class="listing-footer"><span>Explore category</span><b>View details ↗</b></div></div></article>
-          <article class="listing-card" data-category="Websites"><div class="listing-image"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=850&q=85" alt="Business performance charts on a laptop"><span class="sample-tag">Concept preview</span><button class="save-button" aria-label="Save business concept">♡</button></div><div class="listing-body"><div class="listing-meta"><span>ONLINE BUSINESS</span><span class="status-dot">● Example</span></div><h3>Digital business showcase</h3><p>A sample profile showing how an asset can be presented.</p><div class="listing-footer"><span>Explore category</span><b>View details ↗</b></div></div></article>
-          <article class="listing-card" data-category="SaaS"><div class="listing-image"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=850&q=85" alt="Creative digital product design workspace"><span class="sample-tag">Concept preview</span><button class="save-button" aria-label="Save product concept">♡</button></div><div class="listing-body"><div class="listing-meta"><span>DIGITAL PRODUCT</span><span class="status-dot">● Example</span></div><h3>Productivity tool concept</h3><p>A digital product idea with a clear path to evolve.</p><div class="listing-footer"><span>Explore category</span><b>View details ↗</b></div></div></article>
+        <div class="section-heading listing-heading"><div><span class="eyebrow">A WORLD OF OPPORTUNITY</span><h2>Explore real <span class="gradient-text">marketplace listings.</span></h2></div></div>
+        <div class="listing-toolbar"><span>Live listings approved by the Nexa team</span><div class="listing-filters" id="public-listing-filters">
+          <button class="filter-chip active" type="button" data-public-filter="All">All assets</button>
+          <button class="filter-chip" type="button" data-public-filter="Website">Websites</button>
+          <button class="filter-chip" type="button" data-public-filter="E-commerce">E-commerce</button>
+          <button class="filter-chip" type="button" data-public-filter="YouTube Channel">YouTube</button>
+          <button class="filter-chip" type="button" data-public-filter="Social">Social</button>
         </div></div>
-        <p class="demo-note">Illustrative previews only — these are design examples, not active listings or verified businesses.</p>
+        <div class="public-listing-grid" id="public-listing-grid" aria-live="polite"><div class="public-listing-state">Loading the latest approved listings…</div></div>
+        <div class="public-listing-more-wrap"><a class="button button-dark public-listing-more" id="public-listing-more" href="#auth-signup" data-auth-open="signup">View More Listings <span>↗</span></a></div>
       </div>
     </section>
 
