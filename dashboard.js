@@ -180,8 +180,8 @@
   let marketplaceLoaded=false;
   const safeText=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&#39;"}[ch]));
   const renderMarketplaceEmpty=(host,title,detail)=>{if(host)host.innerHTML="<div class='marketplace-empty'><span>⌕</span><b>"+safeText(title)+"</b><p>"+safeText(detail)+"</p></div>";};
-  const marketplaceCategoryOrder=["Website","E-commerce","YouTube Channel","X Account","Facebook Page","Instagram Account","TikTok Account"];
-  const marketplaceCategoryTitles={"Website":"Website for Sale","E-commerce":"Shop for Sale","YouTube Channel":"YouTube Channel for Sale","X Account":"X Account for Sale","Facebook Page":"Facebook Page for Sale","Instagram Account":"Instagram Account for Sale","TikTok Account":"TikTok Account for Sale"};
+  const marketplaceCategoryOrder=["Website","Apps","Software","YouTube Channel","X Account","Facebook Page","Instagram Account","TikTok Account","E-commerce"];
+  const marketplaceCategoryTitles={"Website":"Website for Sale","Apps":"Apps for Sale","Software":"Software for Sale","E-commerce":"Shop for Sale","YouTube Channel":"YouTube Channel for Sale","X Account":"X Account for Sale","Facebook Page":"Facebook Page for Sale","Instagram Account":"Instagram Account for Sale","TikTok Account":"TikTok Account for Sale"};
   const renderApprovedListings=items=>{
     if(!items?.length)return "<div class='marketplace-empty'><span>⌕</span><b>No matching approved listings</b><p>Try changing your filters or clearing them to see more digital assets.</p></div>";
     const availableCategories=[...new Set(items.map(item=>String(item.category||"Other Digital Asset")))];
@@ -226,7 +226,7 @@
   const updatePlatformMetricFilters=()=>{
     const selected=categoryOptions.filter(input=>input.checked).map(input=>input.value);
     const selectedPlatformLabel=document.getElementById("selected-platform-label");
-    const platformNames={"Website":"Website","E-commerce":"Shop","YouTube Channel":"YouTube","X Account":"X","Facebook Page":"Facebook","Instagram Account":"Instagram","TikTok Account":"TikTok","Other Digital Asset":"Other Assets"};
+    const platformNames={"Website":"Website","Apps":"Apps","Software":"Software","E-commerce":"Shop","YouTube Channel":"YouTube","X Account":"X","Facebook Page":"Facebook","Instagram Account":"Instagram","TikTok Account":"TikTok","Other Digital Asset":"Other Assets"};
     if(selectedPlatformLabel)selectedPlatformLabel.textContent=selected.length===1?(platformNames[selected[0]]||selected[0]):"All Categories";
     const hasWeb=!selected.length||selected.some(value=>["Website","E-commerce"].includes(value));
     const hasYoutube=selected.includes("YouTube Channel");
