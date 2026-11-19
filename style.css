@@ -722,3 +722,16 @@ html[lang="bn"] .hero-bottom > span {
 @keyframes stackCardFlip{0%{transform:translate3d(0,0,40px) scale(1) rotateY(0)}45%{transform:translate3d(0,0,70px) scale(1.025) rotateY(90deg)}100%{transform:translate3d(0,0,-20px) scale(.94) rotateY(180deg)}}
 @media(max-width:700px){.stack-stage{height:340px;width:min(430px,94%)}}
 @media(prefers-reduced-motion:reduce){.hero-card-stack .stack-card.flip-out{animation:none!important}}
+
+
+/* Keep the category-card motion to only the flip-out and gentle float-in.
+   Prevent the active-card transform transition from adding a third upward kick. */
+.hero-card-stack .stack-card.is-active{transition:none!important}
+.hero-card-stack .stack-card.float-in{
+  animation:stackCardFloatIn 1.4s cubic-bezier(.18,.62,.28,1) both!important;
+  transition:none!important;
+}
+@keyframes stackCardFloatIn{
+  0%{transform:translate3d(0,14px,8px) scale(.99)}
+  100%{transform:translate3d(0,0,40px) scale(1)}
+}
