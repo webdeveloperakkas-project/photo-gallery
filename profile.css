@@ -92,3 +92,6 @@
 
 /* Keep verification forms and result panels mutually exclusive even when shared styles are loaded. */
 .form-card[hidden],.submission-status[hidden]{display:none!important}
+
+/* Hide the empty overall-status badge on the default Personal Details tab. */
+.overall-status:empty{display:none!important}
