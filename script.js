@@ -127,6 +127,39 @@
   const supabaseClient = window.supabase?.createClient
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
     : null;
+  // Public homepage marketplace: only live rows exposed by the approved public view.
+  const publicListingGrid = document.getElementById('public-listing-grid');
+  if (publicListingGrid && supabaseClient) {
+    const publicMore = document.getElementById('public-listing-more');
+    const publicFilters = [...document.querySelectorAll('[data-public-filter]')];
+    let publicItems = [], publicFilter = 'All';
+    const publicEscape = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const publicCategory = item => String(item.category || 'Digital Asset');
+    const publicSocial = ['YouTube Channel','Facebook Page','Instagram Account','TikTok Account','X Account'];
+    const publicImage = path => path ? supabaseClient.storage.from('asset-listing-media').getPublicUrl(path).data.publicUrl : '';
+    const renderPublicListings = () => {
+      const items = publicItems.filter(item => publicFilter === 'All' || (publicFilter === 'Social' ? publicSocial.includes(publicCategory(item)) : publicCategory(item) === publicFilter));
+      if (!items.length) { publicListingGrid.innerHTML = '<div class="public-listing-state"><b>No approved listings available in this category yet.</b><span>New listings will appear here after admin approval.</span></div>'; return; }
+      publicListingGrid.innerHTML = items.slice(0,10).map(item => {
+        const category=publicCategory(item), image=publicImage(item.cover_image_path), youtube=category==='YouTube Channel', social=publicSocial.includes(category);
+        const metric=youtube?item.total_subscribers:social?item.total_followers:item.monthly_visitors;
+        const metricLabel=youtube?'Subscribers':social?'Followers':'Monthly visitors';
+        const metricHtml=metric!==null&&metric!==undefined?'<span>'+publicEscape(metricLabel)+': <b>'+publicEscape(Number(metric).toLocaleString())+'</b></span>':'';
+        const title=item.subcategory||category, price=publicEscape(item.price_currency||'')+' '+publicEscape(Number(item.asking_price||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}));
+        return '<a class="public-listing-card" href="asset-details.html?id='+encodeURIComponent(item.id)+'" aria-label="View '+publicEscape(title)+' details"><div class="public-listing-image">'+(image?'<img src="'+publicEscape(image)+'" alt="'+publicEscape(title)+' cover image" loading="lazy">':'<div class="public-listing-image-placeholder">'+publicEscape(category)+'</div>')+'<span class="public-approved-label">● Approved</span></div><div class="public-listing-content"><div class="public-listing-category">'+publicEscape(category)+'</div><h3>'+publicEscape(title)+'</h3><div class="public-listing-facts">'+(item.country?'<span>🌍 '+publicEscape(item.country)+'</span>':'')+metricHtml+'</div><div class="public-listing-price-row"><span>Asking Price</span><strong class="public-price-blur" title="Sign in to view asking price">'+price+'</strong></div><div class="public-listing-card-footer"><span>View Details</span><b>↗</b></div></div></a>';
+      }).join('');
+    };
+    publicFilters.forEach(button=>button.addEventListener('click',()=>{publicFilters.forEach(item=>item.classList.toggle('active',item===button));publicFilter=button.dataset.publicFilter||'All';renderPublicListings();}));
+    publicMore?.addEventListener('click',async event=>{const {data}=await supabaseClient.auth.getSession();if(data?.session?.user){event.preventDefault();location.href='dashboard.html#marketplace-section';}});
+    (async()=>{
+      const {data:sessionData}=await supabaseClient.auth.getSession();
+      if(sessionData?.session?.user)publicListingGrid.classList.add('is-authenticated');
+      const {data,error}=await supabaseClient.from('marketplace_public_listings').select('id,title,category,subcategory,asking_price,price_currency,submitted_at,country,monthly_visitors,total_followers,total_subscribers,cover_image_path').order('submitted_at',{ascending:false}).limit(10);
+      if(error){publicListingGrid.innerHTML='<div class="public-listing-state"><b>Listings are temporarily unavailable.</b><span>Please try again later.</span></div>';console.error('Public marketplace could not load:',error.message);return;}
+      publicItems=data||[];renderPublicListings();
+    })();
+  }
+
 
   const authPage = document.getElementById('auth-page');
   const signupForm = document.getElementById('signup-form');
