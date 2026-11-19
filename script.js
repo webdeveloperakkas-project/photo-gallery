@@ -17,26 +17,39 @@
     }, 6000);
   }
 
-  // Show all eight category cards with the same journey-style slide transition.
+  // Keep all eight category cards visible as a layered deck; flip the front card to reveal the next.
   const heroStack = document.getElementById('hero-card-stack');
   if (heroStack) {
     const cards = [...heroStack.querySelectorAll('[data-stack-card]')];
     const current = document.getElementById('hero-stack-current');
     const progress = document.getElementById('hero-stack-progress');
     let active = 0;
+    let flipping = false;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const renderStack = () => {
       cards.forEach((card,index) => {
-        const isActive = index === active;
-        card.classList.toggle('is-active', isActive);
-        card.style.pointerEvents = isActive ? 'auto' : 'none';
-        card.setAttribute('aria-hidden',String(!isActive));
+        const depth = (index - active + cards.length) % cards.length;
+        card.style.setProperty('--stack-depth', depth);
+        card.classList.toggle('is-active', depth === 0);
+        card.style.pointerEvents = depth === 0 ? 'auto' : 'none';
+        card.setAttribute('aria-hidden',String(depth !== 0));
       });
       if(current)current.textContent=String(active+1).padStart(2,'0');
       if(progress)progress.style.width=((active+1)/cards.length*100)+'%';
     };
     renderStack();
-    if(!reducedMotion && cards.length > 1)window.setInterval(()=>{active=(active+1)%cards.length;renderStack();},6000);
+    if(!reducedMotion && cards.length > 1)window.setInterval(()=>{
+      if(flipping)return;
+      flipping=true;
+      const front=cards[active];
+      front.classList.add('flip-out');
+      window.setTimeout(()=>{
+        front.classList.remove('flip-out');
+        active=(active+1)%cards.length;
+        renderStack();
+        flipping=false;
+      },720);
+    },5000);
   }
 
   const menuButton = document.querySelector('.menu-toggle');
