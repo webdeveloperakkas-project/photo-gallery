@@ -687,3 +687,26 @@ html[lang="bn"] .hero-bottom > span {
 .journey-heading .eyebrow{color:#f5d66f;letter-spacing:2.3px}
 .journey-heading h2{max-width:900px;margin:12px auto 0;color:#fff;font-size:clamp(25px,3.3vw,40px);line-height:1.2;letter-spacing:-1.1px}
 @media(max-width:760px){.journey-heading{padding:30px 20px;margin-bottom:22px}.journey-heading h2{font-size:clamp(23px,6vw,30px);line-height:1.28;letter-spacing:-.6px}}
+
+
+/* Shared journey-style slide animation for the three benefit cards and eight category cards */
+.free-benefit-slides{display:grid;grid-template-columns:minmax(0,1fr);width:min(920px,100%);min-height:132px;overflow:hidden}
+.free-benefit-card{grid-column:1;grid-row:1;display:none;min-height:124px;opacity:1;visibility:visible;pointer-events:none}
+.free-benefit-card.is-active{display:grid;pointer-events:auto;animation:journeyFade .45s ease both}
+.free-benefit-card.benefit-seller{background:linear-gradient(115deg,#eee7ff 0%,#faf7ff 58%,#e7ddff 100%);border-color:#d9cafb}
+.free-benefit-card.benefit-seller .benefit-icon{background:#ded0ff;color:#6741b5}
+.free-benefit-card.benefit-seller .benefit-kicker{color:#7655b5}
+.free-benefit-card.benefit-buyer{background:linear-gradient(115deg,#ddf6e9 0%,#f6fff9 58%,#d5f0e2 100%);border-color:#bfe6d0}
+.free-benefit-card.benefit-buyer .benefit-icon{background:#c7ecd7;color:#16845e}
+.free-benefit-card.benefit-nosale{background:linear-gradient(115deg,#fff0df 0%,#fffaf4 58%,#ffe4cb 100%);border-color:#f4d3b5}
+.free-benefit-card.benefit-nosale .benefit-icon{background:#ffdfc1;color:#bd6935}
+.free-benefit-card.benefit-nosale .benefit-kicker{color:#a85d2d}
+.hero-card-stack .stack-card{display:none;transform:none;opacity:1;pointer-events:none}
+.hero-card-stack .stack-card.is-active{display:flex;opacity:1;pointer-events:auto;animation:journeyFade .45s ease both}
+@media(max-width:700px){
+ .free-benefit-slides{width:min(100%,430px);min-height:132px;margin:0 auto 18px}
+ .free-benefit-card{min-height:124px}
+}
+@media(prefers-reduced-motion:reduce){
+ .free-benefit-card.is-active,.hero-card-stack .stack-card.is-active{animation:none}
+}
