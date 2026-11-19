@@ -35,6 +35,12 @@
         card.setAttribute('aria-hidden',String(depth !== 0));
       });
       if(current)current.textContent=String(active+1).padStart(2,'0');
+      const total=document.getElementById('hero-stack-total');
+      if(total)total.textContent=String(cards.length).padStart(2,'0');
+      cards.forEach((card,index)=>{
+        const number=card.querySelector('.stack-number');
+        if(number)number.textContent=String(index+1).padStart(2,'0')+' / '+String(cards.length).padStart(2,'0');
+      });
       if(progress)progress.style.width=((active+1)/cards.length*100)+'%';
     };
     renderStack();
@@ -42,15 +48,19 @@
       if(flipping)return;
       flipping=true;
       const front=cards[active];
+      // The previous float ends at the active card's exact resting transform.
+      // Keep it applied until this card begins its next flip to avoid a reset/jolt.
+      front.classList.remove('float-in');
       front.classList.add('flip-out');
       window.setTimeout(()=>{
-        front.classList.remove('flip-out');
+        // Change the deck order before removing flip-out so the old front never
+        // snaps back to the front position between animations.
         active=(active+1)%cards.length;
         renderStack();
+        front.classList.remove('flip-out');
         const arriving=cards[active];
         arriving.classList.add('float-in');
-        window.setTimeout(()=>arriving.classList.remove('float-in'),1450);
-        flipping=false;
+        window.setTimeout(()=>{flipping=false;},1450);
       },720);
     },5000);
   }
