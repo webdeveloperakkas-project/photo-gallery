@@ -268,3 +268,10 @@ body.image-lightbox-open{overflow:hidden}
 .checkout-layout[hidden]{
   display:none !important;
 }
+
+/* Public listing access for visitors who have not signed in. */
+.public-guest .nexa-sidebar{display:none!important}
+.public-guest .nexa-main-area{margin-left:0!important;width:100%!important}
+.public-guest .nexa-top-header{display:none!important}
+.public-guest .asset-detail-content{max-width:1180px;margin:28px auto;padding:0 22px}
+.public-price-blur{filter:blur(7px);user-select:none;pointer-events:none}
