@@ -221,8 +221,7 @@ body{color:var(--ink);font-size:15px}
 }
 
 
-
-/* ===== Payment methods showcase — planned options, not live integrations ===== */
+/* =====Payment methods showcase — planned options, not live integrations ===== */
 .payment-section{padding:82px 0 76px;background:linear-gradient(180deg,#F3FBFA 0%,#FFFFFF 100%);border-top:1px solid #DDEDEC}
 .payment-heading{text-align:center;max-width:690px;margin:0 auto 38px}
 .payment-heading .eyebrow{color:#087D79}
