@@ -669,12 +669,13 @@ html[lang="bn"] .hero-bottom > span {
 .benefit-nosale .benefit-kicker{color:#7863a4}
 .trust-license{background:#fff0e6;color:#bd6935;border-color:#f5dfd0}
 @media(max-width:700px){
- .free-benefit-slides{display:block;width:min(100%,430px);min-height:120px;margin:0 auto 18px;overflow:hidden}
- .free-benefit-card{display:none;min-height:112px;opacity:0;transform:translateY(7px);transition:opacity .55s ease,transform .55s ease}
- .free-benefit-card.is-active{display:grid;animation:benefitSlideIn .65s ease both}
- @keyframes benefitSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+ .free-benefit-slides{display:grid;grid-template-columns:minmax(0,1fr);width:min(100%,430px);min-height:122px;margin:0 auto 18px;overflow:hidden}
+ .free-benefit-card{grid-column:1;grid-row:1;display:grid;min-height:112px;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(26px);transition:opacity .65s ease,transform .65s cubic-bezier(.22,.75,.25,1),visibility .65s}
+ .free-benefit-card.is-active{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0)}
 }
 @media(min-width:701px){
- .free-benefit-card{display:grid!important;opacity:1!important;transform:none!important}
+ .free-benefit-card{display:grid!important;opacity:1!important;visibility:visible!important;transform:none!important;pointer-events:auto!important}
 }
-@media(prefers-reduced-motion:reduce){.free-benefit-card.is-active{animation:none}}
+@media(prefers-reduced-motion:reduce){
+ .free-benefit-card{transition:none!important;transform:none!important}
+}
