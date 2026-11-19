@@ -513,3 +513,40 @@ body{color:var(--ink);font-size:15px}
 
 /* Keep signed-in navigation links hidden even when button display styles apply. */
 #nav-login-link[hidden],#nav-signup-link[hidden]{display:none!important}
+
+
+/* ===== Refined Bengali typography ===== */
+html[lang="bn"] body,
+html[lang="bn"] body button,
+html[lang="bn"] body input,
+html[lang="bn"] body select,
+html[lang="bn"] body textarea {
+  font-family: "Hind Siliguri", "Noto Sans Bengali", sans-serif !important;
+  letter-spacing: 0;
+}
+html[lang="bn"] body {
+  line-height: 1.85;
+}
+html[lang="bn"] h1,
+html[lang="bn"] h2,
+html[lang="bn"] h3,
+html[lang="bn"] h4,
+html[lang="bn"] .brand,
+html[lang="bn"] .eyebrow,
+html[lang="bn"] .button {
+  font-family: "Hind Siliguri", "Noto Sans Bengali", sans-serif !important;
+  letter-spacing: 0;
+}
+html[lang="bn"] .hero h1,
+html[lang="bn"] .section-heading h2,
+html[lang="bn"] .trust-intro h2,
+html[lang="bn"] .pricing-copy h2,
+html[lang="bn"] .faq-grid h2,
+html[lang="bn"] .cta-inner h2 {
+  line-height: 1.35;
+}
+html[lang="bn"] .eyebrow,
+html[lang="bn"] .journey-step,
+html[lang="bn"] .hero-bottom > span {
+  letter-spacing: 0;
+}
